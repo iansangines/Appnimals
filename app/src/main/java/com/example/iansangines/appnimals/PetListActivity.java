@@ -44,32 +44,30 @@ public class PetListActivity extends AppCompatActivity {
         Intent in = getIntent();
         String rand = in.getStringExtra("Random");
 
-        AlertDialog.Builder insertQuestion = new AlertDialog.Builder(this.getApplicationContext());
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                AlertDialog.Builder insertDialog = new AlertDialog.Builder(getApplicationContext());
 
+            fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    insertDialog.setTitle("Nova mascota").setMessage("Vols afegir una nova mascota?");
-                    insertDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+
+
+                    AlertDialog.Builder newPetDialog = new AlertDialog.Builder(PetListActivity.this);
+                    newPetDialog.setTitle("Nova mascota").setMessage("Vols afegir una nova mascota?");
+                            newPetDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent insertPet = new Intent(PetListActivity.this, InsertPetActivity.class);
+                                    startActivity(insertPet);
+                                }
+                            });
+                    newPetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent insertPet = new Intent(PetListActivity.this, InsertPetActivity.class);
-                            startActivity(insertPet);
+                            dialog.cancel();
                         }
                     });
-                    insertDialog.setNegativeButton("no", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                          dialog.cancel();
-                        }
-                    });
-                   insertDialog.show();
-                    Log.d("alertdialog", "abans del show");
-                    //dialog.show();
-                    Log.d("alertdialog", "dspres del show");
+                    newPetDialog.show();
                 }
             });
         }
@@ -103,7 +101,6 @@ public class PetListActivity extends AppCompatActivity {
             }
         });
 
-        //tractar de listview
 
     }
 }
