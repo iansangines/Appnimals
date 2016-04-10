@@ -80,11 +80,12 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <ExpandableListView
+    <android.support.v7.widget.AppCompatSpinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/type_expandiblelist">
-    </ExpandableListView>
+        android:spinnerMode="dropdown"
+        android:id="@+id/spinner">
+    </android.support.v7.widget.AppCompatSpinner>
 
 
 </LinearLayout>
