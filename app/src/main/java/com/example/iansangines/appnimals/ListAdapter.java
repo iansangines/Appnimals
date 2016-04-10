@@ -16,9 +16,9 @@ import java.util.ArrayList;
  * Created by ian on 09/04/2016.
  */
 public class ListAdapter extends ArrayAdapter<Pet> {
-    Context context;
-    int resource;
-    ArrayList<Pet> pets;
+    private Context context;
+    private int resource;
+    private ArrayList<Pet> pets;
 
 
     public ListAdapter(Context context, int resource, ArrayList<Pet> pets){

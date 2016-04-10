@@ -8,15 +8,13 @@ import android.widget.ListView;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 
 public class InsertPetActivity extends AppCompatActivity {
-    SimpleExpandableListAdapter adapter;
-    ExpandableListView petTypeList;
-    List<String> petTypeHeader;
-    HashMap<String, List<String>> petTypeChild;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +23,21 @@ public class InsertPetActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ExpandableListView petTypeList = (ExpandableListView) findViewById(R.id.type_expandiblelist);
+        ArrayList<String> petTypes = new ArrayList<String>();
+
+        petTypes.add("Amfibi");
+        petTypes.add("Gat");
+        petTypes.add("Gos");
+        petTypes.add("Mascota Aquatica");
+        petTypes.add("Ocell/Au");
+        petTypes.add("Reptil");
+        petTypes.add("Rosegador");
+        petTypes.add("Altre");
+
+        OneParentExpandibleAdapter MyAdapter = new OneParentExpandibleAdapter(this,"Espècie",petTypes);
+        petTypeList.setAdapter(MyAdapter);
     }
 
 }
