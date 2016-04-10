@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/appnimals_outside"
-        android:label="@string/app_name"
+        android:label="Appnimals"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
