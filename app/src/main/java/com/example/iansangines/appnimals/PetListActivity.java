@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -38,8 +40,17 @@ public class PetListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (toolbar != null) {
             toolbar.setTitle("Les teves mascotes");
-
         }
+
+        //BASE DE DADES
+        PetDBController dbController = new PetDBController(this);
+        Log.d("holaaaaaaaaaddddddddddd","holaaaaaaaaaaffffffffffffffffa");
+        dbController.insertPet("Marta", "ahir", "gat", "pataner", "xxx");
+        Log.d("holaaaaaaaaadddddddddddd", "holaaaaaaaaaaaaafffffffffffffa");
+        Cursor query = dbController.queryAll();
+        //
+
+
         //dades del parentactivity
         Intent in = getIntent();
         String rand = in.getStringExtra("Random");
@@ -75,6 +86,11 @@ public class PetListActivity extends AppCompatActivity {
 
         ListView petListView = (ListView) findViewById(R.id.listview);
         ArrayList<Pet> petList = new ArrayList<Pet>();
+        String nom = query.getString(0);
+        String data = query.getString(1);
+        String tipus = query.getString(2);
+        String subtipus = query.getString(3);
+        String xip = query.getString(4);
         Pet Marti = new Pet("Marti", "Insecte podrit", "29/11/1995", "33", R.drawable.appnimals_inside);
         petList.add(Marti);
         Pet Vidal = new Pet("Vidal", "gos pollós", "5/09/1995", "69", R.drawable.common_full_open_on_phone);

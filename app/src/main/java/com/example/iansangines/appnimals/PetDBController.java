@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by iansangines on 06/04/2016.
@@ -15,11 +16,13 @@ public class PetDBController extends SQLiteOpenHelper{
     private static final String PET_TABLE_NAME = "pets";
     private static final String PET_COLUMN_ID = "id";
     private static final String PET_COLUMN_NAME = "name";
+    private static final String PET_COLUMN_DATA = "data";
     private static final String PET_COLUMN_TYPE = "type";
+    private static final String PET_COLUMN_SUBTYPE = "subtype";
     private static final String PET_COLUMN_CHIP= "chip";
     private static final String CREATE_PET_TABLE = "CREATE TABLE " + PET_TABLE_NAME + " (" +
-            PET_COLUMN_ID +  "INTEGER PRIMARY KEY AUTOINCREMENT," + PET_COLUMN_NAME + " TEXT," +
-            PET_COLUMN_TYPE + " TEXT," + PET_COLUMN_CHIP +" TEXT);";
+            PET_COLUMN_ID +  " INTEGER PRIMARY KEY AUTOINCREMENT, " + PET_COLUMN_NAME + " TEXT, " +
+            PET_COLUMN_DATA + " TEXT, " + PET_COLUMN_TYPE + " TEXT, " +PET_COLUMN_SUBTYPE +" TEXT NULL, " + PET_COLUMN_CHIP +" TEXT);";
     private static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + PET_TABLE_NAME;
 
     public PetDBController (Context context){
@@ -35,21 +38,27 @@ public class PetDBController extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean insertPet(String nom, String type, String chip){
+    public boolean insertPet(String nom, String data, String type,String subtype, String chip){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(PET_COLUMN_NAME, nom);
+        values.put(PET_COLUMN_DATA,data);
         values.put(PET_COLUMN_TYPE, type);
+        values.put(PET_COLUMN_SUBTYPE,subtype);
         values.put(PET_COLUMN_CHIP, chip);
         long ret = db.insert(PET_TABLE_NAME,null,values);
+        db.close();
         if(ret != -1) return true;
         else return false;
     }
 
-    public void queryAll(Cursor pet){
-        SQLiteDatabase db = this.getWritableDatabase();
+    public Cursor queryAll(){
+        SQLiteDatabase db = this.getReadableDatabase();
         String q = "SELECT * FROM " + PET_TABLE_NAME;
-        pet = db.rawQuery(q ,null);
+        Cursor pet = db.rawQuery(q ,null);
+        Log.d("queryall", "before close");
+        db.close();
+        return pet;
     }
 
 }

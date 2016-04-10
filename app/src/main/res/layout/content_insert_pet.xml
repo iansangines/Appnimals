@@ -11,7 +11,9 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.iansangines.appnimals.PetListActivity"
     android:orientation="vertical"
-    tools:showIn="@layout/activity_insert_pet">
+    tools:showIn="@layout/activity_insert_pet"
+    android:id="@+id/insertpet_layout">
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
