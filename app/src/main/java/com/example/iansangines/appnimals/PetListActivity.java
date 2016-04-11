@@ -75,19 +75,13 @@ public class PetListActivity extends AppCompatActivity {
 
         //BASE DE DADES
         PetDBController dbController = new PetDBController(this);
-        Log.d("holaaaaaaaaaddddddddddd", "holaaaaaaaaaaffffffffffffffffa");
-        dbController.insertPet("Marta", "ahir", "gat", "pataner", "xxx");
-        Log.d("holaaaaaaaaadddddddddddd", "holaaaaaaaaaaaaafffffffffffffa");
+        dbController.insertPet("Marta", "ahir", "gat", "pataner", "xxx",0);
         Pet returned = dbController.queryAll();
         Log.d("activity", "cursor returned");
         //
 
         ArrayList<Pet> petList = new ArrayList<Pet>();
         petList.add(returned);
-        Pet Marti = new Pet("Marti","29/11/1995", "Insecte", "podrit", "33", R.drawable.appnimals_inside);
-        petList.add(Marti);
-        Pet Vidal = new Pet("Vidal","5/09/1995", "gos", "pollós", "69", R.drawable.common_full_open_on_phone);
-        petList.add(Vidal);
         ListAdapter adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
         assert petListView != null;
         petListView.setAdapter(adapter);
@@ -99,16 +93,6 @@ public class PetListActivity extends AppCompatActivity {
             }
         });
 
-        Button petButton = (Button) findViewById(R.id.buttonew);
-        //start activity onclick
-        assert petButton != null;
-        petButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent insertactivity = new Intent(PetListActivity.this, InsertPetActivity.class);
-                startActivity(insertactivity);
-            }
-        });
 
 
     }

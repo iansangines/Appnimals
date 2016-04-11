@@ -34,7 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nom mascota"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textCapWords"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -109,6 +110,27 @@
         android:layout_height="1dp"
         android:background="@android:color/black"/>
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_input_rasa"
+        android:paddingTop="10dp"
+        android:visibility="invisible">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Raça / tipus"
+            android:singleLine="true"
+            android:inputType="textCapWords"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Afageix"
+        android:id="@+id/buttonafegir"/>
 
 
 </LinearLayout>

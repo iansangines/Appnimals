@@ -15,16 +15,20 @@ import java.util.ArrayList;
  */
 public class PetDBController extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "AppnimalsDB";
-    private static final String PET_TABLE_NAME = "pets";
-    private static final String PET_COLUMN_ID = "id";
-    private static final String PET_COLUMN_NAME = "name";
-    private static final String PET_COLUMN_DATA = "data";
-    private static final String PET_COLUMN_TYPE = "type";
-    private static final String PET_COLUMN_SUBTYPE = "subtype";
-    private static final String PET_COLUMN_CHIP= "chip";
+    private static final String PET_TABLE_NAME = "PETS";
+    private static final String PET_COLUMN_ID = "ID";
+    private static final String PET_COLUMN_NAME = "NAME";
+    private static final String PET_COLUMN_DATA = "DATA";
+    private static final String PET_COLUMN_TYPE = "TYPE";
+    private static final String PET_COLUMN_SUBTYPE = "SUBTYPE";
+    private static final String PET_COLUMN_CHIP= "CHIP";
+    private static final String PET_COLUMN_IMGPATH= "IMGPATH";
     private static final String CREATE_PET_TABLE = "CREATE TABLE " + PET_TABLE_NAME + " (" +
             PET_COLUMN_ID +  " INTEGER PRIMARY KEY AUTOINCREMENT, " + PET_COLUMN_NAME + " TEXT, " +
-            PET_COLUMN_DATA + " TEXT, " + PET_COLUMN_TYPE + " TEXT, " +PET_COLUMN_SUBTYPE +" TEXT NULL, " + PET_COLUMN_CHIP +" TEXT);";
+            PET_COLUMN_DATA + " TEXT, " + PET_COLUMN_TYPE + " TEXT, " +PET_COLUMN_SUBTYPE +" TEXT NULL, " + PET_COLUMN_CHIP +" TEXT, " +
+            PET_COLUMN_IMGPATH +" INTEGER NULL);";
+
+
     private static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + PET_TABLE_NAME;
 
     public PetDBController (Context context){
@@ -40,7 +44,7 @@ public class PetDBController extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean insertPet(String nom, String data, String type,String subtype, String chip){
+    public boolean insertPet(String nom, String data, String type,String subtype, String chip, int imgpath){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(PET_COLUMN_NAME, nom);
@@ -48,6 +52,7 @@ public class PetDBController extends SQLiteOpenHelper{
         values.put(PET_COLUMN_TYPE, type);
         values.put(PET_COLUMN_SUBTYPE,subtype);
         values.put(PET_COLUMN_CHIP, chip);
+        values.put("IMGPATH",imgpath);
         long ret = db.insert(PET_TABLE_NAME,null,values);
         db.close();
         if(ret != -1) return true;
@@ -61,11 +66,12 @@ public class PetDBController extends SQLiteOpenHelper{
         Pet pet = new Pet();
         if(c != null){
             c.moveToNext();
-            pet.setName(c.getString(0));
-            pet.setBornDate(c.getString(1));
-            pet.setPetType(c.getString(2));
-            pet.setPetSubtype(c.getString(3));
-            pet.setChipNumber(c.getString(4));
+            pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
+            pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
+            pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
+            pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
+            pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
+            pet.setPetPhoto(c.getInt(c.getColumnIndex("IMGPATH")));
         }
         db.close();
         assert c != null;
