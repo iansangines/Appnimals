@@ -15,8 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.LinearLayout;
-
-
+import android.widget.Toast;
 
 
 public class InsertPetActivity extends AppCompatActivity {
@@ -67,7 +66,7 @@ public class InsertPetActivity extends AppCompatActivity {
                     EditText nameinput = nameinputlayout.getEditText();
                     assert nameinput != null;
                     String name = nameinput.getText().toString();
-                    if(name == null || name == ""){
+                    if(name == null || name.equals("")){
                         //ALERTDIALOG: no has posat nom
                         return;
                     }
@@ -77,10 +76,10 @@ public class InsertPetActivity extends AppCompatActivity {
 
                     TextInputLayout datainputlayout = (TextInputLayout) findViewById(R.id.layout_input_date);
                     assert datainputlayout != null;
-                    EditText datainput = nameinputlayout.getEditText();
+                    EditText datainput = datainputlayout.getEditText();
                     assert datainput != null;
                     String data = datainput.getText().toString();
-                    if(data == null || data == ""){
+                    if(data == null || data.equals("")){
                         //ALERTDIALOG: no has posat nom
                         return;
                     }
@@ -88,12 +87,12 @@ public class InsertPetActivity extends AppCompatActivity {
                         petToInsert.setBornDate(data);
                     }
 
-                    TextInputLayout xipinputlayout = (TextInputLayout) findViewById(R.id.layout_input_nom);
+                    TextInputLayout xipinputlayout = (TextInputLayout) findViewById(R.id.layout_input_xip);
                     assert xipinputlayout != null;
-                    EditText xipinput = nameinputlayout.getEditText();
+                    EditText xipinput = xipinputlayout.getEditText();
                     assert xipinput != null;
-                    String xip = nameinput.getText().toString();
-                    if(xip == null || xip == ""){
+                    String xip = xipinput.getText().toString();
+                    if(xip == null || xip.equals("")){
                         //ALERTDIALOG: no has posat nom
                         return;
                     }
@@ -101,6 +100,21 @@ public class InsertPetActivity extends AppCompatActivity {
                         petToInsert.setChipNumber(xip);
                     }
 
+                    TextInputLayout subtypeinputlayout = (TextInputLayout) findViewById(R.id.layout_input_rasa);
+                    assert subtypeinputlayout != null;
+                    EditText subtypeinput = subtypeinputlayout.getEditText();
+                    assert subtypeinput != null;
+                    String subtype = subtypeinput.getText().toString();
+                    if(subtype == null || xip.equals("")){
+                        //ALERTDIALOG: no has posat nom
+                        return;
+                    }
+                    else{
+                        petToInsert.setChipNumber(xip);
+                    }
+                    PetDBController db = new PetDBController(InsertPetActivity.this);
+                    db.insertPet(petToInsert.getName(),petToInsert.getBornDate(),petToInsert.getPetType(),petToInsert.getPetSubtype(),petToInsert.getChipNumber(),0);
+                    Toast.makeText(InsertPetActivity.this,"Mascota guardada",Toast.LENGTH_SHORT).show();
                 }
             }
         });
