@@ -52,7 +52,7 @@ public class PetDBController extends SQLiteOpenHelper{
         values.put(PET_COLUMN_TYPE, type);
         values.put(PET_COLUMN_SUBTYPE,subtype);
         values.put(PET_COLUMN_CHIP, chip);
-        values.put("IMGPATH",imgpath);
+        values.put(PET_COLUMN_IMGPATH,imgpath);
         long ret = db.insert(PET_TABLE_NAME,null,values);
         db.close();
         if(ret != -1) return true;
@@ -65,13 +65,14 @@ public class PetDBController extends SQLiteOpenHelper{
         Cursor c = db.rawQuery(q ,null);
         Pet pet = new Pet();
         if(c != null){
-            c.moveToNext();
-            pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
-            pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
-            pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
-            pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
-            pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
-            pet.setPetPhoto(c.getInt(c.getColumnIndex("IMGPATH")));
+            while(c.moveToNext()) {
+                pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
+                pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
+                pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
+                pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
+                pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
+                pet.setPetPhoto(c.getInt(c.getColumnIndex(PET_COLUMN_IMGPATH)));
+            }
         }
         db.close();
         assert c != null;
