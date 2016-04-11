@@ -28,10 +28,16 @@ import static android.app.PendingIntent.getActivity;
 import static java.security.AccessController.getContext;
 
 public class PetListActivity extends AppCompatActivity {
+    private ListAdapter adapter;
+    private ListView petListView;
+    private PetDBController dbController;
+    static final int INSERT_PET_ACTIVITY = 0;
+    static final int INSERTED = 1;
+
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet_list);
 
@@ -56,7 +62,7 @@ public class PetListActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent insertPet = new Intent(PetListActivity.this, InsertPetActivity.class);
-                                    startActivity(insertPet);
+                                    startActivityForResult(insertPet,INSERT_PET_ACTIVITY);
                                 }
                             });
                     newPetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -71,18 +77,14 @@ public class PetListActivity extends AppCompatActivity {
         }
 
 
-        ListView petListView = (ListView) findViewById(R.id.listview);
+        petListView = (ListView) findViewById(R.id.listview);
 
         //BASE DE DADES
-        PetDBController dbController = new PetDBController(this);
-        dbController.insertPet("Marta", "ahir", "gat", "pataner", "xxx",0);
-        Pet returned = dbController.queryAll();
+        dbController = new PetDBController(this);
+        ArrayList<Pet> petList = dbController.queryAll();
         Log.d("activity", "cursor returned");
-        //
 
-        ArrayList<Pet> petList = new ArrayList<Pet>();
-        petList.add(returned);
-        ListAdapter adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
+        adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
         assert petListView != null;
         petListView.setAdapter(adapter);
 
@@ -93,7 +95,21 @@ public class PetListActivity extends AppCompatActivity {
             }
         });
 
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == INSERT_PET_ACTIVITY && resultCode == INSERTED){
+            String xip = data.getStringExtra("xip");
+            Pet pet = dbController.queryPet(xip);
+            if(pet == null) Log.d("peeeeeeeeeeeeeeeeeeeeeeeeet","nuuuuuuuuuuuuuuuull");
+            else Log.d("peeeeeeeeeeeeeeeeeeet nom", pet.getName());
+            adapter.add(pet);
+            petListView.setAdapter(adapter);
+        }
+    }
 
+    public void onResume(){
+        super.onResume();
     }
 }

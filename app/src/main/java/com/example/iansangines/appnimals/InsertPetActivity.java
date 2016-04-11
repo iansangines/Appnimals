@@ -1,5 +1,6 @@
 package com.example.iansangines.appnimals;
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 public class InsertPetActivity extends AppCompatActivity {
     private boolean clicked = false;
+    static final int INSERTED = 1;
 
     private ArrayAdapter<CharSequence> adapter;
     Pet petToInsert = new Pet();
@@ -106,15 +108,20 @@ public class InsertPetActivity extends AppCompatActivity {
                     assert subtypeinput != null;
                     String subtype = subtypeinput.getText().toString();
                     if(subtype == null || xip.equals("")){
-                        //ALERTDIALOG: no has posat nom
+                        //ALERTDIALOG: no has posat xip
                         return;
                     }
                     else{
                         petToInsert.setChipNumber(xip);
                     }
                     PetDBController db = new PetDBController(InsertPetActivity.this);
-                    db.insertPet(petToInsert.getName(),petToInsert.getBornDate(),petToInsert.getPetType(),petToInsert.getPetSubtype(),petToInsert.getChipNumber(),0);
+                    db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(), petToInsert.getPetSubtype(), petToInsert.getChipNumber(), 0);
                     Toast.makeText(InsertPetActivity.this,"Mascota guardada",Toast.LENGTH_SHORT).show();
+                    //Retorna el numero de xip per fer query al petlistactivity
+                    Intent returned = new Intent();
+                    returned.putExtra("xip","'"+petToInsert.getChipNumber()+"'");
+                    setResult(INSERTED,returned);
+                    finish();
                 }
             }
         });

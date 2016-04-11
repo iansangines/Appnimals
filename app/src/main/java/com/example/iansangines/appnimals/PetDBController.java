@@ -52,17 +52,17 @@ public class PetDBController extends SQLiteOpenHelper{
         values.put(PET_COLUMN_TYPE, type);
         values.put(PET_COLUMN_SUBTYPE,subtype);
         values.put(PET_COLUMN_CHIP, chip);
-        values.put(PET_COLUMN_IMGPATH,imgpath);
+        values.put(PET_COLUMN_IMGPATH, imgpath);
         long ret = db.insert(PET_TABLE_NAME,null,values);
         db.close();
-        if(ret != -1) return true;
-        else return false;
+        return ret != -1;
     }
 
-    public Pet queryAll(){
+    public ArrayList<Pet> queryAll(){
         SQLiteDatabase db = this.getReadableDatabase();
         String q = "SELECT * FROM " + PET_TABLE_NAME;
         Cursor c = db.rawQuery(q ,null);
+        ArrayList<Pet> petArrayList = new ArrayList<Pet>();
         Pet pet = new Pet();
         if(c != null){
             while(c.moveToNext()) {
@@ -72,13 +72,33 @@ public class PetDBController extends SQLiteOpenHelper{
                 pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
                 pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
                 pet.setPetPhoto(c.getInt(c.getColumnIndex(PET_COLUMN_IMGPATH)));
+                petArrayList.add(pet);
             }
         }
         db.close();
         assert c != null;
         c.close();
         Log.d("Queryall", "after close");
-        return pet;
+        return petArrayList;
     }
 
+    public Pet queryPet(String xip){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String q = "SELECT * FROM " + PET_TABLE_NAME + " WHERE " + PET_COLUMN_CHIP + " = " + xip;
+        Cursor c = db.rawQuery(q,null);
+        Pet pet = new Pet();
+        if(c != null) {
+            c.moveToNext();
+            pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
+            pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
+            pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
+            pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
+            pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
+            pet.setPetPhoto(c.getInt(c.getColumnIndex(PET_COLUMN_IMGPATH)));
+        }
+        db.close();
+        assert c != null;
+        c.close();
+        return pet;
+    }
 }
