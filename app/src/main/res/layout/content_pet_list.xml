@@ -19,14 +19,16 @@
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
         android:textSize="30sp"
-        android:id="@+id/titol"/>
+        android:id="@+id/titol"
+        />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id= "@+id/listview"
+        android:paddingTop="8dp"
         android:layout_below= "@id/titol"
-        android:dividerHeight="6dp"
+        android:dividerHeight="0dp"
         android:text= "animal"/>
 
     <Button

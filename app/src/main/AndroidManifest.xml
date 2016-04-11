@@ -5,12 +5,13 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/appnimals_outside"
-        android:label="@string/app_name"
+        android:label="Appnimals"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".LaunchActivity"
-            android:label="LaunchActivity">
+            android:label="LaunchActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +26,7 @@
         <activity
             android:name=".InsertPetActivity"
             android:label="@string/title_activity_insert_pet"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".PetListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

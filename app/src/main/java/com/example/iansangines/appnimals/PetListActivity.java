@@ -1,12 +1,18 @@
 package com.example.iansangines.appnimals;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,7 +21,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
 import java.util.Random;
+
+import static android.app.PendingIntent.getActivity;
+import static java.security.AccessController.getContext;
 
 public class PetListActivity extends AppCompatActivity {
 
@@ -24,29 +34,72 @@ public class PetListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet_list);
-        Button petButton = (Button) findViewById(R.id.buttonew);
-        ListView petList = (ListView) findViewById(R.id.listview);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (toolbar != null) {
-            toolbar.setLogo(R.drawable.appnimals_inside);
-            toolbar.setTitle("Appnimals");
-
+            toolbar.setTitle("Les teves mascotes");
         }
-        //dades del parentactivity
-        Intent in = getIntent();
-        String rand = in.getStringExtra("Random");
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
+
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "no va", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+
+
+                    AlertDialog.Builder newPetDialog = new AlertDialog.Builder(PetListActivity.this);
+                    newPetDialog.setTitle("Nova mascota").setMessage("Vols afegir una nova mascota?");
+                            newPetDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent insertPet = new Intent(PetListActivity.this, InsertPetActivity.class);
+                                    startActivity(insertPet);
+                                }
+                            });
+                    newPetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    newPetDialog.show();
                 }
             });
         }
 
+
+        ListView petListView = (ListView) findViewById(R.id.listview);
+
+        //BASE DE DADES
+        PetDBController dbController = new PetDBController(this);
+        Log.d("holaaaaaaaaaddddddddddd", "holaaaaaaaaaaffffffffffffffffa");
+        dbController.insertPet("Marta", "ahir", "gat", "pataner", "xxx");
+        Log.d("holaaaaaaaaadddddddddddd", "holaaaaaaaaaaaaafffffffffffffa");
+        Pet returned = dbController.queryAll();
+        Log.d("activity", "cursor returned");
+        //
+
+        ArrayList<Pet> petList = new ArrayList<Pet>();
+        petList.add(returned);
+        Pet Marti = new Pet("Marti","29/11/1995", "Insecte", "podrit", "33", R.drawable.appnimals_inside);
+        petList.add(Marti);
+        Pet Vidal = new Pet("Vidal","5/09/1995", "gos", "pollós", "69", R.drawable.common_full_open_on_phone);
+        petList.add(Vidal);
+        ListAdapter adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
+        assert petListView != null;
+        petListView.setAdapter(adapter);
+
+        petListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //PERFILACTIVITY
+            }
+        });
+
+        Button petButton = (Button) findViewById(R.id.buttonew);
         //start activity onclick
         assert petButton != null;
         petButton.setOnClickListener(new View.OnClickListener() {
@@ -57,22 +110,6 @@ public class PetListActivity extends AppCompatActivity {
             }
         });
 
-        //tractar de listview
-        String[] values = new String[]{"Query", "els noms", "de la bd"};
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-        assert petList != null;
-        petList.setAdapter(arrayAdapter);
-
-        petList.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-
-                String value = (String) adapter.getItemAtPosition(position);
-                Toast.makeText(PetListActivity.this, "fila on click numero " + value , Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
-
-};
+}

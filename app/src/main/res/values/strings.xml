@@ -3,4 +3,16 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_pet_list">PetListActivity</string>
     <string name="title_activity_insert_pet">InsertPetActivity</string>
+    <string-array name="especies">
+        <item> </item>
+        <item>Amfibi</item>
+        <item>Gat</item>
+        <item>Gos</item>
+        <item>Ocell/au</item>
+        <item>Peix</item>
+        <item>Reptil</item>
+        <item>Rosegador</item>
+        <item>Altres</item>
+    </string-array>
+
 </resources>
