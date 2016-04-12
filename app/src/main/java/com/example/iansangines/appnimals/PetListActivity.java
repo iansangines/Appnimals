@@ -82,6 +82,11 @@ public class PetListActivity extends AppCompatActivity {
         //BASE DE DADES
         dbController = new PetDBController(this);
         ArrayList<Pet> petList = dbController.queryAll();
+
+        for(int i = 0; i < petList.size(); i++){
+            Log.d("petList", petList.get(i).getName());
+        }
+
         Log.d("activity", "cursor returned");
 
         adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);

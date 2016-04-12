@@ -63,9 +63,9 @@ public class PetDBController extends SQLiteOpenHelper{
         String q = "SELECT * FROM " + PET_TABLE_NAME;
         Cursor c = db.rawQuery(q ,null);
         ArrayList<Pet> petArrayList = new ArrayList<Pet>();
-        Pet pet = new Pet();
-        if(c != null){
-            while(c.moveToNext()) {
+        if(c.moveToFirst()){
+            do {
+                Pet pet = new Pet();
                 pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
                 pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
                 pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
@@ -73,10 +73,10 @@ public class PetDBController extends SQLiteOpenHelper{
                 pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
                 pet.setPetPhoto(c.getInt(c.getColumnIndex(PET_COLUMN_IMGPATH)));
                 petArrayList.add(pet);
-            }
+                Log.d("queyall", pet.getName() + pet.getBornDate() + pet.getPetType());
+            } while(c.moveToNext());
         }
         db.close();
-        assert c != null;
         c.close();
         Log.d("Queryall", "after close");
         return petArrayList;
@@ -87,8 +87,7 @@ public class PetDBController extends SQLiteOpenHelper{
         String q = "SELECT * FROM " + PET_TABLE_NAME + " WHERE " + PET_COLUMN_CHIP + " = " + xip;
         Cursor c = db.rawQuery(q,null);
         Pet pet = new Pet();
-        if(c != null) {
-            c.moveToNext();
+        if(c.moveToFirst()) {
             pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
             pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
             pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
@@ -97,7 +96,6 @@ public class PetDBController extends SQLiteOpenHelper{
             pet.setPetPhoto(c.getInt(c.getColumnIndex(PET_COLUMN_IMGPATH)));
         }
         db.close();
-        assert c != null;
         c.close();
         return pet;
     }
