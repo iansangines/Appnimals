@@ -108,9 +108,12 @@ public class PetListActivity extends AppCompatActivity {
             String xip = data.getStringExtra("xip");
             Pet pet = dbController.queryPet(xip);
             if(pet == null) Log.d("peeeeeeeeeeeeeeeeeeeeeeeeet","nuuuuuuuuuuuuuuuull");
-            else Log.d("peeeeeeeeeeeeeeeeeeet nom", pet.getName());
-            adapter.add(pet);
-            petListView.setAdapter(adapter);
+            else {
+                Log.d("peeeeeeeeeeeeeeeeeeet nom", pet.getName());
+                adapter.add(pet);
+                petListView.setAdapter(adapter);
+                Toast.makeText(PetListActivity.this, "Mascota Guardada", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

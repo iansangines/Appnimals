@@ -1,7 +1,11 @@
 package com.example.iansangines.appnimals;
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -22,6 +27,17 @@ import android.widget.Toast;
 public class InsertPetActivity extends AppCompatActivity {
     private boolean clicked = false;
     static final int INSERTED = 1;
+    static ImageButton newImg;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
 
     private ArrayAdapter<CharSequence> adapter;
     Pet petToInsert = new Pet();
@@ -33,6 +49,8 @@ public class InsertPetActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
         Spinner petTypes = (Spinner) findViewById(R.id.spinner);
         adapter = ArrayAdapter.createFromResource(this,R.array.especies,android.R.layout.simple_spinner_dropdown_item);
@@ -57,9 +75,14 @@ public class InsertPetActivity extends AppCompatActivity {
             }
         });
 
+
+
         Button button = (Button) findViewById(R.id.buttonafegir);
         assert button != null;
         button.setOnClickListener(new View.OnClickListener() {
+
+            boolean alertdialog;
+
             @Override
             public void onClick(View v) {
                 if(v.getId() == R.id.buttonafegir){
@@ -69,7 +92,13 @@ public class InsertPetActivity extends AppCompatActivity {
                     assert nameinput != null;
                     String name = nameinput.getText().toString();
                     if(name == null || name.equals("")){
-                        //ALERTDIALOG: no has posat nom
+                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        nameDialog.setMessage("Introdueix un nom").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
                         return;
                     }
                     else{
@@ -82,8 +111,16 @@ public class InsertPetActivity extends AppCompatActivity {
                     assert datainput != null;
                     String data = datainput.getText().toString();
                     if(data == null || data.equals("")){
-                        //ALERTDIALOG: no has posat nom
+
+                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        nameDialog.setMessage("Introdueix una data").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
                         return;
+
                     }
                     else{
                         petToInsert.setBornDate(data);
@@ -95,7 +132,14 @@ public class InsertPetActivity extends AppCompatActivity {
                     assert xipinput != null;
                     String xip = xipinput.getText().toString();
                     if(xip == null || xip.equals("")){
-                        //ALERTDIALOG: no has posat nom
+
+                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        nameDialog.setMessage("Introdueix una número de xip").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
                         return;
                     }
                     else{
@@ -107,8 +151,15 @@ public class InsertPetActivity extends AppCompatActivity {
                     EditText subtypeinput = subtypeinputlayout.getEditText();
                     assert subtypeinput != null;
                     String subtype = subtypeinput.getText().toString();
-                    if(subtype == null || xip.equals("")){
-                        //ALERTDIALOG: no has posat xip
+                    if(subtype == null || subtype.equals("")){
+
+                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        nameDialog.setMessage("Introdueix una raça/tipus").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
                         return;
                     }
                     else{
@@ -125,6 +176,29 @@ public class InsertPetActivity extends AppCompatActivity {
                 }
             }
         });
+
+        newImg = (ImageButton) findViewById(R.id.imgbutton);
+        assert newImg != null;
+        newImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
+
+
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            newImg.setImageBitmap(imageBitmap);
+        }
+    }
+
+
 
 }

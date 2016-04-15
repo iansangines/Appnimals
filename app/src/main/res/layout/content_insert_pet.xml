@@ -12,11 +12,13 @@
     tools:context="com.example.iansangines.appnimals.PetListActivity"
     android:orientation="vertical"
     tools:showIn="@layout/activity_insert_pet"
+    android:theme="@style/AppTheme"
     android:id="@+id/insertpet_layout">
 
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <ImageButton
         android:layout_width="80dp"
         android:layout_height="80dp"
