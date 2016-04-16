@@ -37,7 +37,7 @@ public class ListAdapter extends ArrayAdapter<Pet> {
         TextView petType = (TextView) convertView.findViewById(R.id.animal_type);
         ImageButton petDelete = (ImageButton) convertView.findViewById(R.id.delete);
 
-        petImage.setImageResource(itemPet.petPhoto);
+        petImage.setImageURI(itemPet.getPhotoPath());
         petName.setText(itemPet.name);
         petType.setText(itemPet.petType);
         petDelete.setImageDrawable(null);

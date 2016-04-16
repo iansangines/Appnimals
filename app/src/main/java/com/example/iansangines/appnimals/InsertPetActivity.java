@@ -4,13 +4,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.renderscript.Sampler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ActionMenuView;
@@ -23,6 +27,11 @@ import android.widget.Spinner;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class InsertPetActivity extends AppCompatActivity {
     private boolean clicked = false;
@@ -31,12 +40,7 @@ public class InsertPetActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
+
 
 
     private ArrayAdapter<CharSequence> adapter;
@@ -112,8 +116,8 @@ public class InsertPetActivity extends AppCompatActivity {
                     String data = datainput.getText().toString();
                     if(data == null || data.equals("")){
 
-                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(InsertPetActivity.this);
-                        nameDialog.setMessage("Introdueix una data").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                        AlertDialog.Builder dateDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        dateDialog.setMessage("Introdueix una data").setNeutralButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -133,8 +137,8 @@ public class InsertPetActivity extends AppCompatActivity {
                     String xip = xipinput.getText().toString();
                     if(xip == null || xip.equals("")){
 
-                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(InsertPetActivity.this);
-                        nameDialog.setMessage("Introdueix una número de xip").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                        AlertDialog.Builder xipDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        xipDialog.setMessage("Introdueix una número de xip").setNeutralButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -153,8 +157,8 @@ public class InsertPetActivity extends AppCompatActivity {
                     String subtype = subtypeinput.getText().toString();
                     if(subtype == null || subtype.equals("")){
 
-                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(InsertPetActivity.this);
-                        nameDialog.setMessage("Introdueix una raça/tipus").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                        AlertDialog.Builder typeDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        typeDialog.setMessage("Introdueix una raça/tipus").setNeutralButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -165,14 +169,29 @@ public class InsertPetActivity extends AppCompatActivity {
                     else{
                         petToInsert.setChipNumber(xip);
                     }
+
+                    if(petToInsert.getPhotoPath() == null || petToInsert.getPhotoPath().equals("")){
+                        AlertDialog.Builder photoDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        photoDialog.setMessage("Es requereix una imatge").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        return;
+                    }
+
+
                     PetDBController db = new PetDBController(InsertPetActivity.this);
-                    db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(), petToInsert.getPetSubtype(), petToInsert.getChipNumber(), 0);
+                    db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(), petToInsert.getPetSubtype(), petToInsert.getChipNumber(), petToInsert.getPhotoPath().toString());
                     Toast.makeText(InsertPetActivity.this,"Mascota guardada",Toast.LENGTH_SHORT).show();
                     //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
                     returned.putExtra("xip","'"+petToInsert.getChipNumber()+"'");
                     setResult(INSERTED,returned);
                     finish();
+
+
                 }
             }
         });
@@ -190,12 +209,38 @@ public class InsertPetActivity extends AppCompatActivity {
 
     }
 
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+        String photoName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
+        File folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        if(!folderPath.exists()) folderPath.mkdir(); Log.d("!exists", "Sha creat el directori lokoooooooooooooo");
+        File photoPath = null;
+       try{
+           photoPath = File.createTempFile(photoName, ".jpg", folderPath);
+       }
+
+       catch (IOException x){
+           Log.d("cacaaaaaaaa","cacaaaa");
+       }
+
+       petToInsert.setPetPhotoPath(Uri.parse(photoPath.toString()));
+        Log.d("path", photoPath.getPath());
+
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoPath));
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
+          /*  Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            newImg.setImageBitmap(imageBitmap);
+            petToInsert.setPetPhotoPath((Uri) extras.get("data"));
+            newImg.setImageBitmap(imageBitmap);*/
         }
     }
 

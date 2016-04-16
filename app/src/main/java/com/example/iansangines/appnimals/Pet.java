@@ -1,5 +1,7 @@
 package com.example.iansangines.appnimals;
 
+import android.net.Uri;
+
 /**
  * Created by ian on 09/04/2016.
  */
@@ -9,20 +11,20 @@ public class Pet {
     String petSubtype;
     String bornDate;
     String chipNumber;
-    int petPhoto;
+    Uri photoPath;
 
     public Pet(){
         name = petType = petSubtype = bornDate = chipNumber = "";
-        petPhoto = 0;
+        photoPath = null;
     }
 
-    public Pet(String name,  String bornDate, String petType,String petSubtype , String chipNumber, int petPhoto) {
+    public Pet(String name,  String bornDate, String petType,String petSubtype , String chipNumber, Uri photoPath) {
         this.name = name;
         this.bornDate = bornDate;
         this.petType = petType;
         this.petSubtype = petSubtype;
         this.chipNumber = chipNumber;
-        this.petPhoto = petPhoto;
+        this.photoPath = photoPath;
     }
 
     public String getName(){
@@ -41,8 +43,8 @@ public class Pet {
 
     public String getChipNumber(){return this.chipNumber;}
 
-    public int getPetPhoto(){
-        return this.petPhoto;
+    public Uri getPhotoPath(){
+        return this.photoPath;
     }
 
     public void setName(String name){
@@ -63,7 +65,7 @@ public class Pet {
         this.chipNumber = chipNumber;
     }
 
-    public void setPetPhoto(int petPhoto){
-        this.petPhoto = petPhoto;
+    public void setPetPhotoPath(Uri photoPath){
+        this.photoPath = photoPath;
     }
 }

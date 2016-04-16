@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class PetDBController extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean insertPet(String nom, String data, String type,String subtype, String chip, int imgpath){
+    public boolean insertPet(String nom, String data, String type,String subtype, String chip, String imgpath){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(PET_COLUMN_NAME, nom);
@@ -71,7 +72,7 @@ public class PetDBController extends SQLiteOpenHelper{
                 pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
                 pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
                 pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
-                pet.setPetPhoto(c.getInt(c.getColumnIndex(PET_COLUMN_IMGPATH)));
+                pet.setPetPhotoPath(Uri.parse(c.getString(c.getColumnIndex(PET_COLUMN_IMGPATH)))); //String path -> Uri path
                 petArrayList.add(pet);
                 Log.d("queyall", pet.getName() + pet.getBornDate() + pet.getPetType());
             } while(c.moveToNext());
@@ -93,7 +94,7 @@ public class PetDBController extends SQLiteOpenHelper{
             pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
             pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
             pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
-            pet.setPetPhoto(c.getInt(c.getColumnIndex(PET_COLUMN_IMGPATH)));
+            pet.setPetPhotoPath(Uri.parse(c.getString(c.getColumnIndex(PET_COLUMN_IMGPATH))));
         }
         db.close();
         c.close();

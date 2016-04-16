@@ -2,10 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.iansangines.appnimals">
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/appnimals_outside"
-        android:label="Appnimals"
+        android:label= "Appnimals"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
