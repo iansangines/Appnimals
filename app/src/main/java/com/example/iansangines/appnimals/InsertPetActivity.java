@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -183,7 +185,8 @@ public class InsertPetActivity extends AppCompatActivity {
 
 
                     PetDBController db = new PetDBController(InsertPetActivity.this);
-                    db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(), petToInsert.getPetSubtype(), petToInsert.getChipNumber(), petToInsert.getPhotoPath().toString());
+                    db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(), petToInsert.getPetSubtype(),
+                            petToInsert.getChipNumber(), petToInsert.getPhotoPath().toString(), petToInsert.getthumbnailPath().toString());
                     Toast.makeText(InsertPetActivity.this,"Mascota guardada",Toast.LENGTH_SHORT).show();
                     //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
@@ -208,25 +211,38 @@ public class InsertPetActivity extends AppCompatActivity {
 
 
     }
-
+    private File photoPath;
+    private File thumbnailPath;
+    private File imagesPath;
+    private File thumbnailsPath;
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 
         String photoName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
-        File folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        if(!folderPath.exists()) folderPath.mkdir(); Log.d("!exists", "Sha creat el directori lokoooooooooooooo");
-        File photoPath = null;
-       try{
-           photoPath = File.createTempFile(photoName, ".jpg", folderPath);
+        String thumbnailName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date()) + "_thumbnail";
+        imagesPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages");
+        thumbnailsPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/Thumbnails");
+
+
+        if(!imagesPath.exists()) imagesPath.mkdir(); Log.d(" no exists imagespath", "Sha creat el directori lokoooooooooooooo");
+        if(!thumbnailsPath.exists()) thumbnailsPath.mkdir(); Log.d(" no exists thumbnails", "Sha creat el directori lokoooooooooooooo");
+
+
+        try{
+           photoPath = File.createTempFile(photoName, ".jpg", imagesPath);
+            thumbnailPath = File.createTempFile(thumbnailName, ".png", thumbnailsPath);
+
        }
 
        catch (IOException x){
-           Log.d("cacaaaaaaaa","cacaaaa");
+
        }
 
-       petToInsert.setPetPhotoPath(Uri.parse(photoPath.toString()));
+       petToInsert.setPetPhotoPath(Uri.parse(photoPath.toString()));  //Uri de la foto per a la bd
         Log.d("path", photoPath.getPath());
+        petToInsert.setPetthumbnailPath(Uri.parse(thumbnailPath.toString()));
+        Log.d("path", thumbnailPath.getPath());
 
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoPath));
@@ -237,10 +253,23 @@ public class InsertPetActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-          /*  Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            petToInsert.setPetPhotoPath((Uri) extras.get("data"));
-            newImg.setImageBitmap(imageBitmap);*/
+            Bitmap imageBitmap = BitmapFactory.decodeFile(photoPath.getPath());
+            //newImg.setImageBitmap(imageBitmap);
+            try {
+                FileOutputStream thumbnail = new FileOutputStream(thumbnailPath);
+                Log.d("photo width", Integer.toString(imageBitmap.getWidth()));
+                Log.d("photo width/2", Integer.toString(imageBitmap.getWidth()/10));
+                Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap,(Integer)imageBitmap.getWidth()/10,(Integer) imageBitmap.getHeight()/10,false);
+                Log.d("thumbnail width", Integer.toString(scaled.getWidth()));
+                scaled.compress(Bitmap.CompressFormat.PNG, 100, thumbnail);
+                newImg.setImageBitmap(scaled);
+                thumbnail.flush();
+                thumbnail.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
