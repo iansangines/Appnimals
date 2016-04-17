@@ -259,7 +259,7 @@ public class InsertPetActivity extends AppCompatActivity {
                 FileOutputStream thumbnail = new FileOutputStream(thumbnailPath);
                 Log.d("photo width", Integer.toString(imageBitmap.getWidth()));
                 Log.d("photo width/2", Integer.toString(imageBitmap.getWidth()/10));
-                Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap,(Integer)imageBitmap.getWidth()/10,(Integer) imageBitmap.getHeight()/10,false);
+                Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap,(Integer)imageBitmap.getWidth()/10,((Integer) imageBitmap.getHeight()/10)-30,false);
                 Log.d("thumbnail width", Integer.toString(scaled.getWidth()));
                 scaled.compress(Bitmap.CompressFormat.PNG, 100, thumbnail);
                 newImg.setImageBitmap(scaled);
