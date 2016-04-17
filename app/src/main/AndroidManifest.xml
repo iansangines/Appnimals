@@ -9,9 +9,9 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/appnimals_outside"
+        
         android:label= "Appnimals"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".LaunchActivity"
             android:label="LaunchActivity"
@@ -25,7 +25,7 @@
         <activity
             android:name=".PetListActivity"
             android:label="@string/title_activity_pet_list"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".InsertPetActivity"
@@ -36,11 +36,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.iansangines.appnimals.PetListActivity" />
         </activity>
-        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+
     </application>
 
 </manifest>

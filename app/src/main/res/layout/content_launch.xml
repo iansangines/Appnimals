@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:showIn="@layout/activity_launch"
+    android:theme="@style/AppTheme.NoActionBar"
     tools:context="com.example.iansangines.appnimals.LaunchActivity"
     android:background="@color/colorPrimary">
 
