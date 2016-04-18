@@ -236,7 +236,9 @@ public class InsertPetActivity extends AppCompatActivity {
 
         try{
             photoPath = File.createTempFile(photoName, ".jpg", imagesPath);
+            Log.d("PATH:", photoPath.getPath());
             thumbnailPath = File.createTempFile(thumbnailName, ".png", thumbnailsPath);
+            Log.d("PATH:", thumbnailPath.getPath());
 
         }
 
@@ -270,10 +272,10 @@ public class InsertPetActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("reslt_ok", Integer.toString(resultCode));
+        newImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d("result", "enter result_ok");
             Bitmap imageBitmap = BitmapFactory.decodeFile(photoPath.getPath());
-            newImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
             try {
                 FileOutputStream thumbnail = new FileOutputStream(thumbnailPath);
                 Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap,(Integer)imageBitmap.getWidth()/10,((Integer) imageBitmap.getHeight()/10)-20,false);
@@ -297,7 +299,23 @@ public class InsertPetActivity extends AppCompatActivity {
 
         else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             Log.d("result", "pick image");
-
+            Uri imageUri = data.getData();
+            Bitmap pickedPhoto = BitmapFactory.decodeFile(imageUri.getPath());
+            try {
+                FileOutputStream photo = new FileOutputStream(photoPath);
+                FileOutputStream thumbnail = new FileOutputStream(thumbnailPath);
+                Bitmap scaled = Bitmap.createScaledBitmap(pickedPhoto, pickedPhoto.getWidth() / 10, pickedPhoto.getHeight() / 10 - 20, false);
+                scaled.compress(Bitmap.CompressFormat.PNG, 100, thumbnail);
+                pickedPhoto.compress(Bitmap.CompressFormat.PNG, 100, photo);
+                newImg.setImageBitmap(scaled);
+                photo.flush();
+                thumbnail.flush();
+                photo.close();
+                thumbnail.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
