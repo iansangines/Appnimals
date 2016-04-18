@@ -1,5 +1,4 @@
 package com.example.iansangines.appnimals;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,26 +8,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.renderscript.Sampler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ActionMenuView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,8 +33,12 @@ public class InsertPetActivity extends AppCompatActivity {
     private boolean clicked = false;
     static final int INSERTED = 1;
     static ImageView newImg;
-
+    private File photoPath;
+    private File thumbnailPath;
+    private File imagesPath;
+    private File thumbnailsPath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int PICK_IMAGE = 2;
 
 
 
@@ -56,7 +53,6 @@ public class InsertPetActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
 
         Spinner petTypes = (Spinner) findViewById(R.id.spinner);
@@ -205,41 +201,53 @@ public class InsertPetActivity extends AppCompatActivity {
         newImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent();
+                Log.d("onclick image", "entra");
+                PopupMenu popup = new PopupMenu(InsertPetActivity.this,newImg);
+                popup.getMenuInflater().inflate(R.menu.photo_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Log.d("onclick popup", "entra");
+                        if (item.getItemId() == R.id.camera) {
+                            dispatchTakePictureIntent();
+                            return true;
+                        } else {
+                            pickPictureGalleryIntent();
+                            return false;
+                        }
+                    }
+                });
+                popup.show();
             }
         });
-
-
-
+        //FINAL ON CREate
     }
-    private File photoPath;
-    private File thumbnailPath;
-    private File imagesPath;
-    private File thumbnailsPath;
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 
+    private void createPictureDirectories(){
         String photoName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
         String thumbnailName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date()) + "_thumbnail";
         imagesPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages");
         thumbnailsPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/Thumbnails");
-
 
         if(!imagesPath.exists()) imagesPath.mkdir(); Log.d(" no exists imagespath", "Sha creat el directori lokoooooooooooooo");
         if(!thumbnailsPath.exists()) thumbnailsPath.mkdir(); Log.d(" no exists thumbnails", "Sha creat el directori lokoooooooooooooo");
 
 
         try{
-           photoPath = File.createTempFile(photoName, ".jpg", imagesPath);
+            photoPath = File.createTempFile(photoName, ".jpg", imagesPath);
             thumbnailPath = File.createTempFile(thumbnailName, ".png", thumbnailsPath);
 
-       }
+        }
 
-       catch (IOException x){
+        catch (IOException x){
+            System.err.format ("IOException %s%n",x);
+        }
+    }
 
-       }
-
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        createPictureDirectories();
        petToInsert.setPetPhotoPath(Uri.parse(photoPath.toString()));  //Uri de la foto per a la bd
         Log.d("path", photoPath.getPath());
         petToInsert.setPetthumbnailPath(Uri.parse(thumbnailPath.toString()));
@@ -251,17 +259,24 @@ public class InsertPetActivity extends AppCompatActivity {
         }
     }
 
+    private void pickPictureGalleryIntent(){
+        Intent pickPictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        createPictureDirectories();
+        pickPictureIntent.setType("image/*");
+        startActivityForResult(Intent.createChooser(pickPictureIntent,"Selecciona la imatge"), PICK_IMAGE);
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("reslt_ok", Integer.toString(resultCode));
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Log.d("result", "enter result_ok");
             Bitmap imageBitmap = BitmapFactory.decodeFile(photoPath.getPath());
             newImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
             try {
                 FileOutputStream thumbnail = new FileOutputStream(thumbnailPath);
-                Log.d("photo width", Integer.toString(imageBitmap.getWidth()));
-                Log.d("photo width/2", Integer.toString(imageBitmap.getWidth()/10));
                 Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap,(Integer)imageBitmap.getWidth()/10,((Integer) imageBitmap.getHeight()/10)-20,false);
-                Log.d("thumbnail width", Integer.toString(scaled.getWidth()));
                 scaled.compress(Bitmap.CompressFormat.PNG, 100, thumbnail);
                 newImg.setImageBitmap(scaled);
                 thumbnail.flush();
@@ -270,6 +285,18 @@ public class InsertPetActivity extends AppCompatActivity {
             catch (Exception e) {
                 e.printStackTrace();
             }
+
+        }
+        else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK){
+            Log.d("result", "enter NOT result_ok");
+            petToInsert.setPetPhotoPath(null);
+            petToInsert.setPetthumbnailPath(null);
+            photoPath.delete();
+            thumbnailPath.delete();
+        }
+
+        else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
+            Log.d("result", "pick image");
 
         }
     }
