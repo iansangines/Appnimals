@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -38,7 +39,7 @@ import java.util.Date;
 public class InsertPetActivity extends AppCompatActivity {
     private boolean clicked = false;
     static final int INSERTED = 1;
-    static ImageButton newImg;
+    static ImageView newImg;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -199,7 +200,7 @@ public class InsertPetActivity extends AppCompatActivity {
             }
         });
 
-        newImg = (ImageButton) findViewById(R.id.imgbutton);
+        newImg = (ImageView) findViewById(R.id.imgview);
         assert newImg != null;
         newImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,12 +255,12 @@ public class InsertPetActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap imageBitmap = BitmapFactory.decodeFile(photoPath.getPath());
-            //newImg.setImageBitmap(imageBitmap);
+            newImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
             try {
                 FileOutputStream thumbnail = new FileOutputStream(thumbnailPath);
                 Log.d("photo width", Integer.toString(imageBitmap.getWidth()));
                 Log.d("photo width/2", Integer.toString(imageBitmap.getWidth()/10));
-                Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap,(Integer)imageBitmap.getWidth()/10,((Integer) imageBitmap.getHeight()/10)-30,false);
+                Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap,(Integer)imageBitmap.getWidth()/10,((Integer) imageBitmap.getHeight()/10)-20,false);
                 Log.d("thumbnail width", Integer.toString(scaled.getWidth()));
                 scaled.compress(Bitmap.CompressFormat.PNG, 100, thumbnail);
                 newImg.setImageBitmap(scaled);
