@@ -30,11 +30,11 @@ public class ImageFileController {
         fullSizeDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages");
         thumbnailDir =  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/Thumbnails");
 
-        if(fullSizeDir.mkdir()) Log.d("fullsizeDir", "created");
-        else if(fullSizeDir.exists()) Log.d("fullsizeDir", "exists");
+        if(fullSizeDir.mkdir()) Log.d("fullsizeDir", "created with path: " + fullSizeDir.getPath() );
+        else if(fullSizeDir.exists()) Log.d("fullsizeDir", "exists with path: " +fullSizeDir.getPath());
 
-        if(thumbnailDir.mkdir()) Log.d("thumbnailDir", "created");
-        else if(thumbnailDir.exists()) Log.d("thumbnailDir", "exists");
+        if(thumbnailDir.mkdir()) Log.d("thumbnailDir", "created with path: " + thumbnailDir.getPath());
+        else if(thumbnailDir.exists()) Log.d("thumbnailDir", "exists with path: " + thumbnailDir.getPath());
     }
 
     public String saveFullSizeImage (Bitmap imageBitmap){
@@ -44,6 +44,8 @@ public class ImageFileController {
 
         try {
             FileOutputStream image = new FileOutputStream(fullSizeImage);
+            //Bitmap null?
+
             imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,image);
             image.flush();
             image.close();

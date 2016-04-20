@@ -236,8 +236,9 @@ public class InsertPetActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d("result", "enter result_ok");
-            Bitmap imageBitmap = (Bitmap) data.getExtras().get("Data");
-
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("Data");
+            
             String fullSizeImagePath = imageController.saveFullSizeImage(imageBitmap);
             petToInsert.setPetPhotoPath(Uri.parse(fullSizeImagePath));
 
@@ -257,6 +258,7 @@ public class InsertPetActivity extends AppCompatActivity {
             Log.d("result", "pick image");
             try {
             Uri photoUri = data.getData();
+                Log.d("Pick_image intent on result", "image real path: " + photoUri.getPath());
             Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
 
                 String fullSizeImagePath = imageController.saveFullSizeImage(imageBitmap);
