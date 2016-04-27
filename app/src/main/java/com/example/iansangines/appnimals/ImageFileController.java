@@ -1,6 +1,7 @@
 package com.example.iansangines.appnimals;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
@@ -15,14 +16,12 @@ import java.util.Date;
  * Created by iansangines on 18/04/2016.
  */
 public class ImageFileController {
-    private File fullSizeDir;
-    private File thumbnailDir;
+    private static File fullSizeDir;  //STATIC
+    private static File thumbnailDir;
 
 
     public void ImageFileController(){
 
-        fullSizeDir = null;
-        thumbnailDir = null;
 
     }
 
@@ -30,21 +29,28 @@ public class ImageFileController {
         fullSizeDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages");
         thumbnailDir =  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/Thumbnails");
 
-        if(fullSizeDir.mkdir()) Log.d("fullsizeDir", "created with path: " + fullSizeDir.getPath() );
+
+        if(fullSizeDir.mkdir())Log.d("fullsizeDir", "created with path: " + fullSizeDir.getPath() );
+
         else if(fullSizeDir.exists()) Log.d("fullsizeDir", "exists with path: " +fullSizeDir.getPath());
 
         if(thumbnailDir.mkdir()) Log.d("thumbnailDir", "created with path: " + thumbnailDir.getPath());
         else if(thumbnailDir.exists()) Log.d("thumbnailDir", "exists with path: " + thumbnailDir.getPath());
     }
 
+    public String getFullSizePath(){
+        String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
+        File fullSizeImage = new File(fullSizeDir + imageName + ".jpg");
+        return fullSizeImage.getPath();
+    }
+
     public String saveFullSizeImage (Bitmap imageBitmap){
 
         String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
-        File fullSizeImage = new File(fullSizeDir,imageName + ".jpg");
+        File fullSizeImage = new File(fullSizeDir + imageName + ".png");
 
         try {
             FileOutputStream image = new FileOutputStream(fullSizeImage);
-            //Bitmap null?
 
             imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,image);
             image.flush();
@@ -61,7 +67,10 @@ public class ImageFileController {
     public Pair<String,Bitmap> saveThumbnailImage (Bitmap imageBitmap){
 
         String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date()) + "_thumbnail";
-        File thumbnailImage = new File(thumbnailDir,imageName + ".jpg");
+        File thumbnailImage = new File(thumbnailDir + imageName + ".jpg");
+
+        Log.d("THUMBNAILIMAGEPATH", thumbnailImage.getPath());
+        Log.d("THUMBNAILIMAGEPATH", thumbnailImage.getPath());
 
         try {
             FileOutputStream image = new FileOutputStream(thumbnailImage);

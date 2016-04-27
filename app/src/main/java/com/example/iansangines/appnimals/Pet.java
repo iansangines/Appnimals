@@ -11,16 +11,15 @@ public class Pet {
     String petSubtype;
     String bornDate;
     String chipNumber;
-    Uri thumbnailPath;
-    Uri photoPath;
+    String thumbnailPath;
+    String photoPath;
 
     public Pet(){
         name = petType = petSubtype = bornDate = chipNumber = "";
-        photoPath = null;
-        thumbnailPath = null;
+        photoPath = thumbnailPath = "";
     }
 
-    public Pet(String name,  String bornDate, String petType,String petSubtype , String chipNumber, Uri photoPath, Uri thumbnailPath) {
+    public Pet(String name,  String bornDate, String petType,String petSubtype , String chipNumber, String photoPath, String thumbnailPath) {
         this.name = name;
         this.bornDate = bornDate;
         this.petType = petType;
@@ -46,9 +45,9 @@ public class Pet {
 
     public String getChipNumber(){return this.chipNumber;}
 
-    public Uri getPhotoPath(){ return this.photoPath; }
+    public String getPhotoPath(){ return this.photoPath; }
 
-    public Uri getthumbnailPath(){
+    public String getthumbnailPath(){
         return this.thumbnailPath;
     }
 
@@ -70,9 +69,9 @@ public class Pet {
         this.chipNumber = chipNumber;
     }
 
-    public void setPetPhotoPath(Uri photoPath){
+    public void setPetPhotoPath(String photoPath){
         this.photoPath = photoPath;
     }
 
-    public void setPetthumbnailPath(Uri thumbnailPath) { this.thumbnailPath = thumbnailPath; }
+    public void setPetthumbnailPath(String thumbnailPath) { this.thumbnailPath = thumbnailPath; }
 }

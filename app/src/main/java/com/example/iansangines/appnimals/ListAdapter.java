@@ -2,6 +2,7 @@ package com.example.iansangines.appnimals;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class ListAdapter extends ArrayAdapter<Pet> {
         TextView petType = (TextView) convertView.findViewById(R.id.animal_type);
         ImageButton petDelete = (ImageButton) convertView.findViewById(R.id.delete);
 
-        petImage.setImageURI(itemPet.getthumbnailPath());
+        petImage.setImageURI(Uri.parse(itemPet.getthumbnailPath()));
         petName.setText(itemPet.name);
         petType.setText(itemPet.petType);
         petDelete.setImageDrawable(null);
