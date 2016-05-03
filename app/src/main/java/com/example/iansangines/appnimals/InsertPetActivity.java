@@ -22,7 +22,6 @@ import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.File;
 
 
 public class InsertPetActivity extends AppCompatActivity {
@@ -76,6 +75,7 @@ public class InsertPetActivity extends AppCompatActivity {
         assert button != null;
         button.setOnClickListener(new View.OnClickListener() {
 
+            boolean alertdialog;
 
             @Override
             public void onClick(View v) {
@@ -153,7 +153,7 @@ public class InsertPetActivity extends AppCompatActivity {
                         }).show();
                         return;
                     } else {
-                        petToInsert.setPetSubtype(subtype);
+                        petToInsert.setChipNumber(xip);
                     }
 
                     if (petToInsert.getPhotoPath() == null || petToInsert.getPhotoPath().equals("")) {
@@ -170,7 +170,7 @@ public class InsertPetActivity extends AppCompatActivity {
 
                     PetDBController db = new PetDBController(InsertPetActivity.this);
                     db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(), petToInsert.getPetSubtype(),
-                            petToInsert.getChipNumber(), petToInsert.getPhotoPath(), petToInsert.getthumbnailPath());
+                            petToInsert.getChipNumber(), petToInsert.getPhotoPath().toString(), petToInsert.getthumbnailPath().toString());
                     Toast.makeText(InsertPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
                     //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
@@ -187,7 +187,7 @@ public class InsertPetActivity extends AppCompatActivity {
         assert imgView!= null;
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {  //Triar entre camera o galeria
+            public void onClick(View v) {
                 Log.d("onclick image", "entra");
                 PopupMenu popup = new PopupMenu(InsertPetActivity.this, imgView);
                 popup.getMenuInflater().inflate(R.menu.photo_menu, popup.getMenu());
@@ -213,14 +213,7 @@ public class InsertPetActivity extends AppCompatActivity {
 
 
     private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        ImageFileController imageController = new ImageFileController();
-        imageController.CreateDirectories();
-        String fullSizePath = imageController.getFullSizePath();
-        Log.d("fullsizeUri", fullSizePath);
-        petToInsert.setPetPhotoPath(fullSizePath);
-        File aux = new File(fullSizePath);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(aux));
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
@@ -236,6 +229,7 @@ public class InsertPetActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ImageFileController imageController = new ImageFileController();
+        imageController.CreateDirectories();
 
         Log.d("reslt_ok", Integer.toString(resultCode));
         imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -243,16 +237,23 @@ public class InsertPetActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d("result", "enter result_ok");
             try {
-                File aux = new File(petToInsert.getPhotoPath());
-                Bitmap fullSizeBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(aux));
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("Data");
 
-                Pair<String, Bitmap> thumbnail = imageController.saveThumbnailImage(fullSizeBitmap);
-                petToInsert.setPetthumbnailPath(thumbnail.first);
+                String fullSizeImagePath = imageController.saveFullSizeImage(imageBitmap);
+                petToInsert.setPetPhotoPath(Uri.parse(fullSizeImagePath));
+
+                Pair<String, Bitmap> thumbnail = imageController.saveThumbnailImage(imageBitmap);
+                petToInsert.setPetthumbnailPath(Uri.parse(thumbnail.first));
                 imgView.setImageBitmap(thumbnail.second);
             }
-            catch( Exception e){
+            catch (Exception e){
+                Log.d("requestimagecapture", "Peta el try");
                 e.printStackTrace();
+                Log.d("requestimagecapture", "Peta el try");
+
             }
+
 
         }
         else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK){
@@ -269,10 +270,10 @@ public class InsertPetActivity extends AppCompatActivity {
             Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
 
                 String fullSizeImagePath = imageController.saveFullSizeImage(imageBitmap);
-                petToInsert.setPetPhotoPath(fullSizeImagePath);
+                petToInsert.setPetPhotoPath(Uri.parse(fullSizeImagePath));
 
                 Pair<String,Bitmap> thumbnail = imageController.saveThumbnailImage(imageBitmap);
-                petToInsert.setPetthumbnailPath(thumbnail.first);
+                petToInsert.setPetthumbnailPath(Uri.parse(thumbnail.first));
                 imgView.setImageBitmap(thumbnail.second);
             }
             catch(Exception e){

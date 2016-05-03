@@ -105,6 +105,11 @@ public class PetListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == INSERT_PET_ACTIVITY && resultCode == INSERTED){
+            //Data conté dos bitmaps (fullsize, thumbnail) i en el Result es guarden en el path de la mascota que
+            //retorna el data Intent.  (Aixi no es crea el fitxer de la imatge fins que s'ha acabat
+            //el insertpetactivity)
+
+
             String xip = data.getStringExtra("xip");
             Pet pet = dbController.queryPet(xip);
             if(pet == null) Log.d("peeeeeeeeeeeeeeeeeeeeeeeeet","nuuuuuuuuuuuuuuuull");
