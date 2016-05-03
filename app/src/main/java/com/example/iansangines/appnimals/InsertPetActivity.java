@@ -2,7 +2,9 @@ package com.example.iansangines.appnimals;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,6 +24,7 @@ import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.File;
 
 
 public class InsertPetActivity extends AppCompatActivity {
@@ -30,6 +33,9 @@ public class InsertPetActivity extends AppCompatActivity {
     static ImageView imgView;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
+    ImageFileController imageController = new ImageFileController();
+    File fullSizeImage;
+    File thumbnailImage;
 
 
 
@@ -44,6 +50,10 @@ public class InsertPetActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        imageController.CreateDirectories();
+
 
 
         Spinner petTypes = (Spinner) findViewById(R.id.spinner);
@@ -74,8 +84,6 @@ public class InsertPetActivity extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.buttonafegir);
         assert button != null;
         button.setOnClickListener(new View.OnClickListener() {
-
-            boolean alertdialog;
 
             @Override
             public void onClick(View v) {
@@ -215,6 +223,9 @@ public class InsertPetActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            fullSizeImage = imageController.getFullSizeFile();
+            thumbnailImage = imageController.getThumbnailFile();
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(fullSizeImage));
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
@@ -228,8 +239,6 @@ public class InsertPetActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ImageFileController imageController = new ImageFileController();
-        imageController.CreateDirectories();
 
         Log.d("reslt_ok", Integer.toString(resultCode));
         imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -237,15 +246,15 @@ public class InsertPetActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d("result", "enter result_ok");
             try {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("Data");
 
-                String fullSizeImagePath = imageController.saveFullSizeImage(imageBitmap);
-                petToInsert.setPetPhotoPath(Uri.parse(fullSizeImagePath));
+                String fullSizeImagePath = fullSizeImage.getAbsolutePath();
+                petToInsert.setPetPhotoPath(fullSizeImagePath);
 
-                Pair<String, Bitmap> thumbnail = imageController.saveThumbnailImage(imageBitmap);
-                petToInsert.setPetthumbnailPath(Uri.parse(thumbnail.first));
-                imgView.setImageBitmap(thumbnail.second);
+                Bitmap imageBitmap = BitmapFactory.decodeFile(fullSizeImagePath);
+
+                Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
+                petToInsert.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
+                imgView.setImageBitmap(thumbnail);
             }
             catch (Exception e){
                 Log.d("requestimagecapture", "Peta el try");
@@ -265,16 +274,42 @@ public class InsertPetActivity extends AppCompatActivity {
         else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             Log.d("result", "pick image");
             try {
-            Uri photoUri = data.getData();
+
+                Uri photoUri = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(photoUri,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String imgDecodableString = cursor.getString(columnIndex);
+                cursor.close();
+
+                Bitmap imageBitmap = BitmapFactory.decodeFile(imgDecodableString);
+
+                imageController.saveFullSizeImage(imageBitmap, fullSizeImage);
+                petToInsert.setPetPhotoPath(fullSizeImage.getAbsolutePath());
+
+                Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
+                petToInsert.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
+                imgView.setImageBitmap(thumbnail);
+
+
+
+                /*
+
                 Log.d("Pick_image intent on result", "image real path: " + photoUri.getPath());
             Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
 
-                String fullSizeImagePath = imageController.saveFullSizeImage(imageBitmap);
-                petToInsert.setPetPhotoPath(Uri.parse(fullSizeImagePath));
+                imageController.saveFullSizeImage(imageBitmap, fullSizeImage);
+                petToInsert.setPetPhotoPath(fullSizeImage.getAbsolutePath());
 
-                Pair<String,Bitmap> thumbnail = imageController.saveThumbnailImage(imageBitmap);
-                petToInsert.setPetthumbnailPath(Uri.parse(thumbnail.first));
-                imgView.setImageBitmap(thumbnail.second);
+                Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
+                petToInsert.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
+                imgView.setImageBitmap(thumbnail);*/
             }
             catch(Exception e){
                 e.printStackTrace();

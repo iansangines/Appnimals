@@ -20,9 +20,9 @@ public class ImageFileController {
     private static File thumbnailDir;
 
 
-    public void ImageFileController(){
-
-
+    public ImageFileController(){
+        fullSizeDir = null;
+        thumbnailDir = null;
     }
 
     public void CreateDirectories (){
@@ -38,47 +38,42 @@ public class ImageFileController {
         else if(thumbnailDir.exists()) Log.d("thumbnailDir", "exists with path: " + thumbnailDir.getPath());
     }
 
-    public String getFullSizePath(){
+    public File getFullSizeFile(){
         String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
         File fullSizeImage = new File(fullSizeDir + imageName + ".jpg");
-        return fullSizeImage.getPath();
+        return fullSizeImage;
     }
 
-    public String saveFullSizeImage (Bitmap imageBitmap){
-
+    public File getThumbnailFile(){
         String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
-        File fullSizeImage = new File(fullSizeDir + imageName + ".png");
+        File fullSizeImage = new File(thumbnailDir + imageName+ "_thumbnail" + ".jpg");
+        return fullSizeImage;
+    }
+
+    public void saveFullSizeImage (Bitmap imageBitmap, File fullSizeFile){
 
         try {
-            FileOutputStream image = new FileOutputStream(fullSizeImage);
+            FileOutputStream image = new FileOutputStream(fullSizeFile);
 
             imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,image);
             image.flush();
             image.close();
-            return fullSizeImage.getPath();
         }
         catch (IOException x){
             System.err.format("IOException %s%n",x);
-            return null;
         }
 
     }
 
-    public Pair<String,Bitmap> saveThumbnailImage (Bitmap imageBitmap){
-
-        String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date()) + "_thumbnail";
-        File thumbnailImage = new File(thumbnailDir + imageName + ".jpg");
-
-        Log.d("THUMBNAILIMAGEPATH", thumbnailImage.getPath());
-        Log.d("THUMBNAILIMAGEPATH", thumbnailImage.getPath());
+    public Bitmap saveThumbnailImage (Bitmap imageBitmap, File thumbnailFile){
 
         try {
-            FileOutputStream image = new FileOutputStream(thumbnailImage);
+            FileOutputStream image = new FileOutputStream(thumbnailFile);
             Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.getWidth()/10, imageBitmap.getHeight()/10 - 10, true);
             scaled.compress(Bitmap.CompressFormat.PNG, 80, image);
             image.flush();
             image.close();
-            return new Pair<>(thumbnailImage.getPath(),scaled);
+            return scaled;
         }
         catch (IOException x){
             System.err.format("IOException %s%n",x);
@@ -87,9 +82,8 @@ public class ImageFileController {
 
     }
 
-    public boolean deleteImageFile (String path){
-        File fileToDelete = new File(path);
-        return fileToDelete.delete();
+    public boolean deleteImageFile (File imageFile){
+        return imageFile.delete();
     }
 
 }
