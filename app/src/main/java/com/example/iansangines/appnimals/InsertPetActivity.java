@@ -54,10 +54,13 @@ public class InsertPetActivity extends AppCompatActivity {
 
         imageController.CreateDirectories();
 
+        fullSizeImage = imageController.getFullSizeFile();
+        thumbnailImage = imageController.getThumbnailFile();
+
 
 
         Spinner petTypes = (Spinner) findViewById(R.id.spinner);
-        adapter = ArrayAdapter.createFromResource(this,R.array.especies,android.R.layout.simple_spinner_dropdown_item);
+        adapter = ArrayAdapter.createFromResource(this, R.array.especies, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         assert petTypes != null;
         petTypes.setAdapter(adapter);
@@ -200,6 +203,7 @@ public class InsertPetActivity extends AppCompatActivity {
                 PopupMenu popup = new PopupMenu(InsertPetActivity.this, imgView);
                 popup.getMenuInflater().inflate(R.menu.photo_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         Log.d("onclick popup", "entra");
@@ -223,8 +227,6 @@ public class InsertPetActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            fullSizeImage = imageController.getFullSizeFile();
-            thumbnailImage = imageController.getThumbnailFile();
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(fullSizeImage));
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
@@ -276,6 +278,8 @@ public class InsertPetActivity extends AppCompatActivity {
             try {
 
                 Uri photoUri = data.getData();
+                if( photoUri != null) Log.d("PICK_IMAGE", "URI:" + photoUri.getPath() );
+                else Log.d("URI", "null");
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
                 // Get the cursor

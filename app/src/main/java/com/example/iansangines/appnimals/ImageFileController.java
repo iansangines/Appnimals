@@ -26,8 +26,8 @@ public class ImageFileController {
     }
 
     public void CreateDirectories (){
-        fullSizeDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages");
-        thumbnailDir =  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/Thumbnails");
+        fullSizeDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/");
+        thumbnailDir =  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/Thumbnails/");
 
 
         if(fullSizeDir.mkdir())Log.d("fullsizeDir", "created with path: " + fullSizeDir.getPath() );
@@ -40,13 +40,13 @@ public class ImageFileController {
 
     public File getFullSizeFile(){
         String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
-        File fullSizeImage = new File(fullSizeDir + imageName + ".jpg");
+        File fullSizeImage = new File(fullSizeDir, imageName + ".jpg");
         return fullSizeImage;
     }
 
     public File getThumbnailFile(){
         String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
-        File fullSizeImage = new File(thumbnailDir + imageName+ "_thumbnail" + ".jpg");
+        File fullSizeImage = new File(thumbnailDir, "_thumbnail" +  imageName + ".jpg");
         return fullSizeImage;
     }
 
