@@ -88,7 +88,7 @@ public class PetDBController extends SQLiteOpenHelper{
 
     public Pet queryPet(String xip){
         SQLiteDatabase db = this.getReadableDatabase();
-        String q = "SELECT * FROM " + PET_TABLE_NAME + " WHERE " + PET_COLUMN_CHIP + " = " + xip;
+        String q = "SELECT * FROM " + PET_TABLE_NAME + " WHERE " + PET_COLUMN_CHIP + "=" + xip;
         Cursor c = db.rawQuery(q,null);
         Pet pet = new Pet();
         if(c.moveToFirst()) {

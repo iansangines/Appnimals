@@ -38,8 +38,6 @@ public class InsertPetActivity extends AppCompatActivity {
     File thumbnailImage;
 
 
-
-
     private ArrayAdapter<CharSequence> adapter;
     Pet petToInsert = new Pet();
 
@@ -302,18 +300,6 @@ public class InsertPetActivity extends AppCompatActivity {
                 imgView.setImageBitmap(thumbnail);
 
 
-
-                /*
-
-                Log.d("Pick_image intent on result", "image real path: " + photoUri.getPath());
-            Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
-
-                imageController.saveFullSizeImage(imageBitmap, fullSizeImage);
-                petToInsert.setPetPhotoPath(fullSizeImage.getAbsolutePath());
-
-                Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
-                petToInsert.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
-                imgView.setImageBitmap(thumbnail);*/
             }
             catch(Exception e){
                 e.printStackTrace();

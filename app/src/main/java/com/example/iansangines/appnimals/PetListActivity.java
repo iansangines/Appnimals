@@ -1,31 +1,19 @@
 package com.example.iansangines.appnimals;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
-
 import java.util.ArrayList;
-import java.util.Random;
-
-import static android.app.PendingIntent.getActivity;
-import static java.security.AccessController.getContext;
 
 public class PetListActivity extends AppCompatActivity {
     private ListAdapter adapter;
@@ -38,15 +26,17 @@ public class PetListActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet_list);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (toolbar != null) {
-            toolbar.setTitle("Les teves mascotes");
-        }
+        getSupportActionBar().setTitle("Les teves mascotes");
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -78,7 +68,7 @@ public class PetListActivity extends AppCompatActivity {
 
 
         petListView = (ListView) findViewById(R.id.listview);
-
+        petListView.setClickable(true);
         //BASE DE DADES
         dbController = new PetDBController(this);
         ArrayList<Pet> petList = dbController.queryAll();
@@ -96,7 +86,12 @@ public class PetListActivity extends AppCompatActivity {
         petListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //PERFILACTIVITY
+                Toast.makeText(PetListActivity.this, "S'ha clicat l'element a la posicio" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                Log.d("onItemClick" , "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                Intent profile = new Intent(PetListActivity.this, ProfileActivity.class);
+                Pet auxPet =(Pet) petListView.getItemAtPosition(position);
+                profile.putExtra("chip",auxPet.getChipNumber());
+                startActivity(profile);
             }
         });
 
@@ -112,7 +107,7 @@ public class PetListActivity extends AppCompatActivity {
 
             String xip = data.getStringExtra("xip");
             Pet pet = dbController.queryPet(xip);
-            if(pet == null) Log.d("peeeeeeeeeeeeeeeeeeeeeeeeet","nuuuuuuuuuuuuuuuull");
+            if(pet == null) Log.d("peeeeeeeeeeeeeeeeeeeeeeeeet",xip);
             else {
                 Log.d("peeeeeeeeeeeeeeeeeeet nom", pet.getName());
                 adapter.add(pet);

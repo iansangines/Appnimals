@@ -2,10 +2,12 @@ package com.example.iansangines.appnimals;
 
 import android.net.Uri;
 
+import java.io.Serializable;
+
 /**
  * Created by ian on 09/04/2016.
  */
-public class Pet {
+public class Pet{
     String name;
     String petType;
     String petSubtype;

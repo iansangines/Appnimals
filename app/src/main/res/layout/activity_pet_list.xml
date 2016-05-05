@@ -54,7 +54,8 @@
             android:paddingTop="8dp"
             android:layout_below= "@id/titol"
             android:dividerHeight="1px"
-            android:text= "animal"/>
+            android:text= "animal"
+            android:clickable="true"/>
 
 
     </RelativeLayout>
