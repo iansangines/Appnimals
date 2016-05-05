@@ -74,7 +74,7 @@ public class PetDBController extends SQLiteOpenHelper{
                 pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
                 pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
                 pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
-                pet.setPetPhotoPath(c.getString(c.getColumnIndex(PET_COLUMN_IMGPATH))); //String path -> Uri path
+                pet.setPetPhotoPath(c.getString(c.getColumnIndex(PET_COLUMN_IMGPATH)));
                 pet.setPetthumbnailPath(c.getString(c.getColumnIndex(PET_COLUMN_THUMBNAILPATH)));
                 petArrayList.add(pet);
                 Log.d("queyall", pet.getName() + pet.getBornDate() + pet.getPetType());
@@ -88,10 +88,11 @@ public class PetDBController extends SQLiteOpenHelper{
 
     public Pet queryPet(String xip){
         SQLiteDatabase db = this.getReadableDatabase();
-        String q = "SELECT * FROM " + PET_TABLE_NAME + " WHERE " + PET_COLUMN_CHIP + "=" + xip;
-        Cursor c = db.rawQuery(q,null);
+        String q = "SELECT * FROM " + PET_TABLE_NAME + " WHERE " + PET_COLUMN_CHIP + " = " + xip;
+        Cursor c = db.rawQuery("SELECT * FROM " + PET_TABLE_NAME + " WHERE " + PET_COLUMN_CHIP + "=" + xip, null);
         Pet pet = new Pet();
         if(c.moveToFirst()) {
+            Log.d("queryPet", "l'ha trobat");
             pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
             pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
             pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
@@ -102,6 +103,7 @@ public class PetDBController extends SQLiteOpenHelper{
         }
         db.close();
         c.close();
+        Log.d("queryPet",pet.getPhotoPath());
         return pet;
     }
 }
