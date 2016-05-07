@@ -1,10 +1,14 @@
 package com.example.iansangines.appnimals;
 
+import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Pair;
+import android.view.WindowManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -67,16 +71,29 @@ public class ImageFileController {
 
     public Bitmap saveThumbnailImage (Bitmap imageBitmap, File thumbnailFile){
 
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+
         try {
-            FileOutputStream image = new FileOutputStream(thumbnailFile);
-            Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.getWidth()/10, imageBitmap.getHeight()/10 - 10, true);
-            scaled.compress(Bitmap.CompressFormat.PNG, 80, image);
-            image.flush();
-            image.close();
-            return scaled;
+
+
+                FileOutputStream image = new FileOutputStream(thumbnailFile);
+            if(height/5 < imageBitmap.getHeight() && width/5-10 < imageBitmap.getWidth() ) {
+                Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.getWidth() / 10, imageBitmap.getHeight() / 10 - 10, true);
+                scaled.compress(Bitmap.CompressFormat.PNG, 80, image);
+                image.flush();
+                image.close();
+                return scaled;
+            }
+            else{
+                imageBitmap.compress(Bitmap.CompressFormat.PNG, 80, image);
+                return imageBitmap;
+            }
         }
         catch (IOException x){
             System.err.format("IOException %s%n",x);
+        }
+        finally{
             return null;
         }
 
@@ -85,5 +102,6 @@ public class ImageFileController {
     public boolean deleteImageFile (File imageFile){
         return imageFile.delete();
     }
+
 
 }

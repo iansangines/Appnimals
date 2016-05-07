@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -82,13 +83,13 @@ public class InsertPetActivity extends AppCompatActivity {
 
 
 
-        Button button = (Button) findViewById(R.id.buttonafegir);
+        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
         assert button != null;
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.buttonafegir) {
+                if (v.getId() == R.id.fab) {
                     TextInputLayout nameinputlayout = (TextInputLayout) findViewById(R.id.layout_input_nom);
                     assert nameinputlayout != null;
                     EditText nameinput = nameinputlayout.getEditText();
@@ -131,9 +132,8 @@ public class InsertPetActivity extends AppCompatActivity {
                     assert xipinputlayout != null;
                     EditText xipinput = xipinputlayout.getEditText();
                     assert xipinput != null;
-                    String xip = xipinput.getText().toString();
+                    String xip = (xipinput.getText().toString());
                     if (xip == null || xip.equals("")) {
-
                         AlertDialog.Builder xipDialog = new AlertDialog.Builder(InsertPetActivity.this);
                         xipDialog.setMessage("Introdueix una número de xip").setNeutralButton("ok", new DialogInterface.OnClickListener() {
                             @Override
@@ -162,7 +162,7 @@ public class InsertPetActivity extends AppCompatActivity {
                         }).show();
                         return;
                     } else {
-                        petToInsert.setChipNumber(xip);
+                        petToInsert.setPetSubtype(subtype);
                     }
 
                     if (petToInsert.getPhotoPath() == null || petToInsert.getPhotoPath().equals("")) {
@@ -183,7 +183,7 @@ public class InsertPetActivity extends AppCompatActivity {
                     Toast.makeText(InsertPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
                     //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
-                    returned.putExtra("xip", "'" + petToInsert.getChipNumber() + "'");
+                    returned.putExtra("xip",petToInsert.getChipNumber());
                     setResult(INSERTED, returned);
                     finish();
 

@@ -79,10 +79,13 @@
 
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:id="@+id/calendar_imgbutton"/>
+                android:id="@+id/calendar_imgbutton"
+                android:src="@android:drawable/ic_menu_today"
+                android:background="@color/colorBackground"
+                android:paddingTop="10dp"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -114,7 +117,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Número de Xip"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:inputType="number"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -146,8 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/layout_input_rasa"
-            android:paddingTop="10dp"
-            android:visibility="invisible">
+            android:paddingTop="10dp">
 
             <EditText
                 android:layout_width="match_parent"
@@ -157,12 +160,6 @@
                 android:inputType="textCapWords"/>
 
         </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Afageix"
-            android:id="@+id/buttonafegir"/>
 
 
     </LinearLayout>
@@ -175,6 +172,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_input_add" />
+        android:src="@drawable/ic_done_black_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -39,8 +39,9 @@
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".PetListActivity">
-            <meta-data
+            android:parentActivityName=".PetListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.iansangines.appnimals.PetListActivity" />
         </activity>
