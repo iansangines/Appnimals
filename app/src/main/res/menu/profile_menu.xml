@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ProfileActivity">
+
+    <item
+        android:id="@+id/action_edit"
+        android:icon="@drawable/edit48"
+        app:showAsAction="ifRoom"
+        android:title="Edit">
+
+    </item>
+
+    <item
+        android:id="@+id/add_event"
+        android:icon="@drawable/calendarplus"
+        app:showAsAction="ifRoom"
+        android:title="Edit">
+
+    </item>
+
+    <item
+        android:title="@string/action_settings"
+        app:showAsAction="never">
+
+    </item>
+</menu>

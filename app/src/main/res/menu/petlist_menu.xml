@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".PetListActivity">
+
+    <item
+        android:id="@+id/calendaricon"
+        android:icon="@drawable/calendar"
+        app:showAsAction="ifRoom"
+        android:title="Calendar">
+    </item>
+
+    <item
+        android:id="@+id/filter"
+        app:showAsAction="ifRoom"
+        android:title="Filter">
+    </item>
+
+    <item
+        android:id="@+id/action_settings1"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+
+</menu>

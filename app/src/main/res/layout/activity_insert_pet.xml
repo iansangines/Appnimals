@@ -6,13 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.iansangines.appnimals.PetListActivity"
-    android:theme="@style/AppTheme.NoActionBar">
+    tools:context="com.example.iansangines.appnimals.PetListActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -78,14 +77,15 @@
             android:orientation="horizontal">
 
 
-            <ImageButton
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:id="@+id/calendar_imgbutton"
                 android:src="@android:drawable/ic_menu_today"
                 android:background="@color/colorBackground"
-                android:paddingTop="10dp"/>
+                android:paddingTop="10dp"
+                android:clickable="true"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -34,9 +35,10 @@ public class PetListActivity extends AppCompatActivity {
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        assert toolbar != null;
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Les teves mascotes");
-
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle("");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -95,6 +97,11 @@ public class PetListActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.petlist_menu, menu);
+        return true;
     }
 
     @Override

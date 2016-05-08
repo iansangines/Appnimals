@@ -12,7 +12,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/appnimals_outside"
         android:label="Appnimals"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".LaunchActivity"
             android:label="LaunchActivity"
@@ -26,12 +26,12 @@
         <activity
             android:name=".PetListActivity"
             android:label="@string/title_activity_pet_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".InsertPetActivity"
             android:label="@string/title_activity_insert_pet"
             android:parentActivityName=".PetListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.iansangines.appnimals.PetListActivity" />
@@ -40,7 +40,7 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:parentActivityName=".PetListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
         <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.iansangines.appnimals.PetListActivity" />

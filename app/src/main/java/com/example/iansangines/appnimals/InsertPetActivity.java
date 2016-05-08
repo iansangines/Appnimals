@@ -1,5 +1,8 @@
 package com.example.iansangines.appnimals;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,18 +17,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.Calendar;
 
 
 public class InsertPetActivity extends AppCompatActivity {
@@ -38,6 +45,10 @@ public class InsertPetActivity extends AppCompatActivity {
     File fullSizeImage;
     File thumbnailImage;
 
+    static Calendar c = Calendar.getInstance();
+    static int startYear = c.get(Calendar.YEAR);
+    static int startMonth = c.get(Calendar.MONTH);
+    static int startDay = c.get(Calendar.DAY_OF_MONTH);
 
     private ArrayAdapter<CharSequence> adapter;
     Pet petToInsert = new Pet();
@@ -49,6 +60,8 @@ public class InsertPetActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle("");
 
 
         imageController.CreateDirectories();
@@ -81,6 +94,16 @@ public class InsertPetActivity extends AppCompatActivity {
             }
         });
 
+        ImageView datebutton = (ImageView) findViewById(R.id.calendar_imgbutton);
+        assert datebutton != null;
+        datebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    DialogFragment dialogFragment = new StartDatePicker();
+                    dialogFragment.show(getFragmentManager(), "start_date_picker");
+                Toast.makeText(getApplicationContext(),Integer.toString(startYear) + "/" + Integer.toString(startMonth) + "/" + Integer.toString(startDay),Toast.LENGTH_LONG).show();
+            }
+        });
 
 
         FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
@@ -179,7 +202,7 @@ public class InsertPetActivity extends AppCompatActivity {
 
                     PetDBController db = new PetDBController(InsertPetActivity.this);
                     db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(), petToInsert.getPetSubtype(),
-                            petToInsert.getChipNumber(), petToInsert.getPhotoPath().toString(), petToInsert.getthumbnailPath().toString());
+                            petToInsert.getChipNumber(), petToInsert.getPhotoPath(), petToInsert.getthumbnailPath());
                     Toast.makeText(InsertPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
                     //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
@@ -219,6 +242,7 @@ public class InsertPetActivity extends AppCompatActivity {
         });
         //FINAL ON CREate
     }
+
 
 
 
@@ -309,6 +333,24 @@ public class InsertPetActivity extends AppCompatActivity {
             Log.d("result", "enter NOT result_ok");
             petToInsert.setPetPhotoPath(null);
             petToInsert.setPetthumbnailPath(null);
+        }
+    }
+
+    public static class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(),R.style.DialogTheme,this,startYear,startMonth,startDay);
+            return dialog;
+
+        }
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            TextInputLayout datainputlayout = (TextInputLayout) getActivity().findViewById(R.id.layout_input_date);
+            assert datainputlayout != null;
+            EditText datainput = datainputlayout.getEditText();
+            assert datainput != null;
+            String date = Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year);
+            datainput.setText(date);
         }
     }
 
