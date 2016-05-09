@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/action_edit"
-        android:icon="@drawable/edit48"
+        android:icon="@drawable/pencil"
         app:showAsAction="ifRoom"
         android:title="Edit">
 

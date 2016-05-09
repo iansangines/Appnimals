@@ -13,6 +13,7 @@
 
     <item
         android:id="@+id/filter"
+        android:icon="@drawable/magnify"
         app:showAsAction="ifRoom"
         android:title="Filter">
     </item>
