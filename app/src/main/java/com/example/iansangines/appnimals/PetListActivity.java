@@ -9,9 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 public class PetListActivity extends AppCompatActivity {
     private ListAdapter adapter;
     private ListView petListView;
+    private ArrayList<Pet> petList;
     private PetDBController dbController;
     static final int INSERT_PET_ACTIVITY = 0;
     static final int INSERTED = 1;
@@ -46,24 +49,8 @@ public class PetListActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-
-                    AlertDialog.Builder newPetDialog = new AlertDialog.Builder(PetListActivity.this);
-                    newPetDialog.setTitle("Nova mascota").setMessage("Vols afegir una nova mascota?");
-                            newPetDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent insertPet = new Intent(PetListActivity.this, InsertPetActivity.class);
-                                    startActivityForResult(insertPet,INSERT_PET_ACTIVITY);
-                                }
-                            });
-                    newPetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    newPetDialog.show();
+                    Intent insertPet = new Intent(PetListActivity.this, InsertPetActivity.class);
+                    startActivityForResult(insertPet,INSERT_PET_ACTIVITY);
                 }
             });
         }
@@ -73,7 +60,7 @@ public class PetListActivity extends AppCompatActivity {
         petListView.setClickable(true);
         //BASE DE DADES
         dbController = new PetDBController(this);
-        ArrayList<Pet> petList = dbController.queryAll();
+        petList = dbController.queryAll();
 
         for(int i = 0; i < petList.size(); i++){
             Log.d("petList", petList.get(i).getName());
@@ -88,7 +75,6 @@ public class PetListActivity extends AppCompatActivity {
         petListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(PetListActivity.this, "S'ha clicat l'element a la posicio" + Integer.toString(position), Toast.LENGTH_SHORT).show();
                 Log.d("onItemClick" , "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 Intent profile = new Intent(PetListActivity.this, ProfileActivity.class);
                 Pet auxPet =(Pet) petListView.getItemAtPosition(position);
@@ -102,6 +88,44 @@ public class PetListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.petlist_menu, menu);
         return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.filter:
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(PetListActivity.this);
+                final EditText input = new EditText(this);
+                input.setHint("Nom mascota");
+                alertDialog.setTitle("Buscar");
+                alertDialog.setView(input);
+                alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String chip = null;
+                        String auxName = input.getText().toString();
+                        for(int i = 0; i < petList.size(); i++) if(petList.get(i).getName().equals(auxName)) chip = petList.get(i).getChipNumber();
+
+                        if(chip != null) {
+                            Intent profile = new Intent(PetListActivity.this, ProfileActivity.class);
+                            profile.putExtra("chip", chip);
+                            startActivity(profile);
+                        }
+                        else Toast.makeText(PetListActivity.this, "La mascota no existeix", Toast.LENGTH_LONG).show();
+                    }
+                }).setNegativeButton("Torna", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+                return true;
+            case R.id.calendaricon:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

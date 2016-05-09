@@ -15,5 +15,9 @@
         <item>Altres</item>
     </string-array>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string-array name="filterarray">
+        <item>Rosegador</item>
+        <item>Altres</item>
+    </string-array>
 
 </resources>
