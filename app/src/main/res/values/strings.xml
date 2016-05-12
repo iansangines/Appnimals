@@ -19,5 +19,6 @@
         <item>Rosegador</item>
         <item>Altres</item>
     </string-array>
+    <string name="title_activity_calendar">CalendarActivity</string>
 
 </resources>
