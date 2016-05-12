@@ -75,7 +75,7 @@ public class PetListActivity extends AppCompatActivity {
         petListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("onItemClick" , "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                Log.d("onItemClick" , "aaaaaaaaa");
                 Intent profile = new Intent(PetListActivity.this, ProfileActivity.class);
                 Pet auxPet =(Pet) petListView.getItemAtPosition(position);
                 profile.putExtra("chip",auxPet.getChipNumber());
@@ -138,9 +138,9 @@ public class PetListActivity extends AppCompatActivity {
 
             String xip = data.getStringExtra("xip");
             Pet pet = dbController.queryPet(xip);
-            if(pet == null) Log.d("peeeeeeeeeeeeeeeeeeeeeeeeet",xip);
+            if(pet == null) Log.d("peeeeeeeeeet",xip);
             else {
-                Log.d("peeeeeeeeeeeeeeeeeeet nom", pet.getName());
+                Log.d("peeeeeeeeet nom", pet.getName());
                 adapter.add(pet);
                 petListView.setAdapter(adapter);
                 Toast.makeText(PetListActivity.this, "Mascota Guardada", Toast.LENGTH_SHORT).show();

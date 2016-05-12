@@ -10,22 +10,20 @@ import java.io.Serializable;
 public class Pet{
     String name;
     String petType;
-    String petSubtype;
     String bornDate;
     String chipNumber;
     String thumbnailPath;
     String photoPath;
 
     public Pet(){
-        name = petType = petSubtype = bornDate = chipNumber = "";
+        name = petType = bornDate = chipNumber = "";
         photoPath = thumbnailPath = "";
     }
 
-    public Pet(String name,  String bornDate, String petType,String petSubtype , String chipNumber, String photoPath, String thumbnailPath) {
+    public Pet(String name,  String bornDate, String petType , String chipNumber, String photoPath, String thumbnailPath) {
         this.name = name;
         this.bornDate = bornDate;
         this.petType = petType;
-        this.petSubtype = petSubtype;
         this.chipNumber = chipNumber;
         this.photoPath = photoPath;
         this.thumbnailPath = thumbnailPath;
@@ -42,8 +40,6 @@ public class Pet{
     public String getPetType(){
         return this.petType;
     }
-
-    public String getPetSubtype(){ return this.petSubtype;}
 
     public String getChipNumber(){return this.chipNumber;}
 
@@ -65,7 +61,6 @@ public class Pet{
         this.petType = petType;
     }
 
-    public void setPetSubtype(String petSubtype) {this.petSubtype = petSubtype;}
 
     public void setChipNumber(String chipNumber){
         this.chipNumber = chipNumber;

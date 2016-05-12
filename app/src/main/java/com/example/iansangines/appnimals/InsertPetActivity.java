@@ -38,7 +38,7 @@ import java.util.Calendar;
 public class InsertPetActivity extends AppCompatActivity {
     private boolean clicked = false;
     static final int INSERTED = 1;
-    static ImageView imgView;
+    private ImageView imgView;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
     ImageFileController imageController = new ImageFileController();
@@ -49,8 +49,6 @@ public class InsertPetActivity extends AppCompatActivity {
     static int startYear = c.get(Calendar.YEAR);
     static int startMonth = c.get(Calendar.MONTH);
     static int startDay = c.get(Calendar.DAY_OF_MONTH);
-
-    private ArrayAdapter<CharSequence> adapter;
     Pet petToInsert = new Pet();
 
     @Override
@@ -70,29 +68,6 @@ public class InsertPetActivity extends AppCompatActivity {
         thumbnailImage = imageController.getThumbnailFile();
 
 
-
-        Spinner petTypes = (Spinner) findViewById(R.id.spinner);
-        adapter = ArrayAdapter.createFromResource(this, R.array.especies, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        assert petTypes != null;
-        petTypes.setAdapter(adapter);
-        petTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                petToInsert.setPetType((String) parent.getSelectedItem());
-                if (position > 0 && position < adapter.getCount())
-                    if (!clicked) {
-                        clicked = true;
-                        TextInputLayout subtypeinput = (TextInputLayout) findViewById(R.id.layout_input_rasa);
-                        assert subtypeinput != null;
-                        subtypeinput.setVisibility(view.VISIBLE);
-                    }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
 
         ImageView datebutton = (ImageView) findViewById(R.id.calendar_imgbutton);
         assert datebutton != null;
@@ -185,7 +160,7 @@ public class InsertPetActivity extends AppCompatActivity {
                         }).show();
                         return;
                     } else {
-                        petToInsert.setPetSubtype(subtype);
+                        petToInsert.setPetType(subtype);
                     }
 
                     if (petToInsert.getPhotoPath() == null || petToInsert.getPhotoPath().equals("")) {
@@ -201,7 +176,7 @@ public class InsertPetActivity extends AppCompatActivity {
 
 
                     PetDBController db = new PetDBController(InsertPetActivity.this);
-                    db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(), petToInsert.getPetSubtype(),
+                    db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(),
                             petToInsert.getChipNumber(), petToInsert.getPhotoPath(), petToInsert.getthumbnailPath());
                     Toast.makeText(InsertPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
                     //Retorna el numero de xip per fer query al petlistactivity

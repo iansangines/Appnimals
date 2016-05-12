@@ -21,15 +21,20 @@ public class PetDBController extends SQLiteOpenHelper{
     private static final String PET_COLUMN_NAME = "NAME";
     private static final String PET_COLUMN_DATA = "DATA";
     private static final String PET_COLUMN_TYPE = "TYPE";
-    private static final String PET_COLUMN_SUBTYPE = "SUBTYPE";
     private static final String PET_COLUMN_CHIP= "CHIP";
     private static final String PET_COLUMN_IMGPATH= "IMGPATH";
     private static final String PET_COLUMN_THUMBNAILPATH= "THUMBNAILPATH";
     private static final String CREATE_PET_TABLE = "CREATE TABLE " + PET_TABLE_NAME + " (" +
             PET_COLUMN_ID +  " INTEGER PRIMARY KEY AUTOINCREMENT, " + PET_COLUMN_NAME + " TEXT, " +
-            PET_COLUMN_DATA + " TEXT, " + PET_COLUMN_TYPE + " TEXT, " +PET_COLUMN_SUBTYPE +" TEXT NULL, " + PET_COLUMN_CHIP +" TEXT, " +
+            PET_COLUMN_DATA + " TEXT, " + PET_COLUMN_TYPE + " TEXT, " + PET_COLUMN_CHIP +" TEXT, " +
             PET_COLUMN_IMGPATH +" TEXT, " + PET_COLUMN_THUMBNAILPATH + " TEXT);";
 
+    private static final String EVENT_TABLE_NAME = "PETS";
+    private static final String EVENT_COLUMN_ID = "ID";
+    private static final String EVENT_COLUMN_NAME = "NAME";
+    private static final String EVENT_COLUMN_DATA = "DATA";
+    private static final String EVENT_COLUMN_TYPE = "TYPE"; // vacunacio|desparasitacio|veterinari
+    private static final String EVENT_COLUMN_HOUR= "CHIP";
 
     private static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + PET_TABLE_NAME;
 
@@ -46,13 +51,12 @@ public class PetDBController extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean insertPet(String nom, String data, String type,String subtype, String chip, String imgpath, String thumbnailpath){
+    public boolean insertPet(String nom, String data, String type, String chip, String imgpath, String thumbnailpath){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(PET_COLUMN_NAME, nom);
         values.put(PET_COLUMN_DATA,data);
         values.put(PET_COLUMN_TYPE, type);
-        values.put(PET_COLUMN_SUBTYPE,subtype);
         values.put(PET_COLUMN_CHIP, chip);
         values.put(PET_COLUMN_IMGPATH, imgpath);
         values.put(PET_COLUMN_THUMBNAILPATH, thumbnailpath);
@@ -72,7 +76,6 @@ public class PetDBController extends SQLiteOpenHelper{
                 pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
                 pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
                 pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
-                pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
                 pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
                 pet.setPetPhotoPath(c.getString(c.getColumnIndex(PET_COLUMN_IMGPATH)));
                 pet.setPetthumbnailPath(c.getString(c.getColumnIndex(PET_COLUMN_THUMBNAILPATH)));
@@ -96,7 +99,6 @@ public class PetDBController extends SQLiteOpenHelper{
             pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
             pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
             pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
-            pet.setPetSubtype(c.getString(c.getColumnIndex(PET_COLUMN_SUBTYPE)));
             pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
             pet.setPetPhotoPath(c.getString(c.getColumnIndex(PET_COLUMN_IMGPATH)));
             pet.setPetthumbnailPath(c.getString(c.getColumnIndex(PET_COLUMN_THUMBNAILPATH)));
