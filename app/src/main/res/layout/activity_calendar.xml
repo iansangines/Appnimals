@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.iansangines.appnimals.PetListActivity">
+    tools:context="com.example.iansangines.appnimals.CalendarActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -14,24 +14,32 @@
         android:theme="@style/AppTheme">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbarcalendar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
-            android:title="Afegir Mascota"
+            android:title="Calendari"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical">
 
         <CalendarView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
         </CalendarView>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
 
     </LinearLayout>
 

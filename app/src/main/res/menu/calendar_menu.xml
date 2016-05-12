@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ProfileActivity">
-
-    <item
-        android:id="@+id/action_edit"
-        android:icon="@drawable/pencil"
-        app:showAsAction="ifRoom"
-        android:title="Edit">
-
-    </item>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/add_event"
@@ -25,4 +15,5 @@
         app:showAsAction="never">
 
     </item>
+
 </menu>
