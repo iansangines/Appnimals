@@ -121,6 +121,8 @@ public class PetListActivity extends AppCompatActivity {
                 }).show();
                 return true;
             case R.id.calendaricon:
+                Intent calendarIntent = new Intent(PetListActivity.this, CalendarActivity.class);
+                startActivity(calendarIntent);
 
                 return true;
             default:
