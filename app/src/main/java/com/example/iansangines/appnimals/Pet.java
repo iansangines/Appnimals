@@ -8,26 +8,18 @@ import java.io.Serializable;
  * Created by ian on 09/04/2016.
  */
 public class Pet{
-    String name;
-    String petType;
-    String bornDate;
-    String chipNumber;
-    String thumbnailPath;
-    String photoPath;
+    private String name;
+    private String petType;
+    private String bornDate;
+    private String chipNumber;
+    private String thumbnailPath;
+    private String photoPath;
 
     public Pet(){
         name = petType = bornDate = chipNumber = "";
         photoPath = thumbnailPath = "";
     }
 
-    public Pet(String name,  String bornDate, String petType , String chipNumber, String photoPath, String thumbnailPath) {
-        this.name = name;
-        this.bornDate = bornDate;
-        this.petType = petType;
-        this.chipNumber = chipNumber;
-        this.photoPath = photoPath;
-        this.thumbnailPath = thumbnailPath;
-    }
 
     public String getName(){
         return this.name;

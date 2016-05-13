@@ -13,20 +13,14 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
-        new CountDownTimer(3000,1000){
-            public void onTick(long millisUntilFinished){
-                Log.d("countdowntimer:", Long.toString(millisUntilFinished));
+        new CountDownTimer(3000, 1000) {
+            public void onTick(long millisUntilFinished) {
             }
-            public void onFinish(){
-                Intent petlist = new Intent(LaunchActivity.this,PetListActivity.class);
-                petlist.putExtra("Random", "Holamon");
+
+            public void onFinish() {
+                Intent petlist = new Intent(LaunchActivity.this, PetListActivity.class);
                 startActivity(petlist);
             }
         }.start();
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
     }
 }

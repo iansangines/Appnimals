@@ -60,7 +60,7 @@ public class PetListActivity extends AppCompatActivity {
         petListView.setClickable(true);
         //BASE DE DADES
         dbController = new PetDBController(this);
-        petList = dbController.queryAll();
+        petList = dbController.queryAllPets();
 
         for(int i = 0; i < petList.size(); i++){
             Log.d("petList", petList.get(i).getName());

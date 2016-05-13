@@ -58,15 +58,76 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dia. dd/mm/aaaa"/>
+                android:id="@+id/data"
+                android:text="dia. dd/mm/aaaa"
+                android:clickable="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="hh:mm"/>
+                android:text="hh:mm"
+                android:clickable="true" />
 
         </RelativeLayout>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp">
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vacunació"
+        android:id="@+id/vac"
+        android:layout_alignParentRight="true" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Desparasitació"
+        android:id="@+id/desp"
+        android:layout_alignParentLeft="true" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Veterinari"
+        android:id="@+id/vet"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/desp"/>
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Altre"
+        android:id="@+id/altre"
+        android:layout_alignParentRight="true"
+        android:layout_alignStart="@+id/vac"
+        android:layout_alignLeft="@+id/vac"
+        android:layout_below="@+id/vac"/>
+
+</RelativeLayout>
+
+        <!-- visible cuan s'apreta Altre -->
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_eventtype"
+            android:paddingTop="10dp"
+            android:visibility="invisible">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tipus d'event"
+                android:singleLine="true"
+                android:inputType="textCapWords"/>
+
+        </android.support.design.widget.TextInputLayout>
+
 
 
         <android.support.design.widget.TextInputLayout
@@ -105,9 +166,12 @@
             android:text="Recordatori"
             android:id="@+id/checkBox" />
 
+        <!-- visible cuan s'apreta Recordatori -->
+
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
 
             <Spinner
                 android:layout_width="100dp"
@@ -130,11 +194,13 @@
 
     </LinearLayout>
 
-
-
-
-
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/confevent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_done_black_24dp" />
 
 
     </android.support.design.widget.CoordinatorLayout>

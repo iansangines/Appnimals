@@ -39,8 +39,8 @@ public class ListAdapter extends ArrayAdapter<Pet> {
         ImageButton petDelete = (ImageButton) convertView.findViewById(R.id.delete);
 
         petImage.setImageURI(Uri.parse(itemPet.getthumbnailPath()));
-        petName.setText(itemPet.name);
-        petType.setText(itemPet.petType);
+        petName.setText(itemPet.getName());
+        petType.setText(itemPet.getPetType());
         petDelete.setImageDrawable(null);
 
 

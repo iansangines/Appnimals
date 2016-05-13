@@ -46,9 +46,9 @@ public class InsertPetActivity extends AppCompatActivity {
     File thumbnailImage;
 
     static Calendar c = Calendar.getInstance();
-    static int startYear = c.get(Calendar.YEAR);
-    static int startMonth = c.get(Calendar.MONTH);
-    static int startDay = c.get(Calendar.DAY_OF_MONTH);
+    static int year = c.get(Calendar.YEAR);
+    static int month = c.get(Calendar.MONTH);
+    static int day = c.get(Calendar.DAY_OF_MONTH);
     Pet petToInsert = new Pet();
 
     @Override
@@ -76,7 +76,7 @@ public class InsertPetActivity extends AppCompatActivity {
             public void onClick(View v) {
                     DialogFragment dialogFragment = new StartDatePicker();
                     dialogFragment.show(getFragmentManager(), "start_date_picker");
-                Toast.makeText(getApplicationContext(),Integer.toString(startYear) + "/" + Integer.toString(startMonth) + "/" + Integer.toString(startDay),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),Integer.toString(year) + "/" + Integer.toString(month) + "/" + Integer.toString(day),Toast.LENGTH_LONG).show();
             }
         });
 
@@ -315,10 +315,11 @@ public class InsertPetActivity extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(),R.style.DialogTheme,this,startYear,startMonth,startDay);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(),R.style.DialogTheme,this,year,month,day);
             return dialog;
 
         }
+
         public void onDateSet(DatePicker view, int year, int month, int day) {
             TextInputLayout datainputlayout = (TextInputLayout) getActivity().findViewById(R.id.layout_input_date);
             assert datainputlayout != null;
