@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +13,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -71,7 +74,7 @@ public class AddEventActivity extends AppCompatActivity {
                         TextView dateinput = (TextView) findViewById(R.id.data);
                         assert dateinput != null;
                         String data = dateinput.getText().toString();
-                        if (data == null || data.equals("")) {
+                        if (data == null || data.equals("dd/mm/aaaa")) {
 
                             AlertDialog.Builder dateDialog = new AlertDialog.Builder(AddEventActivity.this);
                             dateDialog.setMessage("Introdueix una data").setNeutralButton("ok", new DialogInterface.OnClickListener() {
@@ -89,7 +92,7 @@ public class AddEventActivity extends AppCompatActivity {
                     TextView hourinput = (TextView) findViewById(R.id.data);
                     assert hourinput != null;
                     String hour = hourinput.getText().toString();
-                    if (hour == null || hour.equals("")) {
+                    if (hour == null || hour.equals("hh:mm")) {
 
                         AlertDialog.Builder dateDialog = new AlertDialog.Builder(AddEventActivity.this);
                         dateDialog.setMessage("Introdueix una hora").setNeutralButton("ok", new DialogInterface.OnClickListener() {
@@ -209,9 +212,34 @@ public class AddEventActivity extends AppCompatActivity {
             String dayName = simpledateformat.format(date);
             TextView datatext = (TextView) getActivity().findViewById(R.id.data);
             assert datatext != null;
-            String datetext = dayName + ", " + Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year);
-            datatext.setText(datetext);
+            if(day < startDay && month < startMonth && year < startYear){
+                Toast.makeText(getActivity(), "La data introduïda ja ha passat", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                String datetext = dayName + ", " + Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year);
+                datatext.setText(datetext);
+            }
         }
     }
 
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            return new TimePickerDialog(getActivity(),R.style.DialogTheme, this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hour, int minute) {
+            TextView timetext = (TextView) getActivity().findViewById(R.id.hour);
+            assert timetext != null;
+            String time = Integer.toString(hour) + ":" + Integer.toString(minute);
+            timetext.setText(time);
+        }
+    }
 }
