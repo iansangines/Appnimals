@@ -29,19 +29,22 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical">
 
-        <android.widget.CalendarView
+
+            <android.widget.CalendarView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="250dp">
+
+            </android.widget.CalendarView>
+
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-        </android.widget.CalendarView>
-
+        </ListView>
 
     </LinearLayout>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </ListView>
 
     </android.support.design.widget.CoordinatorLayout>

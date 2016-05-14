@@ -14,9 +14,12 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,13 +31,18 @@ import java.util.Date;
 public class AddEventActivity extends AppCompatActivity {
 
     static final int INSERTED = 1;
-    View.OnClickListener listener;
     static Calendar c = Calendar.getInstance();
     static int startYear = c.get(Calendar.YEAR);
     static int startMonth = c.get(Calendar.MONTH);
     static int startDay = c.get(Calendar.DAY_OF_MONTH);
-
+    private Button dateinput;
+    private Button hourinput;
     private Event eventToInsert = new Event();
+
+    private RadioButton vacunacio;
+    private RadioButton veterniari;
+    private RadioButton desp;
+    private RadioButton altre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,53 +54,76 @@ public class AddEventActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("");
 
+        vacunacio = (RadioButton) findViewById(R.id.vac);
+        assert vacunacio != null;
+        vacunacio.setOnClickListener(radiolisten);
+
+        veterniari = (RadioButton) findViewById(R.id.vet);
+        assert veterniari != null;
+        veterniari.setOnClickListener(radiolisten);
+
+        desp = (RadioButton) findViewById(R.id.desp);
+        assert desp != null;
+        desp.setOnClickListener(radiolisten);
+
+        altre = (RadioButton) findViewById(R.id.altre);
+        assert altre != null;
+        altre.setOnClickListener(radiolisten);
+
+        dateinput = (Button) findViewById(R.id.data);
+        assert dateinput != null;
+        dateinput.setOnClickListener(listen);
+
+        hourinput = (Button) findViewById(R.id.hour);
+        assert hourinput != null;
+        hourinput.setOnClickListener(listen);
+
+
         FloatingActionButton button = (FloatingActionButton) findViewById(R.id.confevent);
         assert button != null;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v.getId() == R.id.confevent){
+                if (v.getId() == R.id.confevent) {
 
-                        TextInputLayout eventnamelayout = (TextInputLayout) findViewById(R.id.input_eventname);
-                        assert eventnamelayout != null;
-                        EditText eventname = eventnamelayout.getEditText();
-                        assert eventname != null;
-                        String name = eventname.getText().toString();
-                        if (name == null || name.equals("")) {
-                            AlertDialog.Builder nameDialog = new AlertDialog.Builder(AddEventActivity.this);
-                            nameDialog.setMessage("Introdueix un nom").setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).show();
-                            return;
-                        } else {
-                            eventToInsert.setName(name);
-                        }
+                    TextInputLayout eventnamelayout = (TextInputLayout) findViewById(R.id.input_eventname);
+                    assert eventnamelayout != null;
+                    EditText eventname = eventnamelayout.getEditText();
+                    assert eventname != null;
+                    String name = eventname.getText().toString();
+                    if (name == null || name.equals("")) {
+                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(AddEventActivity.this);
+                        nameDialog.setMessage("Introdueix un nom").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        return;
+                    } else {
+                        eventToInsert.setName(name);
+                    }
 
-                        TextView dateinput = (TextView) findViewById(R.id.data);
-                        assert dateinput != null;
-                        String data = dateinput.getText().toString();
-                        if (data == null || data.equals("dd/mm/aaaa")) {
 
-                            AlertDialog.Builder dateDialog = new AlertDialog.Builder(AddEventActivity.this);
-                            dateDialog.setMessage("Introdueix una data").setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).show();
-                            return;
+                    String data = dateinput.getText().toString();
+                    if (data == null || data.equals("dia. dd/mm/aaaa")) {
 
-                        } else {
-                            eventToInsert.setDate(data);
-                        }
+                        AlertDialog.Builder dateDialog = new AlertDialog.Builder(AddEventActivity.this);
+                        dateDialog.setMessage("Introdueix una data").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        return;
 
-                    TextView hourinput = (TextView) findViewById(R.id.data);
-                    assert hourinput != null;
+                    } else {
+                        eventToInsert.setDate(data);
+                    }
+
+
                     String hour = hourinput.getText().toString();
-                    if (hour == null || hour.equals("hh:mm")) {
+                    if (hour == null || hour.equals("hh:mm h")) {
 
                         AlertDialog.Builder dateDialog = new AlertDialog.Builder(AddEventActivity.this);
                         dateDialog.setMessage("Introdueix una hora").setNeutralButton("ok", new DialogInterface.OnClickListener() {
@@ -108,7 +139,7 @@ public class AddEventActivity extends AppCompatActivity {
                     }
 
 
-                        //SPINNER DEL NOM DE LA MASCOTA --> Si es ve d ela mascota getExtra(nom i xip) i centrar l'spinner a la mascota i bloquejarlo, sino, Extranull i yasta
+                    //SPINNER DEL NOM DE LA MASCOTA --> Si es ve d ela mascota getExtra(nom i xip) i centrar l'spinner a la mascota i bloquejarlo, sino, Extranull i yasta
                         /*
                         TextInputLayout xipinputlayout = (TextInputLayout) findViewById(R.id.layout_input_xip);
                         assert xipinputlayout != null;
@@ -129,7 +160,7 @@ public class AddEventActivity extends AppCompatActivity {
                         }
                         */
 
-                        //TRACTAR ELS RADIOBUTTONS
+                    //TRACTAR ELS RADIOBUTTONS
                         /*
                         TextInputLayout subtypeinputlayout = (TextInputLayout) findViewById(R.id.layout_input_rasa);
                         assert subtypeinputlayout != null;
@@ -150,53 +181,97 @@ public class AddEventActivity extends AppCompatActivity {
                             petToInsert.setPetType(subtype);
                         } */
 
-                        TextInputLayout loclayout = (TextInputLayout) findViewById(R.id.input_eventloc);
-                        assert loclayout != null;
-                        EditText loc = eventnamelayout.getEditText();
-                        assert loc != null;
-                        String ubic = eventname.getText().toString();
-                        if(ubic == null) ubic = "";
-                            eventToInsert.setEventLocation(ubic);
+                    TextInputLayout loclayout = (TextInputLayout) findViewById(R.id.input_eventloc);
+                    assert loclayout != null;
+                    EditText loc = eventnamelayout.getEditText();
+                    assert loc != null;
+                    String ubic = eventname.getText().toString();
+                    if (ubic == null) ubic = "";
+                    eventToInsert.setEventLocation(ubic);
 
-                        TextInputLayout desclayout = (TextInputLayout) findViewById(R.id.input_eventdesc);
-                        assert desclayout != null;
-                        EditText desc = eventnamelayout.getEditText();
-                        assert desc != null;
-                        String descString = eventname.getText().toString();
-                        if(descString == null) descString = "";
-                            eventToInsert.setEventDescription(descString);
-
-
-
-                        PetDBController db = new PetDBController(AddEventActivity.this);
-                        db.insertEvent(eventToInsert.getName(),eventToInsert.getDate(),null,eventToInsert.getHour(),null,eventToInsert.getEventLocation(),eventToInsert.getEventDescription());
-                        Toast.makeText(AddEventActivity.this, "Esdeveniment Guardat", Toast.LENGTH_SHORT).show();
-                        //Retorna el numero de xip per fer query al petlistactivity
-                        Intent returned = new Intent();
-                        returned.putExtra("date",eventToInsert.getDate());
-                        returned.putExtra("hour", eventToInsert.getHour());
-                        setResult(INSERTED, returned);
-                        finish();
+                    TextInputLayout desclayout = (TextInputLayout) findViewById(R.id.input_eventdesc);
+                    assert desclayout != null;
+                    EditText desc = eventnamelayout.getEditText();
+                    assert desc != null;
+                    String descString = eventname.getText().toString();
+                    if (descString == null) descString = "";
+                    eventToInsert.setEventDescription(descString);
 
 
-                    }
-                }
-            });
+                    PetDBController db = new PetDBController(AddEventActivity.this);
+                    db.insertEvent(eventToInsert.getName(), eventToInsert.getDate(), null, eventToInsert.getHour(), null, eventToInsert.getEventLocation(), eventToInsert.getEventDescription());
+                    Toast.makeText(AddEventActivity.this, "Esdeveniment Guardat", Toast.LENGTH_SHORT).show();
+                    //Retorna el numero de xip per fer query al petlistactivity
+                    Intent returned = new Intent();
+                    returned.putExtra("date", eventToInsert.getDate());
+                    returned.putExtra("hour", eventToInsert.getHour());
+                    setResult(INSERTED, returned);
+                    finish();
 
-        listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch(v.getId()){
-                    case R.id.data:
-                        DialogFragment dialogFragment = new StartDatePicker();
-                        dialogFragment.show(getFragmentManager(), "start_date_picker");
+
                 }
             }
-        };
-
-
-
+        });
     }
+
+    private View.OnClickListener listen = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(v.getId() == R.id.data){
+                DialogFragment newFragment = new StartDatePicker();
+                newFragment.show(getFragmentManager(), "datePicker");
+            }
+            if(v.getId() == R.id.hour){
+                DialogFragment newFragment = new TimePickerFragment();
+                newFragment.show(getFragmentManager(), "TimePicker");
+            }
+        }
+    };
+
+    private View.OnClickListener radiolisten = new View.OnClickListener() {
+        // Is the button now checked?
+        @Override
+        public void onClick(View view) {
+            boolean checked = ((RadioButton) view).isChecked();
+
+            // Check which radio button was clicked
+            switch (view.getId()) {
+                case R.id.vac:
+                    if (checked) {
+                        vacunacio.setChecked(true);
+                        desp.setChecked(false);
+                        veterniari.setChecked(false);
+                        altre.setChecked(false);
+                    }
+                    break;
+                case R.id.vet:
+                    if (checked){
+                        vacunacio.setChecked(false);
+                        desp.setChecked(false);
+                        veterniari.setChecked(true);
+                        altre.setChecked(false);
+                    }
+                    break;
+                case R.id.desp:
+                    if(checked){
+                        vacunacio.setChecked(false);
+                        desp.setChecked(true);
+                        veterniari.setChecked(false);
+                        altre.setChecked(false);
+                    }
+                    break;
+                case R.id.altre:
+                    if(checked) {
+                        vacunacio.setChecked(false);
+                        desp.setChecked(false);
+                        veterniari.setChecked(false);
+                        altre.setChecked(true);
+                    }
+            }
+        }
+    };
+
+
 
     public static class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener{
         @Override
@@ -210,7 +285,7 @@ public class AddEventActivity extends AppCompatActivity {
             SimpleDateFormat simpledateformat = new SimpleDateFormat("EEEE");
             Date date = new Date(year, month, day-1);
             String dayName = simpledateformat.format(date);
-            TextView datatext = (TextView) getActivity().findViewById(R.id.data);
+            Button datatext = (Button) getActivity().findViewById(R.id.data);
             assert datatext != null;
             if(day < startDay && month < startMonth && year < startYear){
                 Toast.makeText(getActivity(), "La data introduïda ja ha passat", Toast.LENGTH_SHORT).show();
@@ -236,9 +311,9 @@ public class AddEventActivity extends AppCompatActivity {
         }
 
         public void onTimeSet(TimePicker view, int hour, int minute) {
-            TextView timetext = (TextView) getActivity().findViewById(R.id.hour);
+            Button timetext = (Button) getActivity().findViewById(R.id.hour);
             assert timetext != null;
-            String time = Integer.toString(hour) + ":" + Integer.toString(minute);
+            String time = Integer.toString(hour) + ":" + Integer.toString(minute) + " h";
             timetext.setText(time);
         }
     }

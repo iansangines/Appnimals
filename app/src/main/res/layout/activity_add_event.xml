@@ -55,20 +55,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/data"
                 android:text="dia. dd/mm/aaaa"
-                android:clickable="true"/>
+                android:textAllCaps="false"
+                style="?android:attr/borderlessButtonStyle"/>
 
-            <TextView
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/hour"
                 android:layout_alignParentRight="true"
-                android:text="hh:mm"
-                android:clickable="true" />
+                android:text="hh:mm h"
+                android:textAllCaps="false"
+                style="?android:attr/borderlessButtonStyle"/>
+
 
         </RelativeLayout>
 
@@ -77,37 +81,37 @@
     android:layout_height="wrap_content"
     android:paddingTop="16dp">
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Vacunació"
-        android:id="@+id/vac"
-        android:layout_alignParentRight="true" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vacunació"
+            android:id="@+id/vac"
+            android:layout_alignParentRight="true"/>
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Desparasitació"
-        android:id="@+id/desp"
-        android:layout_alignParentLeft="true" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Desparasitació"
+            android:id="@+id/desp"
+            android:layout_alignParentLeft="true" />
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Veterinari"
-        android:id="@+id/vet"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/desp"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Veterinari"
+            android:id="@+id/vet"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/desp"/>
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Altre"
-        android:id="@+id/altre"
-        android:layout_alignParentRight="true"
-        android:layout_alignStart="@+id/vac"
-        android:layout_alignLeft="@+id/vac"
-        android:layout_below="@+id/vac"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Altre"
+            android:id="@+id/altre"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/vac"
+            android:layout_alignLeft="@+id/vac"
+            android:layout_below="@+id/vac"/>
 
 </RelativeLayout>
 
