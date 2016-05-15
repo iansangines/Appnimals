@@ -39,6 +39,7 @@ public class PetDBController extends SQLiteOpenHelper{
     private static final String EVENT_COLUMN_YEAR = "YEAR";
     private static final String EVENT_COLUMN_TYPE = "TYPE"; // vacunacio|desparasitacio|veterinari
     private static final String EVENT_COLUMN_HOUR= "HOUR";
+    private static final String EVENT_COLUMN_MINUTE= "MINUTE";
     private static final String EVENT_COLUMN_LOC= "UBIC";
     private static final String EVENT_COLUMN_DESC= "DESC";
 
@@ -51,10 +52,11 @@ public class PetDBController extends SQLiteOpenHelper{
             + EVENT_COLUMN_YEAR + " TEXT, "
             + EVENT_COLUMN_TYPE + " TEXT, "
             + EVENT_COLUMN_HOUR +" TEXT, "
+            + EVENT_COLUMN_MINUTE +" TEXT, "
             + EVENT_COLUMN_PETCHIP+" TEXT, "
-            + EVENT_COLUMN_LOC + "TEXT, "
-            + EVENT_COLUMN_DESC + "TEXT, "
-            + " PRIMARY KEY (" + EVENT_COLUMN_DAY + ", " + EVENT_COLUMN_MONTH + ", " + EVENT_COLUMN_YEAR + ", " + EVENT_COLUMN_HOUR + ")"
+            + EVENT_COLUMN_LOC + " TEXT, "
+            + EVENT_COLUMN_DESC + " TEXT, "
+            + " PRIMARY KEY (" + EVENT_COLUMN_DAY + ", " + EVENT_COLUMN_MONTH + ", " + EVENT_COLUMN_YEAR + ", " + EVENT_COLUMN_HOUR + ", " + EVENT_COLUMN_MINUTE+ ")"
             + " FOREIGN KEY (" + EVENT_COLUMN_PETCHIP + ") REFERENCES " + PET_TABLE_NAME + "(" + PET_COLUMN_CHIP + ") );";
 
     private static final String DELETE_PET_TABLE = "DROP TABLE IF EXISTS " + PET_TABLE_NAME;
@@ -89,15 +91,25 @@ public class PetDBController extends SQLiteOpenHelper{
         return ret != -1;
     }
 
-    public boolean insertEvent(String nom, String day, String month , String year ,String type, String hour, String petChip,String loc, String desc){
+    public boolean insertEvent(String nom, String day, String month , String year ,String type, String hour, String minute, String petChip,String loc, String desc){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        Log.d("noom", nom);
+        Log.d("diia", day);
+        Log.d("mees", month);
+        Log.d("yeaar", year);
+        // Log.d("tipus", e.getEventType());
+        Log.d("horaa", hour);
+        Log.d("minuut", minute);
+        Log.d("looc", loc);
+        Log.d("deesc", desc);
         values.put(EVENT_COLUMN_NAME, nom);
         values.put(EVENT_COLUMN_DAY,day);
         values.put(EVENT_COLUMN_MONTH,month);
         values.put(EVENT_COLUMN_YEAR,year);
         values.put(EVENT_COLUMN_TYPE, type);
         values.put(EVENT_COLUMN_HOUR, hour);
+        values.put(EVENT_COLUMN_MINUTE,minute);
         values.put(EVENT_COLUMN_PETCHIP, petChip);
         values.put(EVENT_COLUMN_LOC, loc);
         values.put(EVENT_COLUMN_DESC, desc);
@@ -121,12 +133,10 @@ public class PetDBController extends SQLiteOpenHelper{
                 pet.setPetPhotoPath(c.getString(c.getColumnIndex(PET_COLUMN_IMGPATH)));
                 pet.setPetthumbnailPath(c.getString(c.getColumnIndex(PET_COLUMN_THUMBNAILPATH)));
                 petArrayList.add(pet);
-                Log.d("queyall", pet.getName() + pet.getBornDate() + pet.getPetType());
             } while(c.moveToNext());
         }
         db.close();
         c.close();
-        Log.d("Queryall", "after close");
         return petArrayList;
     }
 
@@ -144,11 +154,12 @@ public class PetDBController extends SQLiteOpenHelper{
                 event.setYear(c.getString(c.getColumnIndex(EVENT_COLUMN_YEAR)));
                 event.setEventType(c.getString(c.getColumnIndex(EVENT_COLUMN_TYPE)));
                 event.setHour(c.getString(c.getColumnIndex(EVENT_COLUMN_HOUR)));
+                event.setMinute(c.getString(c.getColumnIndex(EVENT_COLUMN_MINUTE)));
                 event.setPetChip(c.getString(c.getColumnIndex(EVENT_COLUMN_PETCHIP)));
                 event.setEventLocation(c.getString(c.getColumnIndex(EVENT_COLUMN_LOC)));
                 event.setEventDescription(c.getString(c.getColumnIndex(EVENT_COLUMN_DESC)));
                 eventArrayList.add(event);
-                Log.d("queyall", event.getName() + event.getDay() + event.getPetChip());
+                Log.d("queyall", event.getName() + event.getDay() + event.getMonth() + event.getHour());
             } while(c.moveToNext());
         }
         db.close();

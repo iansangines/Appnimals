@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -33,6 +34,20 @@ public class CalendarActivity extends AppCompatActivity {
         eventListView = (ListView) findViewById(R.id.eventlist);
         dbController = new PetDBController(this);
         eventList = dbController.queryAllEvents();
+
+        for(int i = 0; i < eventList.size(); i++){
+            Event e = eventList.get(i);
+            Log.d("eventliist posició:", Integer.toString(i));
+            Log.d("nom", e.getName());
+            Log.d("dia", e.getDay());
+            Log.d("mes", e.getMonth());
+            Log.d("year", e.getYear());
+           // Log.d("tipus", e.getEventType());
+            Log.d("hora", e.getHour());
+            Log.d("minut", e.getMinute());
+            Log.d("loc", e.getEventLocation());
+            Log.d("desc", e.getEventDescription());
+        }
 
         adapter = new EventListAdapter(getApplicationContext(), R.layout.listed_event, eventList);
         assert eventListView != null;

@@ -23,7 +23,8 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -33,18 +34,18 @@
             <android.widget.CalendarView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/calendar"
                 android:layout_marginBottom="250dp">
 
             </android.widget.CalendarView>
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/eventlist">
+            android:layout_height="match_parent"
+            android:id="@+id/eventlist"
+            android:layout_marginTop="317dp"/>
 
-        </ListView>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 
 

@@ -1,6 +1,7 @@
 package com.example.iansangines.appnimals;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         TextView eventYear = (TextView) convertView.findViewById(R.id.eventyear);
         TextView eventName = (TextView) convertView.findViewById(R.id.eventname);
         TextView eventPet = (TextView) convertView.findViewById(R.id.eventpet);
-        TextView eventHourLoc= (TextView) convertView.findViewById(R.id.eventhourloc);
+        TextView eventHourLoc = (TextView) convertView.findViewById(R.id.eventhourloc);
         ImageButton delete = (ImageButton) convertView.findViewById(R.id.deletevent);
 
         eventDay.setText(itemEvent.getDay());
@@ -43,9 +44,11 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         eventYear.setText(itemEvent.getYear());
 
         eventName.setText(itemEvent.getName());
-        eventPet.setText(itemEvent.getPetChip());
-        String hourLoc = itemEvent.getHour() + " - " + itemEvent.getEventLocation();
+       // eventPet.setText(itemEvent.getPetChip());
+        eventPet.setText("");
+        String hourLoc = itemEvent.getHour() + ":" + itemEvent.getMinute() + " - " + itemEvent.getEventLocation();
         eventHourLoc.setText(hourLoc);
+        Log.d("randooooom", eventHourLoc.getText().toString());
         delete.setImageBitmap(null);
 
         return convertView;

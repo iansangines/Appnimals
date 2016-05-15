@@ -32,9 +32,11 @@ public class AddEventActivity extends AppCompatActivity {
 
     static final int INSERTED = 1;
     static Calendar c = Calendar.getInstance();
-    static int startYear = c.get(Calendar.YEAR);
-    static int startMonth = c.get(Calendar.MONTH);
-    static int startDay = c.get(Calendar.DAY_OF_MONTH);
+    final static int startDay = c.get(Calendar.DAY_OF_MONTH);
+    final static int startMonth = c.get(Calendar.MONTH);
+    final static int startYear = c.get(Calendar.YEAR);
+    static int startHour = c.get(Calendar.HOUR_OF_DAY);
+    static int startMinute = c.get(Calendar.MINUTE);
     private Button dateinput;
     private Button hourinput;
     private Event eventToInsert = new Event();
@@ -106,20 +108,21 @@ public class AddEventActivity extends AppCompatActivity {
                         return;
 
                     } else {
-                        eventToInsert.setDay(Integer.toString(startDay));
-                        eventToInsert.setMonth(Integer.toString(startMonth));
-                        eventToInsert.setYear(Integer.toString(startYear));
+                        eventToInsert.setDay(Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
+                        eventToInsert.setMonth(Integer.toString(c.get(Calendar.MONTH)));
+                        eventToInsert.setYear(Integer.toString(c.get(Calendar.YEAR)));
 
                     }
 
                     //HORA DE l'ESDEVENIMENT (NECESSARI)
-                    String hour = hourinput.getText().toString();
-                    if (hour == null || hour.equals("hh:mm h")) {
+                    String shour = hourinput.getText().toString();
+                    if (shour == null || shour.equals("hh:mm h")) {
                         Toast.makeText(AddEventActivity.this, "Introdueix una hora", Toast.LENGTH_SHORT).show();
                         return;
 
                     } else {
-                        eventToInsert.setHour(hour);
+                        eventToInsert.setHour(Integer.toString(c.get(Calendar.HOUR_OF_DAY)));
+                        eventToInsert.setMinute(Integer.toString(c.get(Calendar.MINUTE)));
                     }
 
 
@@ -160,24 +163,24 @@ public class AddEventActivity extends AppCompatActivity {
                     //LLOC DE L'ESDEVENIMENT
                     TextInputLayout loclayout = (TextInputLayout) findViewById(R.id.input_eventloc);
                     assert loclayout != null;
-                    EditText loc = eventnamelayout.getEditText();
+                    EditText loc = loclayout.getEditText();
                     assert loc != null;
-                    String ubic = eventname.getText().toString();
+                    String ubic = loc.getText().toString();
                     if (ubic == null) ubic = "";
                     eventToInsert.setEventLocation(ubic);
 
                     //DESCRIPCIÓ DE L'ESDEVENIMENT
                     TextInputLayout desclayout = (TextInputLayout) findViewById(R.id.input_eventdesc);
                     assert desclayout != null;
-                    EditText desc = eventnamelayout.getEditText();
+                    EditText desc = desclayout.getEditText();
                     assert desc != null;
-                    String descString = eventname.getText().toString();
+                    String descString = desc.getText().toString();
                     if (descString == null) descString = "";
                     eventToInsert.setEventDescription(descString);
 
 
                     PetDBController db = new PetDBController(AddEventActivity.this);
-                    db.insertEvent(eventToInsert.getName(), eventToInsert.getDay(),eventToInsert.getMonth(),eventToInsert.getYear(), null, eventToInsert.getHour(), null, eventToInsert.getEventLocation(), eventToInsert.getEventDescription());
+                    db.insertEvent(eventToInsert.getName(), eventToInsert.getDay(), eventToInsert.getMonth(), eventToInsert.getYear(), null, eventToInsert.getHour(), eventToInsert.getMinute(), null, eventToInsert.getEventLocation(), eventToInsert.getEventDescription());
                     Toast.makeText(AddEventActivity.this, "Esdeveniment Guardat", Toast.LENGTH_SHORT).show();
                     //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
@@ -254,7 +257,6 @@ public class AddEventActivity extends AppCompatActivity {
     public static class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-
             DatePickerDialog dialog = new DatePickerDialog(getActivity(),R.style.DialogTheme,this,startYear,startMonth,startDay);
             return dialog;
 
@@ -271,6 +273,7 @@ public class AddEventActivity extends AppCompatActivity {
             else{
                 String datetext = dayName + ", " + Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year);
                 datatext.setText(datetext);
+                c.set(year, month+1, day);
             }
         }
     }
@@ -280,18 +283,20 @@ public class AddEventActivity extends AppCompatActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            return new TimePickerDialog(getActivity(),R.style.DialogTheme, this, hour, minute,
+            return new TimePickerDialog(getActivity(),R.style.DialogTheme, this, startHour, startMinute,
                     DateFormat.is24HourFormat(getActivity()));
         }
 
         public void onTimeSet(TimePicker view, int hour, int minute) {
             Button timetext = (Button) getActivity().findViewById(R.id.hour);
             assert timetext != null;
-            String time = Integer.toString(hour) + ":" + Integer.toString(minute) + " h";
+            String h = Integer.toString(hour);
+            String m = Integer.toString(minute);
+            if(hour < 10) h = "0" + h;
+            if(minute < 10) m = "0" + m;
+            String time = h + ":" + m + " h";
+            c.set(Calendar.HOUR_OF_DAY,hour);
+            c.set(Calendar.MINUTE,minute);
             timetext.setText(time);
         }
     }
