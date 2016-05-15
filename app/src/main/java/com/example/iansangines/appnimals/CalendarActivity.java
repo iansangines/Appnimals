@@ -8,8 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class CalendarActivity extends AppCompatActivity {
+
+    private ListView eventListView;
+    private PetDBController dbController;
+    private ArrayList<Event> eventList;
+    private EventListAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +30,13 @@ public class CalendarActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Calendari");
 
+        eventListView = (ListView) findViewById(R.id.eventlist);
+        dbController = new PetDBController(this);
+        eventList = dbController.queryAllEvents();
+
+        adapter = new EventListAdapter(getApplicationContext(), R.layout.listed_event, eventList);
+        assert eventListView != null;
+        eventListView.setAdapter(adapter);
     }
 
 

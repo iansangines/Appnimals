@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/evenmonth"
+            android:id="@+id/eventmonth"
             android:layout_gravity="center_horizontal"
             android:textSize="16dp"
             android:textColor="#212121"
@@ -70,7 +70,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eventinf"
+                android:id="@+id/eventpet"
                 android:layout_marginLeft="72dp"
                 android:layout_alignParentTop="true"
                 android:text="Mascota"/>
@@ -79,9 +79,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/eventhourloc"
-                android:layout_below="@+id/eventinf"
+                android:layout_below="@+id/eventpet"
                 android:layout_marginLeft="72dp"
-                android:text="Hora i Lloc"/>
+                android:text="Hora - Lloc"/>
 
 
         </RelativeLayout>
@@ -90,6 +90,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/deletevent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

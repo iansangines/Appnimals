@@ -34,7 +34,9 @@ public class PetDBController extends SQLiteOpenHelper{
 
     private static final String EVENT_TABLE_NAME = "EVENTS";
     private static final String EVENT_COLUMN_NAME = "NAME";
-    private static final String EVENT_COLUMN_DATA = "DATA";
+    private static final String EVENT_COLUMN_DAY = "DAY";
+    private static final String EVENT_COLUMN_MONTH = "MONTH";
+    private static final String EVENT_COLUMN_YEAR = "YEAR";
     private static final String EVENT_COLUMN_TYPE = "TYPE"; // vacunacio|desparasitacio|veterinari
     private static final String EVENT_COLUMN_HOUR= "HOUR";
     private static final String EVENT_COLUMN_LOC= "UBIC";
@@ -44,13 +46,15 @@ public class PetDBController extends SQLiteOpenHelper{
 
     private static final String CREATE_EVENT_TABLE = "CREATE TABLE " + EVENT_TABLE_NAME
             + " (" + EVENT_COLUMN_NAME + " TEXT, "
-            + EVENT_COLUMN_DATA + " TEXT, "
+            + EVENT_COLUMN_DAY + " TEXT, "
+            + EVENT_COLUMN_MONTH + " TEXT, "
+            + EVENT_COLUMN_YEAR + " TEXT, "
             + EVENT_COLUMN_TYPE + " TEXT, "
             + EVENT_COLUMN_HOUR +" TEXT, "
             + EVENT_COLUMN_PETCHIP+" TEXT, "
             + EVENT_COLUMN_LOC + "TEXT, "
             + EVENT_COLUMN_DESC + "TEXT, "
-            + " PRIMARY KEY (" + EVENT_COLUMN_DATA + ", " + EVENT_COLUMN_HOUR + ")"
+            + " PRIMARY KEY (" + EVENT_COLUMN_DAY + ", " + EVENT_COLUMN_MONTH + ", " + EVENT_COLUMN_YEAR + ", " + EVENT_COLUMN_HOUR + ")"
             + " FOREIGN KEY (" + EVENT_COLUMN_PETCHIP + ") REFERENCES " + PET_TABLE_NAME + "(" + PET_COLUMN_CHIP + ") );";
 
     private static final String DELETE_PET_TABLE = "DROP TABLE IF EXISTS " + PET_TABLE_NAME;
@@ -85,11 +89,13 @@ public class PetDBController extends SQLiteOpenHelper{
         return ret != -1;
     }
 
-    public boolean insertEvent(String nom, String data, String type, String hour, String petChip,String loc, String desc){
+    public boolean insertEvent(String nom, String day, String month , String year ,String type, String hour, String petChip,String loc, String desc){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(EVENT_COLUMN_NAME, nom);
-        values.put(EVENT_COLUMN_DATA,data);
+        values.put(EVENT_COLUMN_DAY,day);
+        values.put(EVENT_COLUMN_MONTH,month);
+        values.put(EVENT_COLUMN_YEAR,year);
         values.put(EVENT_COLUMN_TYPE, type);
         values.put(EVENT_COLUMN_HOUR, hour);
         values.put(EVENT_COLUMN_PETCHIP, petChip);
@@ -133,14 +139,16 @@ public class PetDBController extends SQLiteOpenHelper{
             do {
                 Event event = new Event();
                 event.setName(c.getString(c.getColumnIndex(EVENT_COLUMN_NAME)));
-                event.setDate(c.getString(c.getColumnIndex(EVENT_COLUMN_DATA)));
+                event.setDay(c.getString(c.getColumnIndex(EVENT_COLUMN_DAY)));
+                event.setMonth(c.getString(c.getColumnIndex(EVENT_COLUMN_MONTH)));
+                event.setYear(c.getString(c.getColumnIndex(EVENT_COLUMN_YEAR)));
                 event.setEventType(c.getString(c.getColumnIndex(EVENT_COLUMN_TYPE)));
                 event.setHour(c.getString(c.getColumnIndex(EVENT_COLUMN_HOUR)));
                 event.setPetChip(c.getString(c.getColumnIndex(EVENT_COLUMN_PETCHIP)));
                 event.setEventLocation(c.getString(c.getColumnIndex(EVENT_COLUMN_LOC)));
                 event.setEventDescription(c.getString(c.getColumnIndex(EVENT_COLUMN_DESC)));
                 eventArrayList.add(event);
-                Log.d("queyall", event.getName() + event.getDate() + event.getPetChip());
+                Log.d("queyall", event.getName() + event.getDay() + event.getPetChip());
             } while(c.moveToNext());
         }
         db.close();

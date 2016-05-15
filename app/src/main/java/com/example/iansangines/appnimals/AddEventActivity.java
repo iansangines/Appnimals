@@ -86,52 +86,36 @@ public class AddEventActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (v.getId() == R.id.confevent) {
 
+                    //NOM DE L'ESDEVENIMENT (NECESSARI)
                     TextInputLayout eventnamelayout = (TextInputLayout) findViewById(R.id.input_eventname);
                     assert eventnamelayout != null;
                     EditText eventname = eventnamelayout.getEditText();
                     assert eventname != null;
                     String name = eventname.getText().toString();
                     if (name == null || name.equals("")) {
-                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(AddEventActivity.this);
-                        nameDialog.setMessage("Introdueix un nom").setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                        Toast.makeText(AddEventActivity.this, "Introdueix el nom de l'esdeveniment", Toast.LENGTH_SHORT).show();
                         return;
                     } else {
                         eventToInsert.setName(name);
                     }
 
-
+                    //DATA DE L'ESDEVENIMENT (NECESSARI)
                     String data = dateinput.getText().toString();
                     if (data == null || data.equals("dia. dd/mm/aaaa")) {
-
-                        AlertDialog.Builder dateDialog = new AlertDialog.Builder(AddEventActivity.this);
-                        dateDialog.setMessage("Introdueix una data").setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                        Toast.makeText(AddEventActivity.this, "Introdueix una data", Toast.LENGTH_SHORT).show();
                         return;
 
                     } else {
-                        eventToInsert.setDate(data);
+                        eventToInsert.setDay(Integer.toString(startDay));
+                        eventToInsert.setMonth(Integer.toString(startMonth));
+                        eventToInsert.setYear(Integer.toString(startYear));
+
                     }
 
-
+                    //HORA DE l'ESDEVENIMENT (NECESSARI)
                     String hour = hourinput.getText().toString();
                     if (hour == null || hour.equals("hh:mm h")) {
-
-                        AlertDialog.Builder dateDialog = new AlertDialog.Builder(AddEventActivity.this);
-                        dateDialog.setMessage("Introdueix una hora").setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                        Toast.makeText(AddEventActivity.this, "Introdueix una hora", Toast.LENGTH_SHORT).show();
                         return;
 
                     } else {
@@ -160,27 +144,20 @@ public class AddEventActivity extends AppCompatActivity {
                         }
                         */
 
-                    //TRACTAR ELS RADIOBUTTONS
-                        /*
-                        TextInputLayout subtypeinputlayout = (TextInputLayout) findViewById(R.id.layout_input_rasa);
-                        assert subtypeinputlayout != null;
-                        EditText subtypeinput = subtypeinputlayout.getEditText();
-                        assert subtypeinput != null;
-                        String subtype = subtypeinput.getText().toString();
-                        if (subtype == null || subtype.equals("")) {
 
-                            AlertDialog.Builder typeDialog = new AlertDialog.Builder(InsertPetActivity.this);
-                            typeDialog.setMessage("Introdueix una raça/tipus").setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).show();
-                            return;
-                        } else {
-                            petToInsert.setPetType(subtype);
-                        } */
+                    //TIPUS DE L'ESDEVENIMENT (NECESSARI)
+                    if(veterniari.isChecked()) eventToInsert.setEventType(veterniari.getText().toString());
+                    else if(vacunacio.isChecked()) eventToInsert.setEventType(vacunacio.getText().toString());
+                    else if(desp.isChecked()) eventToInsert.setEventType(desp.getText().toString());
+                    else if(altre.isChecked()){
+                        //afegir un edittext i gardar lo escrit
+                    }
+                    else{
+                        Toast.makeText(AddEventActivity.this, "Selecciona el tipus d'esdeveniment", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
+                    //LLOC DE L'ESDEVENIMENT
                     TextInputLayout loclayout = (TextInputLayout) findViewById(R.id.input_eventloc);
                     assert loclayout != null;
                     EditText loc = eventnamelayout.getEditText();
@@ -189,6 +166,7 @@ public class AddEventActivity extends AppCompatActivity {
                     if (ubic == null) ubic = "";
                     eventToInsert.setEventLocation(ubic);
 
+                    //DESCRIPCIÓ DE L'ESDEVENIMENT
                     TextInputLayout desclayout = (TextInputLayout) findViewById(R.id.input_eventdesc);
                     assert desclayout != null;
                     EditText desc = eventnamelayout.getEditText();
@@ -199,11 +177,11 @@ public class AddEventActivity extends AppCompatActivity {
 
 
                     PetDBController db = new PetDBController(AddEventActivity.this);
-                    db.insertEvent(eventToInsert.getName(), eventToInsert.getDate(), null, eventToInsert.getHour(), null, eventToInsert.getEventLocation(), eventToInsert.getEventDescription());
+                    db.insertEvent(eventToInsert.getName(), eventToInsert.getDay(),eventToInsert.getMonth(),eventToInsert.getYear(), null, eventToInsert.getHour(), null, eventToInsert.getEventLocation(), eventToInsert.getEventDescription());
                     Toast.makeText(AddEventActivity.this, "Esdeveniment Guardat", Toast.LENGTH_SHORT).show();
                     //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
-                    returned.putExtra("date", eventToInsert.getDate());
+                    returned.putExtra("day", eventToInsert.getDay());
                     returned.putExtra("hour", eventToInsert.getHour());
                     setResult(INSERTED, returned);
                     finish();
