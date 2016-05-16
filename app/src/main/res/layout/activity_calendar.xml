@@ -35,15 +35,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/calendar"
-                android:layout_marginBottom="250dp">
+                android:layout_marginBottom="250dp"
+                android:selectedWeekBackgroundColor="@color/colorAccent"
+                android:selectedDateVerticalBar ="@color/colorPrimary">
 
             </android.widget.CalendarView>
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/eventlist"
-            android:layout_marginTop="317dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignBottom="@+id/calendar"
+                android:background="#424242"/>
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/eventlist"
+                android:dividerHeight="1dp"
+                android:layout_marginTop="317dp"
+                android:clickable="true"/>
 
     </RelativeLayout>
 

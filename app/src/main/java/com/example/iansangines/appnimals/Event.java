@@ -11,6 +11,7 @@ public class Event {
     private String eventType;
     private String hour;
     private String minute;
+    private String petName;
     private String petChip;
     private String eventLocation;
     private String eventDescription;
@@ -47,6 +48,10 @@ public class Event {
     public String getMinute() {return minute;}
 
     public void setMinute(String minute) {this.minute = minute;}
+
+    public String getPetName() {return petName;}
+
+    public void setPetName(String petName) {this.petName = petName;}
 
     public String getPetChip() {return petChip;}
 

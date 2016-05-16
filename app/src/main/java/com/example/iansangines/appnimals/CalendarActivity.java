@@ -9,13 +9,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CalendarView;
 import android.widget.ListView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class CalendarActivity extends AppCompatActivity {
 
     private ListView eventListView;
+    private CalendarView calendarView;
     private PetDBController dbController;
     private ArrayList<Event> eventList;
     private EventListAdapter adapter;
@@ -52,6 +59,21 @@ public class CalendarActivity extends AppCompatActivity {
         adapter = new EventListAdapter(getApplicationContext(), R.layout.listed_event, eventList);
         assert eventListView != null;
         eventListView.setAdapter(adapter);
+
+        calendarView = (CalendarView) findViewById(R.id.calendar);
+
+        eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("onitecmclick", "trueeee");
+                Event e = (Event) eventListView.getItemAtPosition(position);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, Integer.parseInt(e.getYear()));
+                calendar.set(Calendar.MONTH, Integer.parseInt(e.getMonth())-1);
+                calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(e.getDay()));
+                calendarView.setDate(calendar.getTimeInMillis(), false, true);
+            }
+        });
     }
 
 

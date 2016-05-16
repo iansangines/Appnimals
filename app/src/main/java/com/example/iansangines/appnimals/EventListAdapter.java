@@ -18,6 +18,7 @@ public class EventListAdapter extends ArrayAdapter<Event> {
     private Context context;
     private int resource;
     private ArrayList<Event> events;
+    private final String[] MONTHS = {"Gen", "Feb", "Març", "Abr", "Maig", "Juny", "Jul", "Ag", "Set", "Oct", "Nov", "Des"};
 
 
     public EventListAdapter(Context context, int resource, ArrayList<Event> events){
@@ -40,12 +41,11 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         ImageButton delete = (ImageButton) convertView.findViewById(R.id.deletevent);
 
         eventDay.setText(itemEvent.getDay());
-        eventMonth.setText(itemEvent.getMonth());
+        eventMonth.setText(MONTHS[Integer.parseInt(itemEvent.getMonth())-1]);
         eventYear.setText(itemEvent.getYear());
-
         eventName.setText(itemEvent.getName());
-       // eventPet.setText(itemEvent.getPetChip());
-        eventPet.setText("");
+        String pet = itemEvent.getPetName() +" - "+itemEvent.getPetChip();
+        eventPet.setText(pet);
         String hourLoc = itemEvent.getHour() + ":" + itemEvent.getMinute() + " - " + itemEvent.getEventLocation();
         eventHourLoc.setText(hourLoc);
         Log.d("randooooom", eventHourLoc.getText().toString());

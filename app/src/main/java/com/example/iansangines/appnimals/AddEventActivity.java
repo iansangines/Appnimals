@@ -16,15 +16,18 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,6 +48,8 @@ public class AddEventActivity extends AppCompatActivity {
     private RadioButton veterniari;
     private RadioButton desp;
     private RadioButton altre;
+    private Spinner petSpinner;
+    private ArrayList<Pet> pets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +85,22 @@ public class AddEventActivity extends AppCompatActivity {
         assert hourinput != null;
         hourinput.setOnClickListener(listen);
 
+        petSpinner = (Spinner) findViewById(R.id.petspinner);
+        PetDBController db = new PetDBController(AddEventActivity.this);
+        pets = db.queryAllPets();
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAdapter.add("Selecciona una mascota..");
+        for(int i = 0; i<pets.size(); i++) {
+            Pet aux = pets.get(i);
+            String name = aux.getName();
+            String chip = aux.getChipNumber();
+            String spin = name + " - " + chip;
+            spinnerAdapter.add(spin);
+        }
+        assert petSpinner != null;
+        petSpinner.setAdapter(spinnerAdapter);
 
         FloatingActionButton button = (FloatingActionButton) findViewById(R.id.confevent);
         assert button != null;
@@ -127,32 +148,23 @@ public class AddEventActivity extends AppCompatActivity {
 
 
                     //SPINNER DEL NOM DE LA MASCOTA --> Si es ve d ela mascota getExtra(nom i xip) i centrar l'spinner a la mascota i bloquejarlo, sino, Extranull i yasta
-                        /*
-                        TextInputLayout xipinputlayout = (TextInputLayout) findViewById(R.id.layout_input_xip);
-                        assert xipinputlayout != null;
-                        EditText xipinput = xipinputlayout.getEditText();
-                        assert xipinput != null;
-                        String xip = (xipinput.getText().toString());
-                        if (xip == null || xip.equals("")) {
-                            AlertDialog.Builder xipDialog = new AlertDialog.Builder(InsertPetActivity.this);
-                            xipDialog.setMessage("Introdueix una número de xip").setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).show();
-                            return;
-                        } else {
-                            petToInsert.setChipNumber(xip);
-                        }
-                        */
-
+                    String aux = petSpinner.getSelectedItem().toString();
+                    if(aux == null || aux.equals("Selecciona una mascota..")){
+                        Toast.makeText(AddEventActivity.this, "Selecciona una mascota", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    else{
+                        String[] splitted = aux.split(" - ");
+                        eventToInsert.setPetName(splitted[0]);
+                        eventToInsert.setPetChip(splitted[1]);
+                    }
 
                     //TIPUS DE L'ESDEVENIMENT (NECESSARI)
                     if(veterniari.isChecked()) eventToInsert.setEventType(veterniari.getText().toString());
                     else if(vacunacio.isChecked()) eventToInsert.setEventType(vacunacio.getText().toString());
                     else if(desp.isChecked()) eventToInsert.setEventType(desp.getText().toString());
                     else if(altre.isChecked()){
+                        Log.d("Altre radiobut", "is checked");
                         //afegir un edittext i gardar lo escrit
                     }
                     else{
@@ -180,9 +192,9 @@ public class AddEventActivity extends AppCompatActivity {
 
 
                     PetDBController db = new PetDBController(AddEventActivity.this);
-                    db.insertEvent(eventToInsert.getName(), eventToInsert.getDay(), eventToInsert.getMonth(), eventToInsert.getYear(), null, eventToInsert.getHour(), eventToInsert.getMinute(), null, eventToInsert.getEventLocation(), eventToInsert.getEventDescription());
+                    Log.d("type selected", eventToInsert.getEventType());
+                    db.insertEvent(eventToInsert.getName(), eventToInsert.getDay(), eventToInsert.getMonth(), eventToInsert.getYear(), null, eventToInsert.getHour(), eventToInsert.getMinute(), eventToInsert.getPetChip(),eventToInsert.getPetName(), eventToInsert.getEventLocation(), eventToInsert.getEventDescription());
                     Toast.makeText(AddEventActivity.this, "Esdeveniment Guardat", Toast.LENGTH_SHORT).show();
-                    //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
                     returned.putExtra("day", eventToInsert.getDay());
                     returned.putExtra("hour", eventToInsert.getHour());

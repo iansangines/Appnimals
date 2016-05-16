@@ -28,9 +28,10 @@ public class PetDBController extends SQLiteOpenHelper{
             " (" + PET_COLUMN_NAME + " TEXT, "
             + PET_COLUMN_DATA + " TEXT, "
             + PET_COLUMN_TYPE + " TEXT, "
-            + PET_COLUMN_CHIP +" TEXT PRIMARY KEY, "
+            + PET_COLUMN_CHIP +" TEXT, "
             + PET_COLUMN_IMGPATH +" TEXT, "
-            + PET_COLUMN_THUMBNAILPATH + " TEXT);";
+            + PET_COLUMN_THUMBNAILPATH + " TEXT, "
+            + "PRIMARY KEY (" + PET_COLUMN_NAME + ", "+ PET_COLUMN_CHIP + ") );";
 
     private static final String EVENT_TABLE_NAME = "EVENTS";
     private static final String EVENT_COLUMN_NAME = "NAME";
@@ -42,7 +43,7 @@ public class PetDBController extends SQLiteOpenHelper{
     private static final String EVENT_COLUMN_MINUTE= "MINUTE";
     private static final String EVENT_COLUMN_LOC= "UBIC";
     private static final String EVENT_COLUMN_DESC= "DESC";
-
+    private static final String EVENT_COLUMN_PETNAME = "TYPE"; // vacunacio|desparasitacio|veterinari
     private static final String EVENT_COLUMN_PETCHIP = "PETCHIP";
 
     private static final String CREATE_EVENT_TABLE = "CREATE TABLE " + EVENT_TABLE_NAME
@@ -57,7 +58,8 @@ public class PetDBController extends SQLiteOpenHelper{
             + EVENT_COLUMN_LOC + " TEXT, "
             + EVENT_COLUMN_DESC + " TEXT, "
             + " PRIMARY KEY (" + EVENT_COLUMN_DAY + ", " + EVENT_COLUMN_MONTH + ", " + EVENT_COLUMN_YEAR + ", " + EVENT_COLUMN_HOUR + ", " + EVENT_COLUMN_MINUTE+ ")"
-            + " FOREIGN KEY (" + EVENT_COLUMN_PETCHIP + ") REFERENCES " + PET_TABLE_NAME + "(" + PET_COLUMN_CHIP + ") );";
+            + " FOREIGN KEY (" + EVENT_COLUMN_PETCHIP + ") REFERENCES " + PET_TABLE_NAME + "(" + PET_COLUMN_CHIP + ") "
+            + "FOREIGN KEY (" + EVENT_COLUMN_PETNAME + ") REFERENCES " + PET_TABLE_NAME + "(" +PET_COLUMN_NAME + " ) );";
 
     private static final String DELETE_PET_TABLE = "DROP TABLE IF EXISTS " + PET_TABLE_NAME;
     private static final String DELETE_EVENT_TABLE = "DROP TABLE IF EXISTS " + EVENT_TABLE_NAME;
@@ -91,7 +93,7 @@ public class PetDBController extends SQLiteOpenHelper{
         return ret != -1;
     }
 
-    public boolean insertEvent(String nom, String day, String month , String year ,String type, String hour, String minute, String petChip,String loc, String desc){
+    public boolean insertEvent(String nom, String day, String month , String year ,String type, String hour, String minute, String petChip,String petName, String loc, String desc){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         Log.d("noom", nom);
@@ -110,6 +112,7 @@ public class PetDBController extends SQLiteOpenHelper{
         values.put(EVENT_COLUMN_TYPE, type);
         values.put(EVENT_COLUMN_HOUR, hour);
         values.put(EVENT_COLUMN_MINUTE,minute);
+        values.put(EVENT_COLUMN_PETNAME, petName);
         values.put(EVENT_COLUMN_PETCHIP, petChip);
         values.put(EVENT_COLUMN_LOC, loc);
         values.put(EVENT_COLUMN_DESC, desc);
@@ -142,7 +145,7 @@ public class PetDBController extends SQLiteOpenHelper{
 
     public ArrayList<Event> queryAllEvents(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String q = "SELECT * FROM " + EVENT_TABLE_NAME;
+        String q = "SELECT * FROM " + EVENT_TABLE_NAME + " ORDER BY " + EVENT_COLUMN_YEAR + ", " + EVENT_COLUMN_MONTH + ", " + EVENT_COLUMN_DAY + " ," +EVENT_COLUMN_HOUR + ", " + EVENT_COLUMN_MINUTE +";";
         Cursor c = db.rawQuery(q ,null);
         ArrayList<Event> eventArrayList = new ArrayList<Event>();
         if(c.moveToFirst()){
@@ -155,6 +158,7 @@ public class PetDBController extends SQLiteOpenHelper{
                 event.setEventType(c.getString(c.getColumnIndex(EVENT_COLUMN_TYPE)));
                 event.setHour(c.getString(c.getColumnIndex(EVENT_COLUMN_HOUR)));
                 event.setMinute(c.getString(c.getColumnIndex(EVENT_COLUMN_MINUTE)));
+                event.setPetName(c.getString(c.getColumnIndex(EVENT_COLUMN_PETNAME)));
                 event.setPetChip(c.getString(c.getColumnIndex(EVENT_COLUMN_PETCHIP)));
                 event.setEventLocation(c.getString(c.getColumnIndex(EVENT_COLUMN_LOC)));
                 event.setEventDescription(c.getString(c.getColumnIndex(EVENT_COLUMN_DESC)));
