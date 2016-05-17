@@ -86,17 +86,26 @@ public class AddEventActivity extends AppCompatActivity {
         hourinput.setOnClickListener(listen);
 
         petSpinner = (Spinner) findViewById(R.id.petspinner);
-        PetDBController db = new PetDBController(AddEventActivity.this);
-        pets = db.queryAllPets();
 
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAdapter.add("Selecciona una mascota..");
-        for(int i = 0; i<pets.size(); i++) {
-            Pet aux = pets.get(i);
-            String name = aux.getName();
-            String chip = aux.getChipNumber();
-            String spin = name + " - " + chip;
+        PetDBController db = new PetDBController(AddEventActivity.this);
+
+        String petChip = null;
+        if(getIntent().getExtras() == null) {
+            pets = db.queryAllPets();
+            for (int i = 0; i < pets.size(); i++) {
+                Pet aux = pets.get(i);
+                String name = aux.getName();
+                String chip = aux.getChipNumber();
+                String spin = name + " - " + chip;
+                spinnerAdapter.add(spin);
+            }
+        }
+        else{
+            Pet aux = db.queryPet(getIntent().getStringExtra("chip"));
+            String spin = aux.getName() + " - " + aux.getChipNumber();
             spinnerAdapter.add(spin);
         }
         assert petSpinner != null;

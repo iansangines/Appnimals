@@ -220,4 +220,16 @@ public class PetDBController extends SQLiteOpenHelper{
         Log.d("Queryall", "after close");
         return eventArrayList;
     }
+
+    public boolean deletePet(String chip)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(PET_TABLE_NAME, PET_COLUMN_CHIP + "=" + chip, null) > 0;
+    }
+
+    public boolean deletePetEvents(String chip)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(EVENT_TABLE_NAME, EVENT_COLUMN_PETCHIP + "=" + chip, null) > 0;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.iansangines.appnimals;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -76,4 +79,21 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                Log.d("action_edit", "inside");
+                Intent edit = new Intent(ProfileActivity.this, EditPetActivity.class);
+                edit.putExtra("chip",profilePet.getChipNumber());
+                startActivity(edit);
+                return true;
+            case R.id.add_event:
+                Intent addevent = new Intent(ProfileActivity.this, AddEventActivity.class);
+                addevent.putExtra("chip",profilePet.getChipNumber());
+                startActivityForResult(addevent,1);
+            default: return super.onOptionsItemSelected(item);
+
+        }
+    }
 }

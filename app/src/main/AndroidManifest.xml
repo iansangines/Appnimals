@@ -19,6 +19,7 @@
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -50,7 +51,8 @@
             android:label="@string/title_activity_calendar" />
         <activity
             android:name=".AddEventActivity"
-            android:label="@string/title_activity_add_event"></activity>
+            android:label="@string/title_activity_add_event" />
+        <activity android:name=".EditPetActivity"></activity>
     </application>
 
 </manifest>
