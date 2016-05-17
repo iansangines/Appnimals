@@ -4,16 +4,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 public class ProfileActivity extends AppCompatActivity {
     private Pet profilePet;
     private PetDBController dbController;
+    private RecyclerView eventList;
+    private ArrayList<Event> petEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,17 @@ public class ProfileActivity extends AppCompatActivity {
         assert typeTextView != null;
         typeTextView.setText(petType);
 
+        eventList = (RecyclerView) findViewById(R.id.eventlist);
+        petEvents = dbController.queryPetEvents(profilePet.getChipNumber());
+        for(int i = 0; i < petEvents.size() ; i++){
+            petEvents.get(i).getName();
+        }
+        EventRecyclerAdapter adapter = new EventRecyclerAdapter(petEvents);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        eventList.setLayoutManager(mLayoutManager);
+        eventList.setItemAnimator(new DefaultItemAnimator());
+        eventList.setNestedScrollingEnabled(false);
+        eventList.setAdapter(adapter);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

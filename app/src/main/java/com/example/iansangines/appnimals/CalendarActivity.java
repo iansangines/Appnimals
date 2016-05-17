@@ -65,12 +65,12 @@ public class CalendarActivity extends AppCompatActivity {
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("onitecmclick", "trueeee");
                 Event e = (Event) eventListView.getItemAtPosition(position);
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.YEAR, Integer.parseInt(e.getYear()));
                 calendar.set(Calendar.MONTH, Integer.parseInt(e.getMonth())-1);
                 calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(e.getDay()));
+                calendarView.setDate(calendar.getTimeInMillis()-1,false, true);
                 calendarView.setDate(calendar.getTimeInMillis(), false, true);
             }
         });
@@ -89,6 +89,18 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivityForResult(addEvent,5);
         }
             return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == 5){
+            dbController = new PetDBController(CalendarActivity.this);
+            ArrayList<Event> events = dbController.queryAllEvents();
+            adapter = new EventListAdapter(getApplicationContext(), R.layout.listed_event, events);
+            assert eventListView != null;
+            eventListView.setAdapter(adapter);
+
+        }
     }
 
 }

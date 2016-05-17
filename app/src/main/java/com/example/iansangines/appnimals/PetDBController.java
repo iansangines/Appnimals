@@ -191,4 +191,33 @@ public class PetDBController extends SQLiteOpenHelper{
         Log.d("queryPet",pet.getPhotoPath());
         return pet;
     }
+
+    public ArrayList<Event> queryPetEvents(String xip){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String q = "SELECT * FROM " + EVENT_TABLE_NAME + " WHERE " + EVENT_COLUMN_PETCHIP + "=" + xip + " ORDER BY " + EVENT_COLUMN_YEAR  + ", " + EVENT_COLUMN_MONTH + ", " + EVENT_COLUMN_DAY + " ," +EVENT_COLUMN_HOUR + ", " + EVENT_COLUMN_MINUTE +";";
+        Cursor c = db.rawQuery(q,null);
+        ArrayList<Event> eventArrayList = new ArrayList<Event>();
+        if(c.moveToFirst()){
+            do {
+                Event event = new Event();
+                event.setName(c.getString(c.getColumnIndex(EVENT_COLUMN_NAME)));
+                event.setDay(c.getString(c.getColumnIndex(EVENT_COLUMN_DAY)));
+                event.setMonth(c.getString(c.getColumnIndex(EVENT_COLUMN_MONTH)));
+                event.setYear(c.getString(c.getColumnIndex(EVENT_COLUMN_YEAR)));
+                event.setEventType(c.getString(c.getColumnIndex(EVENT_COLUMN_TYPE)));
+                event.setHour(c.getString(c.getColumnIndex(EVENT_COLUMN_HOUR)));
+                event.setMinute(c.getString(c.getColumnIndex(EVENT_COLUMN_MINUTE)));
+                event.setPetName(c.getString(c.getColumnIndex(EVENT_COLUMN_PETNAME)));
+                event.setPetChip(c.getString(c.getColumnIndex(EVENT_COLUMN_PETCHIP)));
+                event.setEventLocation(c.getString(c.getColumnIndex(EVENT_COLUMN_LOC)));
+                event.setEventDescription(c.getString(c.getColumnIndex(EVENT_COLUMN_DESC)));
+                eventArrayList.add(event);
+                Log.d("queyall", event.getName() + event.getDay() + event.getMonth() + event.getHour());
+            } while(c.moveToNext());
+        }
+        db.close();
+        c.close();
+        Log.d("Queryall", "after close");
+        return eventArrayList;
+    }
 }
