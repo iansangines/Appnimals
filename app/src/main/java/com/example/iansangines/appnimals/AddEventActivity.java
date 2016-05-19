@@ -43,13 +43,15 @@ public class AddEventActivity extends AppCompatActivity {
     private Button dateinput;
     private Button hourinput;
     private Event eventToInsert = new Event();
+    private PetDBController db;
 
     private RadioButton vacunacio;
     private RadioButton veterniari;
     private RadioButton desp;
     private RadioButton altre;
     private Spinner petSpinner;
-    private ArrayList<Pet> pets;
+    private ArrayList<Pet> pets = null;
+    private Pet pet = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +91,10 @@ public class AddEventActivity extends AppCompatActivity {
 
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerAdapter.add("Selecciona una mascota..");
-        PetDBController db = new PetDBController(AddEventActivity.this);
+        db = new PetDBController(AddEventActivity.this);
 
-        String petChip = null;
         if(getIntent().getExtras() == null) {
+            spinnerAdapter.add("Selecciona una mascota..");
             pets = db.queryAllPets();
             for (int i = 0; i < pets.size(); i++) {
                 Pet aux = pets.get(i);
@@ -104,8 +105,8 @@ public class AddEventActivity extends AppCompatActivity {
             }
         }
         else{
-            Pet aux = db.queryPet(getIntent().getStringExtra("chip"));
-            String spin = aux.getName() + " - " + aux.getChipNumber();
+            pet = db.queryPetById(getIntent().getIntExtra("id", -1));
+            String spin = pet.getName() + " - " + pet.getChipNumber();
             spinnerAdapter.add(spin);
         }
         assert petSpinner != null;
@@ -162,10 +163,23 @@ public class AddEventActivity extends AppCompatActivity {
                         Toast.makeText(AddEventActivity.this, "Selecciona una mascota", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
+                    else if(pet == null){
+                        String[] splitted = aux.split(" - ");
+                        eventToInsert.setPetName(splitted[0]);
+                        eventToInsert.setPetChip(splitted[1]);
+                        for(int i = 0; i < pets.size(); i++) {
+                            if(pets.get(i).getName().equals(splitted[0])) {
+                                eventToInsert.setPetId(pets.get(i).getId());
+                                break;
+                            }
+                        }
+                    }
                     else{
                         String[] splitted = aux.split(" - ");
                         eventToInsert.setPetName(splitted[0]);
                         eventToInsert.setPetChip(splitted[1]);
+                        eventToInsert.setPetId(pet.getId());
                     }
 
                     //TIPUS DE L'ESDEVENIMENT (NECESSARI)
@@ -202,11 +216,10 @@ public class AddEventActivity extends AppCompatActivity {
 
                     PetDBController db = new PetDBController(AddEventActivity.this);
                     Log.d("type selected", eventToInsert.getEventType());
-                    db.insertEvent(eventToInsert.getName(), eventToInsert.getDay(), eventToInsert.getMonth(), eventToInsert.getYear(), null, eventToInsert.getHour(), eventToInsert.getMinute(), eventToInsert.getPetChip(),eventToInsert.getPetName(), eventToInsert.getEventLocation(), eventToInsert.getEventDescription());
+                    db.insertEvent(eventToInsert);
                     Toast.makeText(AddEventActivity.this, "Esdeveniment Guardat", Toast.LENGTH_SHORT).show();
                     Intent returned = new Intent();
-                    returned.putExtra("day", eventToInsert.getDay());
-                    returned.putExtra("hour", eventToInsert.getHour());
+                    returned.putExtra("id", eventToInsert.getId());
                     setResult(INSERTED, returned);
                     finish();
 

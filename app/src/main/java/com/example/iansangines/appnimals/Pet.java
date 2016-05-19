@@ -7,7 +7,8 @@ import java.io.Serializable;
 /**
  * Created by ian on 09/04/2016.
  */
-public class Pet{
+public class Pet {
+    private int id;
     private String name;
     private String petType;
     private String bornDate;
@@ -15,52 +16,65 @@ public class Pet{
     private String thumbnailPath;
     private String photoPath;
 
-    public Pet(){
+    public Pet() {
         name = petType = bornDate = chipNumber = "";
         photoPath = thumbnailPath = "";
     }
 
+    public int getId() {
+        return id;
+    }
 
-    public String getName(){
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
         return this.name;
     }
 
-    public String getBornDate(){
+    public String getBornDate() {
         return this.bornDate;
     }
 
-    public String getPetType(){
+    public String getPetType() {
         return this.petType;
     }
 
-    public String getChipNumber(){return this.chipNumber;}
+    public String getChipNumber() {
+        return this.chipNumber;
+    }
 
-    public String getPhotoPath(){ return this.photoPath; }
+    public String getPhotoPath() {
+        return this.photoPath;
+    }
 
-    public String getthumbnailPath(){
+    public String getthumbnailPath() {
         return this.thumbnailPath;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setBornDate(String bornDate){
+    public void setBornDate(String bornDate) {
         this.bornDate = bornDate;
     }
 
-    public void setPetType(String petType){
+    public void setPetType(String petType) {
         this.petType = petType;
     }
 
 
-    public void setChipNumber(String chipNumber){
+    public void setChipNumber(String chipNumber) {
         this.chipNumber = chipNumber;
     }
 
-    public void setPetPhotoPath(String photoPath){
+    public void setPetPhotoPath(String photoPath) {
         this.photoPath = photoPath;
     }
 
-    public void setPetthumbnailPath(String thumbnailPath) { this.thumbnailPath = thumbnailPath; }
+    public void setPetthumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
+    }
 }

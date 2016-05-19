@@ -1,6 +1,7 @@
 package com.example.iansangines.appnimals;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -25,48 +26,57 @@ public class ProfileActivity extends AppCompatActivity {
     private PetDBController dbController;
     private RecyclerView eventList;
     private ArrayList<Event> petEvents;
+    EventRecyclerAdapter adapter;
+    static final int EDIT_PET_ACTIVITY = 0;
+    static final int ADD_EVENT_ACTIVITY = 1;
+    static final int INSERTED = 1;
+
+    private TextView chipTextView;
+    private TextView bdTextView;
+    private TextView typeTextView;
+    private ImageView petImage;
+    private CollapsingToolbarLayout collapsingToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarprofile);
         setSupportActionBar(toolbar);
 
 
-        String petChip = getIntent().getStringExtra("chip");
+        int petId = getIntent().getIntExtra("id", -1);
         dbController = new PetDBController(this);
-        profilePet = dbController.queryPet(petChip);
+        profilePet = dbController.queryPetById(petId);
         assert collapsingToolbar != null;
         collapsingToolbar.setTitle(profilePet.getName());
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
         Bitmap petBitmap = BitmapFactory.decodeFile(profilePet.getPhotoPath());
 
-        ImageView petImage = (ImageView) findViewById(R.id.toolbarimg);
+        petImage = (ImageView) findViewById(R.id.toolbarimg);
         assert petImage != null;
         petImage.setImageBitmap(petBitmap);
 
-        TextView chipTextView = (TextView) findViewById(R.id.profChip);
+        chipTextView = (TextView) findViewById(R.id.profChip);
         assert chipTextView != null;
+        String petChip = profilePet.getChipNumber();
         chipTextView.setText(petChip);
-        TextView bdTextView = (TextView) findViewById(R.id.profBd);
+        bdTextView = (TextView) findViewById(R.id.profBd);
         String petBd = profilePet.getBornDate();
         assert bdTextView != null;
         bdTextView.setText(petBd);
-        TextView typeTextView = (TextView) findViewById(R.id.profType);
+        typeTextView = (TextView) findViewById(R.id.profType);
         String petType = profilePet.getPetType();
         assert typeTextView != null;
         typeTextView.setText(petType);
 
         eventList = (RecyclerView) findViewById(R.id.eventlist);
-        petEvents = dbController.queryPetEvents(profilePet.getChipNumber());
-        for(int i = 0; i < petEvents.size() ; i++){
-            petEvents.get(i).getName();
-        }
-        EventRecyclerAdapter adapter = new EventRecyclerAdapter(petEvents);
+        petEvents = dbController.queryPetEvents(profilePet.getId());
+
+        adapter = new EventRecyclerAdapter(petEvents);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         eventList.setLayoutManager(mLayoutManager);
         eventList.setItemAnimator(new DefaultItemAnimator());
@@ -85,15 +95,36 @@ public class ProfileActivity extends AppCompatActivity {
             case R.id.action_edit:
                 Log.d("action_edit", "inside");
                 Intent edit = new Intent(ProfileActivity.this, EditPetActivity.class);
-                edit.putExtra("chip",profilePet.getChipNumber());
-                startActivity(edit);
+                edit.putExtra("id", profilePet.getId());
+                startActivityForResult(edit, EDIT_PET_ACTIVITY);
                 return true;
             case R.id.add_event:
                 Intent addevent = new Intent(ProfileActivity.this, AddEventActivity.class);
-                addevent.putExtra("chip",profilePet.getChipNumber());
-                startActivityForResult(addevent,1);
-            default: return super.onOptionsItemSelected(item);
+                addevent.putExtra("id", profilePet.getId());
+                startActivityForResult(addevent, ADD_EVENT_ACTIVITY);
+            default:
+                return super.onOptionsItemSelected(item);
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if( requestCode == EDIT_PET_ACTIVITY && resultCode== INSERTED){
+            PetDBController dbController = new PetDBController(this);
+            profilePet = dbController.queryPetById(data.getIntExtra("id",-1));
+            collapsingToolbar.setTitle(profilePet.getName());
+             chipTextView.setText(profilePet.getChipNumber());
+            bdTextView.setText(profilePet.getBornDate());
+            typeTextView.setText(profilePet.getPetType());
+            Bitmap petBitmap = BitmapFactory.decodeFile(profilePet.getPhotoPath());
+            petImage.setImageBitmap(petBitmap);
+        }
+
+        if( requestCode == ADD_EVENT_ACTIVITY && resultCode == INSERTED){
+            petEvents = dbController.queryPetEvents(profilePet.getId());
+            adapter = new EventRecyclerAdapter(petEvents);
+            eventList.setAdapter(adapter);
         }
     }
 }

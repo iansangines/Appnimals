@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 
 public class PetListActivity extends AppCompatActivity {
@@ -25,7 +26,6 @@ public class PetListActivity extends AppCompatActivity {
     private PetDBController dbController;
     static final int INSERT_PET_ACTIVITY = 0;
     static final int INSERTED = 1;
-
 
 
     @Override
@@ -50,7 +50,7 @@ public class PetListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent insertPet = new Intent(PetListActivity.this, InsertPetActivity.class);
-                    startActivityForResult(insertPet,INSERT_PET_ACTIVITY);
+                    startActivityForResult(insertPet, INSERT_PET_ACTIVITY);
                 }
             });
         }
@@ -62,8 +62,9 @@ public class PetListActivity extends AppCompatActivity {
         dbController = new PetDBController(this);
         petList = dbController.queryAllPets();
 
-        for(int i = 0; i < petList.size(); i++){
+        for (int i = 0; i < petList.size(); i++) {
             Log.d("petList", petList.get(i).getName());
+            Log.d("petList", Integer.toString(petList.get(i).getId()));
         }
 
         Log.d("activity", "cursor returned");
@@ -75,10 +76,10 @@ public class PetListActivity extends AppCompatActivity {
         petListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("onItemClick" , "aaaaaaaaa");
+                Log.d("onItemClick", "aaaaaaaaa");
                 Intent profile = new Intent(PetListActivity.this, ProfileActivity.class);
-                Pet auxPet =(Pet) petListView.getItemAtPosition(position);
-                profile.putExtra("chip",auxPet.getChipNumber());
+                Pet auxPet = (Pet) petListView.getItemAtPosition(position);
+                profile.putExtra("id", auxPet.getId());
                 startActivity(profile);
             }
         });
@@ -99,19 +100,21 @@ public class PetListActivity extends AppCompatActivity {
                 input.setHint("Nom mascota");
                 alertDialog.setTitle("Buscar");
                 alertDialog.setView(input);
-                alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+                alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String chip = null;
+                        int id = -1;
                         String auxName = input.getText().toString();
-                        for(int i = 0; i < petList.size(); i++) if(petList.get(i).getName().equals(auxName)) chip = petList.get(i).getChipNumber();
+                        for (int i = 0; i < petList.size(); i++)
+                            if (petList.get(i).getName().equals(auxName))
+                                id = petList.get(i).getId();
 
-                        if(chip != null) {
+                        if (id != -1) {
                             Intent profile = new Intent(PetListActivity.this, ProfileActivity.class);
-                            profile.putExtra("chip", chip);
+                            profile.putExtra("id", id);
                             startActivity(profile);
-                        }
-                        else Toast.makeText(PetListActivity.this, "La mascota no existeix", Toast.LENGTH_LONG).show();
+                        } else
+                            Toast.makeText(PetListActivity.this, "La mascota no existeix", Toast.LENGTH_LONG).show();
                     }
                 }).setNegativeButton("Torna", new DialogInterface.OnClickListener() {
                     @Override
@@ -131,26 +134,16 @@ public class PetListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode == INSERT_PET_ACTIVITY && resultCode == INSERTED){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == INSERT_PET_ACTIVITY && resultCode == INSERTED) {
             //Data conté dos bitmaps (fullsize, thumbnail) i en el Result es guarden en el path de la mascota que
             //retorna el data Intent.  (Aixi no es crea el fitxer de la imatge fins que s'ha acabat
             //el insertpetactivity)
-
-
-            String xip = data.getStringExtra("xip");
-            Pet pet = dbController.queryPet(xip);
-            if(pet == null) Log.d("peeeeeeeeeet",xip);
-            else {
-                Log.d("peeeeeeeeet nom", pet.getName());
-                adapter.add(pet);
-                petListView.setAdapter(adapter);
-                Toast.makeText(PetListActivity.this, "Mascota Guardada", Toast.LENGTH_SHORT).show();
-            }
+            petList = dbController.queryAllPets();
+            adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
+            assert petListView != null;
+            petListView.setAdapter(adapter);
+            Toast.makeText(PetListActivity.this, "Mascota Guardada", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void onResume(){
-        super.onResume();
     }
 }

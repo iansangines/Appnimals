@@ -1,4 +1,5 @@
 package com.example.iansangines.appnimals;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -68,15 +69,14 @@ public class InsertPetActivity extends AppCompatActivity {
         thumbnailImage = imageController.getThumbnailFile();
 
 
-
         ImageView datebutton = (ImageView) findViewById(R.id.calendar_imgbutton);
         assert datebutton != null;
         datebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    DialogFragment dialogFragment = new StartDatePicker();
-                    dialogFragment.show(getFragmentManager(), "start_date_picker");
-                Toast.makeText(getApplicationContext(),Integer.toString(year) + "/" + Integer.toString(month) + "/" + Integer.toString(day),Toast.LENGTH_LONG).show();
+                DialogFragment dialogFragment = new StartDatePicker();
+                dialogFragment.show(getFragmentManager(), "start_date_picker");
+                Toast.makeText(getApplicationContext(), Integer.toString(year) + "/" + Integer.toString(month) + "/" + Integer.toString(day), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -176,22 +176,21 @@ public class InsertPetActivity extends AppCompatActivity {
 
 
                     PetDBController db = new PetDBController(InsertPetActivity.this);
-                    db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(),
+                    int id = db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(),
                             petToInsert.getChipNumber(), petToInsert.getPhotoPath(), petToInsert.getthumbnailPath());
                     Toast.makeText(InsertPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
-                    //Retorna el numero de xip per fer query al petlistactivity
+                    //Retorna el numero de id per fer query al petlistactivity
                     Intent returned = new Intent();
-                    returned.putExtra("xip",petToInsert.getChipNumber());
+                    returned.putExtra("id", id);
+                    Log.d("id returned:", Integer.toString(petToInsert.getId()));
                     setResult(INSERTED, returned);
                     finish();
-
-
                 }
             }
         });
 
         imgView = (ImageView) findViewById(R.id.imgview);
-        assert imgView!= null;
+        assert imgView != null;
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,8 +218,6 @@ public class InsertPetActivity extends AppCompatActivity {
     }
 
 
-
-
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -229,10 +226,10 @@ public class InsertPetActivity extends AppCompatActivity {
         }
     }
 
-    private void pickPictureGalleryIntent(){
+    private void pickPictureGalleryIntent() {
         Intent pickPictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
         pickPictureIntent.setType("image/*");
-        startActivityForResult(Intent.createChooser(pickPictureIntent,"Selecciona la imatge"), PICK_IMAGE);
+        startActivityForResult(Intent.createChooser(pickPictureIntent, "Selecciona la imatge"), PICK_IMAGE);
     }
 
 
@@ -253,9 +250,9 @@ public class InsertPetActivity extends AppCompatActivity {
 
                 Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
                 petToInsert.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
+                Log.d("setImageBitmap", thumbnail.toString());
                 imgView.setImageBitmap(thumbnail);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 Log.d("requestimagecapture", "Peta el try");
                 e.printStackTrace();
                 Log.d("requestimagecapture", "Peta el try");
@@ -263,21 +260,18 @@ public class InsertPetActivity extends AppCompatActivity {
             }
 
 
-        }
-        else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK){
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK) {
             Log.d("result", "enter NOT result_ok");
             petToInsert.setPetPhotoPath(null);
             petToInsert.setPetthumbnailPath(null);
-        }
-
-        else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
+        } else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
             Log.d("result", "pick image");
             try {
 
                 Uri photoUri = data.getData();
-                if( photoUri != null) Log.d("PICK_IMAGE", "URI:" + photoUri.getPath() );
+                if (photoUri != null) Log.d("PICK_IMAGE", "URI:" + photoUri.getPath());
                 else Log.d("URI", "null");
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                 // Get the cursor
                 Cursor cursor = getContentResolver().query(photoUri,
@@ -299,23 +293,21 @@ public class InsertPetActivity extends AppCompatActivity {
                 imgView.setImageBitmap(thumbnail);
 
 
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if(requestCode == PICK_IMAGE && resultCode != RESULT_OK){
+        } else if (requestCode == PICK_IMAGE && resultCode != RESULT_OK) {
             Log.d("result", "enter NOT result_ok");
             petToInsert.setPetPhotoPath(null);
             petToInsert.setPetthumbnailPath(null);
         }
     }
 
-    public static class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+    public static class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(),R.style.DialogTheme,this,year,month,day);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, this, year, month, day);
             return dialog;
 
         }
@@ -325,11 +317,10 @@ public class InsertPetActivity extends AppCompatActivity {
             assert datainputlayout != null;
             EditText datainput = datainputlayout.getEditText();
             assert datainput != null;
-            String date = Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year);
+            String date = Integer.toString(day) + "/" + Integer.toString(month + 1) + "/" + Integer.toString(year);
             datainput.setText(date);
         }
     }
-
 
 
 }

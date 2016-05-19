@@ -1,8 +1,10 @@
 package com.example.iansangines.appnimals;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -52,8 +55,8 @@ public class EditPetActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Edita la mascota");
 
-        String petChip = getIntent().getStringExtra("chip");
-        petToEdit = dbController.queryPet(petChip);
+        int petId = getIntent().getIntExtra("id",-1);
+        petToEdit = dbController.queryPetById(petId);
         ImageView photo = (ImageView) findViewById(R.id.imgview);
         Bitmap petBitmap = BitmapFactory.decodeFile(petToEdit.getthumbnailPath());
 
@@ -89,6 +92,114 @@ public class EditPetActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DialogFragment dialogFragment = new StartDatePicker();
                 dialogFragment.show(getFragmentManager(), "start_date_picker");
+            }
+        });
+
+        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
+        assert button != null;
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.fab) {
+                    TextInputLayout nameinputlayout = (TextInputLayout) findViewById(R.id.layout_input_nom);
+                    assert nameinputlayout != null;
+                    EditText nameinput = nameinputlayout.getEditText();
+                    assert nameinput != null;
+                    String name = nameinput.getText().toString();
+                    if (name == null || name.equals("")) {
+                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(EditPetActivity.this);
+                        nameDialog.setMessage("Introdueix un nom").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        return;
+                    } else {
+                        petToEdit.setName(name);
+                    }
+
+                    TextInputLayout datainputlayout = (TextInputLayout) findViewById(R.id.layout_input_date);
+                    assert datainputlayout != null;
+                    EditText datainput = datainputlayout.getEditText();
+                    assert datainput != null;
+                    String data = datainput.getText().toString();
+                    if (data == null || data.equals("")) {
+
+                        AlertDialog.Builder dateDialog = new AlertDialog.Builder(EditPetActivity.this);
+                        dateDialog.setMessage("Introdueix una data").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        return;
+
+                    } else {
+                        petToEdit.setBornDate(data);
+                    }
+
+                    TextInputLayout xipinputlayout = (TextInputLayout) findViewById(R.id.layout_input_xip);
+                    assert xipinputlayout != null;
+                    EditText xipinput = xipinputlayout.getEditText();
+                    assert xipinput != null;
+                    String xip = (xipinput.getText().toString());
+                    if (xip == null || xip.equals("")) {
+                        AlertDialog.Builder xipDialog = new AlertDialog.Builder(EditPetActivity.this);
+                        xipDialog.setMessage("Introdueix una número de xip").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        return;
+                    } else {
+                        petToEdit.setChipNumber(xip);
+                    }
+
+                    TextInputLayout subtypeinputlayout = (TextInputLayout) findViewById(R.id.layout_input_rasa);
+                    assert subtypeinputlayout != null;
+                    EditText subtypeinput = subtypeinputlayout.getEditText();
+                    assert subtypeinput != null;
+                    String subtype = subtypeinput.getText().toString();
+                    if (subtype == null || subtype.equals("")) {
+
+                        AlertDialog.Builder typeDialog = new AlertDialog.Builder(EditPetActivity.this);
+                        typeDialog.setMessage("Introdueix una raça/tipus").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        return;
+                    } else {
+                        petToEdit.setPetType(subtype);
+                    }
+
+                    if (petToEdit.getPhotoPath() == null || petToEdit.getPhotoPath().equals("")) {
+                        AlertDialog.Builder photoDialog = new AlertDialog.Builder(EditPetActivity.this);
+                        photoDialog.setMessage("Es requereix una imatge").setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        return;
+                    }
+
+
+                    PetDBController db = new PetDBController(EditPetActivity.this);
+                    db.updatePet(petToEdit);
+                    Toast.makeText(EditPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
+                    //Retorna el numero de xip per fer query al petlistactivity
+                    Intent returned = new Intent();
+                    returned.putExtra("id",petToEdit.getId());
+                    setResult(INSERTED, returned);
+                    finish();
+
+
+                }
             }
         });
 

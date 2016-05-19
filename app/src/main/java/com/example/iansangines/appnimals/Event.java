@@ -4,6 +4,7 @@ package com.example.iansangines.appnimals;
  * Created by ian on 13/05/2016.
  */
 public class Event {
+    private int id;
     private String name;
     private String day;
     private String month;
@@ -13,56 +14,118 @@ public class Event {
     private String minute;
     private String petName;
     private String petChip;
+    private int petId;
     private String eventLocation;
     private String eventDescription;
 
 
-    public Event(){
+    public Event() {
         name = day = month = year = eventType = hour = petChip = "";
+        id = 0;
     }
 
-    public String getName() {return name;}
+    public int getId() {
+        return id;
+    }
 
-    public void setName(String name) {this.name = name;}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getDay() {return day;}
+    public String getName() {
+        return name;
+    }
 
-    public void setDay(String day) {this.day = day;}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getMonth() {return month;}
+    public String getDay() {
+        return day;
+    }
 
-    public void setMonth(String month) {this.month = month;}
+    public void setDay(String day) {
+        this.day = day;
+    }
 
-    public String getYear() {return year;}
+    public String getMonth() {
+        return month;
+    }
 
-    public void setYear(String year) {this.year = year;}
+    public void setMonth(String month) {
+        this.month = month;
+    }
 
-    public String getEventType() {return eventType;}
+    public String getYear() {
+        return year;
+    }
 
-    public void setEventType(String eventType) {this.eventType = eventType;}
+    public void setYear(String year) {
+        this.year = year;
+    }
 
-    public String getHour() {return hour;}
+    public String getEventType() {
+        return eventType;
+    }
 
-    public void setHour(String hour) {this.hour = hour;}
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
 
-    public String getMinute() {return minute;}
+    public String getHour() {
+        return hour;
+    }
 
-    public void setMinute(String minute) {this.minute = minute;}
+    public void setHour(String hour) {
+        this.hour = hour;
+    }
 
-    public String getPetName() {return petName;}
+    public String getMinute() {
+        return minute;
+    }
 
-    public void setPetName(String petName) {this.petName = petName;}
+    public void setMinute(String minute) {
+        this.minute = minute;
+    }
 
-    public String getPetChip() {return petChip;}
+    public String getPetName() {
+        return petName;
+    }
 
-    public void setPetChip(String petChip) {this.petChip = petChip;}
+    public void setPetName(String petName) {
+        this.petName = petName;
+    }
 
-    public String getEventLocation() {return eventLocation;}
+    public String getPetChip() {
+        return petChip;
+    }
 
-    public void setEventLocation(String eventLocation) {this.eventLocation = eventLocation;}
+    public void setPetChip(String petChip) {
+        this.petChip = petChip;
+    }
 
-    public String getEventDescription() {return eventDescription;}
+    public int getPetId() {
+        return petId;
+    }
 
-    public void setEventDescription(String eventDescription) {this.eventDescription = eventDescription;}
+    public void setPetId(int petId) {
+        this.petId = petId;
+    }
+
+    public String getEventLocation() {
+        return eventLocation;
+    }
+
+    public void setEventLocation(String eventLocation) {
+        this.eventLocation = eventLocation;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
 }
 

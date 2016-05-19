@@ -24,52 +24,55 @@ public class ImageFileController {
     private static File thumbnailDir;
 
 
-    public ImageFileController(){
+    public ImageFileController() {
         fullSizeDir = null;
         thumbnailDir = null;
     }
 
-    public void CreateDirectories (){
+    public void CreateDirectories() {
         fullSizeDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/");
-        thumbnailDir =  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/Thumbnails/");
+        thumbnailDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/Thumbnails/");
 
 
-        if(fullSizeDir.mkdir())Log.d("fullsizeDir", "created with path: " + fullSizeDir.getPath() );
+        if (fullSizeDir.mkdir())
+            Log.d("fullsizeDir", "created with path: " + fullSizeDir.getPath());
 
-        else if(fullSizeDir.exists()) Log.d("fullsizeDir", "exists with path: " +fullSizeDir.getPath());
+        else if (fullSizeDir.exists())
+            Log.d("fullsizeDir", "exists with path: " + fullSizeDir.getPath());
 
-        if(thumbnailDir.mkdir()) Log.d("thumbnailDir", "created with path: " + thumbnailDir.getPath());
-        else if(thumbnailDir.exists()) Log.d("thumbnailDir", "exists with path: " + thumbnailDir.getPath());
+        if (thumbnailDir.mkdir())
+            Log.d("thumbnailDir", "created with path: " + thumbnailDir.getPath());
+        else if (thumbnailDir.exists())
+            Log.d("thumbnailDir", "exists with path: " + thumbnailDir.getPath());
     }
 
-    public File getFullSizeFile(){
+    public File getFullSizeFile() {
         String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
         File fullSizeImage = new File(fullSizeDir, imageName + ".jpg");
         return fullSizeImage;
     }
 
-    public File getThumbnailFile(){
+    public File getThumbnailFile() {
         String imageName = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
-        File fullSizeImage = new File(thumbnailDir, "_thumbnail" +  imageName + ".jpg");
+        File fullSizeImage = new File(thumbnailDir, "_thumbnail" + imageName + ".jpg");
         return fullSizeImage;
     }
 
-    public void saveFullSizeImage (Bitmap imageBitmap, File fullSizeFile){
+    public void saveFullSizeImage(Bitmap imageBitmap, File fullSizeFile) {
 
         try {
             FileOutputStream image = new FileOutputStream(fullSizeFile);
 
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,image);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, image);
             image.flush();
             image.close();
-        }
-        catch (IOException x){
-            System.err.format("IOException %s%n",x);
+        } catch (IOException x) {
+            System.err.format("IOException %s%n", x);
         }
 
     }
 
-    public Bitmap saveThumbnailImage (Bitmap imageBitmap, File thumbnailFile){
+    public Bitmap saveThumbnailImage(Bitmap imageBitmap, File thumbnailFile) {
 
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
@@ -77,29 +80,24 @@ public class ImageFileController {
         try {
 
 
-                FileOutputStream image = new FileOutputStream(thumbnailFile);
-            if(height/5 < imageBitmap.getHeight() && width/5-10 < imageBitmap.getWidth() ) {
+            FileOutputStream image = new FileOutputStream(thumbnailFile);
+            if (height / 5 < imageBitmap.getHeight() && width / 5 - 10 < imageBitmap.getWidth()) {
                 Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.getWidth() / 10, imageBitmap.getHeight() / 10 - 10, true);
                 scaled.compress(Bitmap.CompressFormat.PNG, 80, image);
                 image.flush();
                 image.close();
                 return scaled;
-            }
-            else{
+            } else {
                 imageBitmap.compress(Bitmap.CompressFormat.PNG, 80, image);
                 return imageBitmap;
             }
+        } catch (IOException x) {
+            System.err.format("IOException %s%n", x);
         }
-        catch (IOException x){
-            System.err.format("IOException %s%n",x);
-        }
-        finally{
-            return null;
-        }
-
+        return null;
     }
 
-    public boolean deleteImageFile (File imageFile){
+    public boolean deleteImageFile(File imageFile) {
         return imageFile.delete();
     }
 

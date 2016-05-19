@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdapter.MyViewHolder>  {
 
     private ArrayList<Event> eventList;
+    private final String[] MONTHS = {"Gen", "Feb", "Març", "Abr", "Maig", "Juny", "Jul", "Ag", "Set", "Oct", "Nov", "Des"};
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView day, month, year, eventName, eventPet, eventHourLoc;
@@ -41,9 +42,10 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+
         Event e = eventList.get(position);
         holder.day.setText(e.getDay());
-        holder.month.setText(e.getMonth());
+        holder.month.setText(MONTHS[Integer.parseInt(e.getMonth())-1]);
         holder.year.setText(e.getYear());
         holder.eventName.setText(e.getName());
         String epet = e.getPetName() + " - " + e.getPetChip();
