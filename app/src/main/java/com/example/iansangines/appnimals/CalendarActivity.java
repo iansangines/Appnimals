@@ -56,7 +56,7 @@ public class CalendarActivity extends AppCompatActivity {
             Log.d("desc", e.getEventDescription());
         }
 
-        adapter = new EventListAdapter(getApplicationContext(), R.layout.listed_event, eventList);
+        adapter = new EventListAdapter(CalendarActivity.this, R.layout.listed_event, eventList);
         assert eventListView != null;
         eventListView.setAdapter(adapter);
 

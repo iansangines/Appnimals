@@ -1,10 +1,15 @@
 package com.example.iansangines.appnimals;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,6 +23,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView day, month, year, eventName, eventPet, eventHourLoc;
+        public ImageView deleteImg;
 
         public MyViewHolder(View view) {
             super(view);
@@ -27,6 +33,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
             eventName = (TextView) view.findViewById(R.id.eventname);
             eventPet =(TextView) view.findViewById(R.id.eventpet);
             eventHourLoc = (TextView) view.findViewById(R.id.eventhourloc);
+            deleteImg = (ImageView) view.findViewById(R.id.deletevent);
         }
     }
 
@@ -43,7 +50,8 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Event e = eventList.get(position);
+        final Event e = eventList.get(position);
+        final int index = position;
         holder.day.setText(e.getDay());
         holder.month.setText(MONTHS[Integer.parseInt(e.getMonth())-1]);
         holder.year.setText(e.getYear());
@@ -52,6 +60,33 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         holder.eventPet.setText(epet);
         String hourloc = e.getHour() + ":" + e.getMinute() + " - " + e.getEventLocation();
         holder.eventHourLoc.setText(hourloc);
+        holder.deleteImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View aux = v;
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
+                alertDialog.setMessage("Estas segur d'eliminar l'esdeveniment?").setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        PetDBController db = new PetDBController(aux.getContext());
+                        boolean deleted = db.deleteEvent(e.getId());
+                        if (deleted) {
+                            eventList.remove(index);
+                            Toast.makeText(aux.getContext(), "S'ha eliminat l'esdeveniment", Toast.LENGTH_SHORT).show();
+                            notifyDataSetChanged();
+                        } else {
+                            Log.d("no s'ha eliminat lindex", Integer.toString(index));
+                        }
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+            }
+        });
     }
 
     @Override

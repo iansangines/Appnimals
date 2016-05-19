@@ -91,14 +91,16 @@
         </RelativeLayout>
 
 
-        <ImageButton
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/deletevent"
+            android:src="@drawable/ic_delete_action"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="16dp"
+            android:clickable="true"/>
 
 
     </RelativeLayout>

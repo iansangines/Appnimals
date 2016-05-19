@@ -69,7 +69,7 @@ public class PetListActivity extends AppCompatActivity {
 
         Log.d("activity", "cursor returned");
 
-        adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
+        adapter = new ListAdapter(PetListActivity.this, R.layout.listed_pet, petList);
         assert petListView != null;
         petListView.setAdapter(adapter);
 
@@ -136,14 +136,16 @@ public class PetListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == INSERT_PET_ACTIVITY && resultCode == INSERTED) {
-            //Data conté dos bitmaps (fullsize, thumbnail) i en el Result es guarden en el path de la mascota que
-            //retorna el data Intent.  (Aixi no es crea el fitxer de la imatge fins que s'ha acabat
-            //el insertpetactivity)
-            petList = dbController.queryAllPets();
-            adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
-            assert petListView != null;
-            petListView.setAdapter(adapter);
             Toast.makeText(PetListActivity.this, "Mascota Guardada", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        petList = dbController.queryAllPets();
+        adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
+        assert petListView != null;
+        petListView.setAdapter(adapter);
     }
 }

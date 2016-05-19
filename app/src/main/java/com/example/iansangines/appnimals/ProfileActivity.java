@@ -77,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
         petEvents = dbController.queryPetEvents(profilePet.getId());
 
         adapter = new EventRecyclerAdapter(petEvents);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ProfileActivity.this);
         eventList.setLayoutManager(mLayoutManager);
         eventList.setItemAnimator(new DefaultItemAnimator());
         eventList.setNestedScrollingEnabled(false);
