@@ -144,8 +144,8 @@ public class PetListActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         petList = dbController.queryAllPets();
-        adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
-        assert petListView != null;
-        petListView.setAdapter(adapter);
+        adapter.clear();
+        adapter.addAll(petList);
+        adapter.notifyDataSetChanged();
     }
 }
