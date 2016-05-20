@@ -71,7 +71,6 @@ public class PetDBController extends SQLiteOpenHelper {
     public PetDBController(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
-
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PET_TABLE);
         db.execSQL(CREATE_EVENT_TABLE);

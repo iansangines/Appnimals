@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -27,36 +26,46 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-            <android.widget.CalendarView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/calendar"
-                android:layout_marginBottom="250dp"
-                android:selectedWeekBackgroundColor="@color/colorAccent"
-                android:selectedDateVerticalBar ="@color/colorPrimary">
+        <android.widget.CalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="250dp"
+            android:selectedDateVerticalBar="@color/colorPrimary"
+            android:selectedWeekBackgroundColor="@color/colorAccent">
 
-            </android.widget.CalendarView>
+        </android.widget.CalendarView>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignBottom="@+id/calendar"
-                android:background="#424242"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/view"
+            android:layout_alignBottom="@+id/calendar"
+            android:background="#424242" />
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/eventlist"
-                android:dividerHeight="1dp"
-                android:layout_marginTop="317dp"
-                android:clickable="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/view"
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp"
+            android:textSize="22sp"
+            android:textColor="#424242"
+            android:text="Esdeveniments" />
+
+        <ListView
+            android:id="@+id/eventlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="350dp"
+            android:clickable="true"
+            android:dividerHeight="1dp" />
 
     </RelativeLayout>
 
 
-
-    </android.support.design.widget.CoordinatorLayout>
+</android.support.design.widget.CoordinatorLayout>

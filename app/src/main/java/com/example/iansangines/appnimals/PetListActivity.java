@@ -31,8 +31,6 @@ public class PetListActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet_list);
 
@@ -144,8 +142,8 @@ public class PetListActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         petList = dbController.queryAllPets();
-        adapter = new ListAdapter(getApplicationContext(), R.layout.listed_pet, petList);
-        assert petListView != null;
-        petListView.setAdapter(adapter);
+        adapter.clear();
+        adapter.addAll(petList);
+        adapter.notifyDataSetChanged();
     }
 }
