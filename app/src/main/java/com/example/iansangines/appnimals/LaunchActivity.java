@@ -13,7 +13,7 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
-        new CountDownTimer(3000, 1000) {
+        new CountDownTimer(2500, 1000) {
             public void onTick(long millisUntilFinished) {
             }
 

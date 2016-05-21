@@ -73,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         assert typeTextView != null;
         typeTextView.setText(petType);
 
-        eventList = (RecyclerView) findViewById(R.id.eventlist);
+        eventList = (RecyclerView) findViewById(R.id.eventview);
         petEvents = dbController.queryPetEvents(profilePet.getId());
 
         adapter = new EventRecyclerAdapter(petEvents);
