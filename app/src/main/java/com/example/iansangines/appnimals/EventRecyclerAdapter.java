@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by iansangines on 17/05/2016.
  */
-public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdapter.MyViewHolder>  {
+public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<Event> eventList;
     private final String[] MONTHS = {"Gen", "Feb", "Març", "Abr", "Maig", "Juny", "Jul", "Ag", "Set", "Oct", "Nov", "Des"};
@@ -31,13 +31,13 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
             month = (TextView) view.findViewById(R.id.eventmonth);
             year = (TextView) view.findViewById(R.id.eventyear);
             eventName = (TextView) view.findViewById(R.id.eventname);
-            eventPet =(TextView) view.findViewById(R.id.eventpet);
+            eventPet = (TextView) view.findViewById(R.id.eventpet);
             eventHourLoc = (TextView) view.findViewById(R.id.eventhourloc);
             deleteImg = (ImageView) view.findViewById(R.id.deletevent);
         }
     }
 
-    public EventRecyclerAdapter(ArrayList<Event> eventList){
+    public EventRecyclerAdapter(ArrayList<Event> eventList) {
         this.eventList = eventList;
     }
 
@@ -53,7 +53,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         final Event e = eventList.get(position);
         final int index = position;
         holder.day.setText(e.getDay());
-        holder.month.setText(MONTHS[Integer.parseInt(e.getMonth())-1]);
+        holder.month.setText(MONTHS[Integer.parseInt(e.getMonth()) - 1]);
         holder.year.setText(e.getYear());
         holder.eventName.setText(e.getName());
         String epet = e.getPetName() + " - " + e.getPetChip();

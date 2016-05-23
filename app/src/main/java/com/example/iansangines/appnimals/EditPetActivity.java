@@ -26,6 +26,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class EditPetActivity extends AppCompatActivity {
@@ -45,6 +46,7 @@ public class EditPetActivity extends AppCompatActivity {
 
     private PetDBController dbController = new PetDBController(this);
     private Pet petToEdit = new Pet();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,7 @@ public class EditPetActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Edita la mascota");
 
-        int petId = getIntent().getIntExtra("id",-1);
+        int petId = getIntent().getIntExtra("id", -1);
         petToEdit = dbController.queryPetById(petId);
         ImageView photo = (ImageView) findViewById(R.id.imgview);
         Bitmap petBitmap = BitmapFactory.decodeFile(petToEdit.getthumbnailPath());
@@ -191,10 +193,16 @@ public class EditPetActivity extends AppCompatActivity {
 
                     PetDBController db = new PetDBController(EditPetActivity.this);
                     db.updatePet(petToEdit);
+                    ArrayList<Event> petEvents = db.queryPetEvents(petToEdit.getId());
+                    for (Event e : petEvents) {
+                        e.setPetChip(petToEdit.getChipNumber());
+                        e.setPetName(petToEdit.getName());
+                        db.updateEvent(e);
+                    }
                     Toast.makeText(EditPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
                     //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
-                    returned.putExtra("id",petToEdit.getId());
+                    returned.putExtra("id", petToEdit.getId());
                     setResult(INSERTED, returned);
                     finish();
 
@@ -205,18 +213,16 @@ public class EditPetActivity extends AppCompatActivity {
 
 
         imgView = (ImageView) findViewById(R.id.imgview);
-        assert imgView!= null;
+        assert imgView != null;
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("onclick image", "entra");
                 PopupMenu popup = new PopupMenu(EditPetActivity.this, imgView);
                 popup.getMenuInflater().inflate(R.menu.photo_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        Log.d("onclick popup", "entra");
                         if (item.getItemId() == R.id.camera) {
                             dispatchTakePictureIntent();
                             return true;
@@ -239,20 +245,17 @@ public class EditPetActivity extends AppCompatActivity {
         }
     }
 
-    private void pickPictureGalleryIntent(){
+    private void pickPictureGalleryIntent() {
         Intent pickPictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
         pickPictureIntent.setType("image/*");
-        startActivityForResult(Intent.createChooser(pickPictureIntent,"Selecciona la imatge"), PICK_IMAGE);
+        startActivityForResult(Intent.createChooser(pickPictureIntent, "Selecciona la imatge"), PICK_IMAGE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        Log.d("reslt_ok", Integer.toString(resultCode));
         imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Log.d("result", "enter result_ok");
             try {
 
                 String fullSizeImagePath = fullSizeImage.getAbsolutePath();
@@ -263,35 +266,20 @@ public class EditPetActivity extends AppCompatActivity {
                 Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
                 petToEdit.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
                 imgView.setImageBitmap(thumbnail);
-            }
-            catch (Exception e){
-                Log.d("requestimagecapture", "Peta el try");
+            } catch (Exception e) {
                 e.printStackTrace();
-                Log.d("requestimagecapture", "Peta el try");
-
             }
 
 
-        }
-        else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK){
-            Log.d("result", "enter NOT result_ok");
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK) {
             petToEdit.setPetPhotoPath(null);
             petToEdit.setPetthumbnailPath(null);
-        }
-
-        else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
-            Log.d("result", "pick image");
+        } else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
             try {
 
                 Uri photoUri = data.getData();
-                if( photoUri != null) Log.d("PICK_IMAGE", "URI:" + photoUri.getPath() );
-                else Log.d("URI", "null");
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-                // Get the cursor
-                Cursor cursor = getContentResolver().query(photoUri,
-                        filePathColumn, null, null, null);
-                // Move to first row
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(photoUri, filePathColumn, null, null, null);
                 cursor.moveToFirst();
 
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -308,23 +296,20 @@ public class EditPetActivity extends AppCompatActivity {
                 imgView.setImageBitmap(thumbnail);
 
 
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if(requestCode == PICK_IMAGE && resultCode != RESULT_OK){
-            Log.d("result", "enter NOT result_ok");
+        } else if (requestCode == PICK_IMAGE && resultCode != RESULT_OK) {
             petToEdit.setPetPhotoPath(null);
             petToEdit.setPetthumbnailPath(null);
         }
     }
 
-    public static class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+    public static class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(),R.style.DialogTheme,this,year,month,day);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, this, year, month, day);
             return dialog;
 
         }
@@ -334,7 +319,7 @@ public class EditPetActivity extends AppCompatActivity {
             assert datainputlayout != null;
             EditText datainput = datainputlayout.getEditText();
             assert datainput != null;
-            String date = Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year);
+            String date = Integer.toString(day) + "/" + Integer.toString(month + 1) + "/" + Integer.toString(year);
             datainput.setText(date);
         }
     }

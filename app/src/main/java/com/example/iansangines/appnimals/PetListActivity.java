@@ -59,14 +59,6 @@ public class PetListActivity extends AppCompatActivity {
         //BASE DE DADES
         dbController = new PetDBController(this);
         petList = dbController.queryAllPets();
-
-        for (int i = 0; i < petList.size(); i++) {
-            Log.d("petList", petList.get(i).getName());
-            Log.d("petList", Integer.toString(petList.get(i).getId()));
-        }
-
-        Log.d("activity", "cursor returned");
-
         adapter = new ListAdapter(PetListActivity.this, R.layout.listed_pet, petList);
         assert petListView != null;
         petListView.setAdapter(adapter);
@@ -74,7 +66,6 @@ public class PetListActivity extends AppCompatActivity {
         petListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("onItemClick", "aaaaaaaaa");
                 Intent profile = new Intent(PetListActivity.this, ProfileActivity.class);
                 Pet auxPet = (Pet) petListView.getItemAtPosition(position);
                 profile.putExtra("id", auxPet.getId());
@@ -139,7 +130,7 @@ public class PetListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         petList = dbController.queryAllPets();
         adapter.clear();

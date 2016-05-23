@@ -182,7 +182,6 @@ public class InsertPetActivity extends AppCompatActivity {
                     //Retorna el numero de id per fer query al petlistactivity
                     Intent returned = new Intent();
                     returned.putExtra("id", id);
-                    Log.d("id returned:", Integer.toString(petToInsert.getId()));
                     setResult(INSERTED, returned);
                     finish();
                 }
@@ -194,14 +193,12 @@ public class InsertPetActivity extends AppCompatActivity {
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("onclick image", "entra");
                 PopupMenu popup = new PopupMenu(InsertPetActivity.this, imgView);
                 popup.getMenuInflater().inflate(R.menu.photo_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        Log.d("onclick popup", "entra");
                         if (item.getItemId() == R.id.camera) {
                             dispatchTakePictureIntent();
                             return true;
@@ -236,11 +233,9 @@ public class InsertPetActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.d("reslt_ok", Integer.toString(resultCode));
         imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Log.d("result", "enter result_ok");
             try {
 
                 String fullSizeImagePath = fullSizeImage.getAbsolutePath();
@@ -250,22 +245,17 @@ public class InsertPetActivity extends AppCompatActivity {
 
                 Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
                 petToInsert.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
-                Log.d("setImageBitmap", thumbnail.toString());
                 imgView.setImageBitmap(thumbnail);
             } catch (Exception e) {
-                Log.d("requestimagecapture", "Peta el try");
                 e.printStackTrace();
-                Log.d("requestimagecapture", "Peta el try");
 
             }
 
 
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK) {
-            Log.d("result", "enter NOT result_ok");
             petToInsert.setPetPhotoPath(null);
             petToInsert.setPetthumbnailPath(null);
         } else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
-            Log.d("result", "pick image");
             try {
 
                 Uri photoUri = data.getData();
@@ -297,7 +287,6 @@ public class InsertPetActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else if (requestCode == PICK_IMAGE && resultCode != RESULT_OK) {
-            Log.d("result", "enter NOT result_ok");
             petToInsert.setPetPhotoPath(null);
             petToInsert.setPetthumbnailPath(null);
         }

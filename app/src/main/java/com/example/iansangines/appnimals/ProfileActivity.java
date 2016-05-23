@@ -110,21 +110,18 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if( requestCode == EDIT_PET_ACTIVITY && resultCode== INSERTED){
+        if (requestCode == EDIT_PET_ACTIVITY && resultCode == INSERTED) {
             PetDBController dbController = new PetDBController(this);
-            profilePet = dbController.queryPetById(data.getIntExtra("id",-1));
+            profilePet = dbController.queryPetById(data.getIntExtra("id", -1));
             collapsingToolbar.setTitle(profilePet.getName());
-             chipTextView.setText(profilePet.getChipNumber());
+            chipTextView.setText(profilePet.getChipNumber());
             bdTextView.setText(profilePet.getBornDate());
             typeTextView.setText(profilePet.getPetType());
             Bitmap petBitmap = BitmapFactory.decodeFile(profilePet.getPhotoPath());
             petImage.setImageBitmap(petBitmap);
         }
-
-        if( requestCode == ADD_EVENT_ACTIVITY && resultCode == INSERTED){
-            petEvents = dbController.queryPetEvents(profilePet.getId());
-            adapter = new EventRecyclerAdapter(petEvents);
-            eventList.setAdapter(adapter);
-        }
+        petEvents = dbController.queryPetEvents(profilePet.getId());
+        adapter = new EventRecyclerAdapter(petEvents);
+        eventList.setAdapter(adapter);
     }
 }

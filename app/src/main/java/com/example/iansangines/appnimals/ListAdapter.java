@@ -26,18 +26,19 @@ public class ListAdapter extends ArrayAdapter<Pet> {
     private ArrayList<Pet> pets;
 
 
-    public ListAdapter(Context context, int resource, ArrayList<Pet> pets){
-        super(context,resource,pets);
+    public ListAdapter(Context context, int resource, ArrayList<Pet> pets) {
+        super(context, resource, pets);
         this.context = context;
         this.resource = resource; //id de l'Xml amb le layout
         this.pets = pets;
-        Log.d("context",context.toString());
+        Log.d("context", context.toString());
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         final Pet itemPet = pets.get(position);
         final int index = position;
-        if(convertView == null) convertView = LayoutInflater.from(context).inflate(R.layout.listed_pet, parent, false);
+        if (convertView == null)
+            convertView = LayoutInflater.from(context).inflate(R.layout.listed_pet, parent, false);
 
         ImageView petImage = (ImageView) convertView.findViewById(R.id.pet_image);
         TextView petName = (TextView) convertView.findViewById(R.id.animal_name);
@@ -64,7 +65,7 @@ public class ListAdapter extends ArrayAdapter<Pet> {
                             Toast.makeText(context, "S'ha eliminat la mascota", Toast.LENGTH_SHORT).show();
                             notifyDataSetChanged();
                         } else {
-                            Log.d("no s'ha eliminat lindex", Integer.toString(index) );
+                            Log.d("no s'ha eliminat lindex", Integer.toString(index));
                         }
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {

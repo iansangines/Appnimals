@@ -39,11 +39,6 @@ public class ImageFileController {
 
         else if (fullSizeDir.exists())
             Log.d("fullsizeDir", "exists with path: " + fullSizeDir.getPath());
-
-        if (thumbnailDir.mkdir())
-            Log.d("thumbnailDir", "created with path: " + thumbnailDir.getPath());
-        else if (thumbnailDir.exists())
-            Log.d("thumbnailDir", "exists with path: " + thumbnailDir.getPath());
     }
 
     public File getFullSizeFile() {
@@ -63,7 +58,7 @@ public class ImageFileController {
         try {
             FileOutputStream image = new FileOutputStream(fullSizeFile);
 
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, image);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 70, image);
             image.flush();
             image.close();
         } catch (IOException x) {
@@ -83,12 +78,12 @@ public class ImageFileController {
             FileOutputStream image = new FileOutputStream(thumbnailFile);
             if (height / 5 < imageBitmap.getHeight() && width / 5 - 10 < imageBitmap.getWidth()) {
                 Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.getWidth() / 10, imageBitmap.getHeight() / 10 - 10, true);
-                scaled.compress(Bitmap.CompressFormat.PNG, 80, image);
+                scaled.compress(Bitmap.CompressFormat.PNG, 75, image);
                 image.flush();
                 image.close();
                 return scaled;
             } else {
-                imageBitmap.compress(Bitmap.CompressFormat.PNG, 80, image);
+                imageBitmap.compress(Bitmap.CompressFormat.PNG, 75, image);
                 return imageBitmap;
             }
         } catch (IOException x) {

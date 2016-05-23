@@ -43,7 +43,6 @@ public class PetDBController extends SQLiteOpenHelper {
     private static final String EVENT_COLUMN_HOUR = "HOUR";
     private static final String EVENT_COLUMN_MINUTE = "MINUTE";
     private static final String EVENT_COLUMN_LOC = "UBIC";
-    private static final String EVENT_COLUMN_DESC = "DESC";
     private static final String EVENT_COLUMN_PETNAME = "TYPE"; // vacunacio|desparasitacio|veterinari
     private static final String EVENT_COLUMN_PETCHIP = "PETCHIP";
     private static final String EVENT_COLUMN_PETID = "PETID";
@@ -60,7 +59,6 @@ public class PetDBController extends SQLiteOpenHelper {
             + EVENT_COLUMN_PETCHIP + " TEXT, "
             + EVENT_COLUMN_PETID + " INTEGER, "
             + EVENT_COLUMN_LOC + " TEXT, "
-            + EVENT_COLUMN_DESC + " TEXT, "
             + " FOREIGN KEY (" + EVENT_COLUMN_PETCHIP + ") REFERENCES " + PET_TABLE_NAME + "(" + PET_COLUMN_CHIP + ") "
             + " FOREIGN KEY (" + EVENT_COLUMN_PETID + ") REFERENCES " + PET_TABLE_NAME + "(" + COLUMN_ID + ") "
             + "FOREIGN KEY (" + EVENT_COLUMN_PETNAME + ") REFERENCES " + PET_TABLE_NAME + "(" + PET_COLUMN_NAME + " ) );";
@@ -71,6 +69,7 @@ public class PetDBController extends SQLiteOpenHelper {
     public PetDBController(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
+
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PET_TABLE);
         db.execSQL(CREATE_EVENT_TABLE);
@@ -78,7 +77,7 @@ public class PetDBController extends SQLiteOpenHelper {
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DELETE_PET_TABLE);
-        db.execSQL(DELETE_PET_TABLE);
+        db.execSQL(DELETE_EVENT_TABLE);
         onCreate(db);
     }
 
@@ -121,7 +120,6 @@ public class PetDBController extends SQLiteOpenHelper {
         values.put(EVENT_COLUMN_PETCHIP, e.getPetChip());
         values.put(EVENT_COLUMN_PETID, e.getPetId());
         values.put(EVENT_COLUMN_LOC, e.getEventLocation());
-        values.put(EVENT_COLUMN_DESC, e.getEventDescription());
         long ret = db.insert(EVENT_TABLE_NAME, null, values);
         db.close();
         return ret != -1;
@@ -169,16 +167,12 @@ public class PetDBController extends SQLiteOpenHelper {
                 event.setPetName(c.getString(c.getColumnIndex(EVENT_COLUMN_PETNAME)));
                 event.setPetChip(c.getString(c.getColumnIndex(EVENT_COLUMN_PETCHIP)));
                 event.setPetId(c.getInt(c.getColumnIndex(EVENT_COLUMN_PETID)));
-                Log.d("event petid", Integer.toString(event.getId()));
                 event.setEventLocation(c.getString(c.getColumnIndex(EVENT_COLUMN_LOC)));
-                event.setEventDescription(c.getString(c.getColumnIndex(EVENT_COLUMN_DESC)));
                 eventArrayList.add(event);
-                Log.d("queyall", event.getName() + event.getDay() + event.getMonth() + event.getHour());
             } while (c.moveToNext());
         }
         db.close();
         c.close();
-        Log.d("Queryall", "after close");
         return eventArrayList;
     }
 
@@ -187,7 +181,6 @@ public class PetDBController extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT * FROM " + PET_TABLE_NAME + " WHERE " + COLUMN_ID + "=" + id, null);
         Pet pet = new Pet();
         if (c.moveToFirst()) {
-            Log.d("queryPet", "l'ha trobat");
             pet.setId(c.getInt(c.getColumnIndex(COLUMN_ID)));
             pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
             pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
@@ -198,27 +191,6 @@ public class PetDBController extends SQLiteOpenHelper {
         }
         db.close();
         c.close();
-        Log.d("queryPet", pet.getPhotoPath());
-        return pet;
-    }
-
-    public Pet queryPetByChip(String chip) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM " + PET_TABLE_NAME + " WHERE " + PET_COLUMN_CHIP + "=" + chip, null);
-        Pet pet = new Pet();
-        if (c.moveToFirst()) {
-            Log.d("queryPet", "l'ha trobat");
-            pet.setId(c.getInt(c.getColumnIndex(COLUMN_ID)));
-            pet.setName(c.getString(c.getColumnIndex(PET_COLUMN_NAME)));
-            pet.setBornDate(c.getString(c.getColumnIndex(PET_COLUMN_DATA)));
-            pet.setPetType(c.getString(c.getColumnIndex(PET_COLUMN_TYPE)));
-            pet.setChipNumber(c.getString(c.getColumnIndex(PET_COLUMN_CHIP)));
-            pet.setPetPhotoPath(c.getString(c.getColumnIndex(PET_COLUMN_IMGPATH)));
-            pet.setPetthumbnailPath(c.getString(c.getColumnIndex(PET_COLUMN_THUMBNAILPATH)));
-        }
-        db.close();
-        c.close();
-        Log.d("queryPet", pet.getPhotoPath());
         return pet;
     }
 
@@ -242,28 +214,32 @@ public class PetDBController extends SQLiteOpenHelper {
                 event.setPetChip(c.getString(c.getColumnIndex(EVENT_COLUMN_PETCHIP)));
                 event.setPetId(c.getInt(c.getColumnIndex(EVENT_COLUMN_PETID)));
                 event.setEventLocation(c.getString(c.getColumnIndex(EVENT_COLUMN_LOC)));
-                event.setEventDescription(c.getString(c.getColumnIndex(EVENT_COLUMN_DESC)));
                 eventArrayList.add(event);
-                Log.d("queyall", event.getName() + event.getDay() + event.getMonth() + event.getHour());
             } while (c.moveToNext());
         }
-        Log.d("petEvent size", Integer.toString(eventArrayList.size()));
         db.close();
         c.close();
-        Log.d("Queryall", "after close");
         return eventArrayList;
     }
 
-    public boolean updatePet(Pet pet){
+    public boolean updatePet(Pet pet) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(PET_COLUMN_NAME, pet.getName());
         values.put(PET_COLUMN_DATA, pet.getBornDate());
         values.put(PET_COLUMN_TYPE, pet.getPetType());
-        values.put(PET_COLUMN_CHIP ,pet.getChipNumber());
-        values.put(PET_COLUMN_IMGPATH , pet.getPhotoPath());
-        values.put( PET_COLUMN_THUMBNAILPATH, pet.getthumbnailPath());
-        return db.update(PET_TABLE_NAME,values,  COLUMN_ID + "=" + pet.getId(),null) > 0;
+        values.put(PET_COLUMN_CHIP, pet.getChipNumber());
+        values.put(PET_COLUMN_IMGPATH, pet.getPhotoPath());
+        values.put(PET_COLUMN_THUMBNAILPATH, pet.getthumbnailPath());
+        return db.update(PET_TABLE_NAME, values, COLUMN_ID + "=" + pet.getId(), null) > 0;
+    }
+
+    public boolean updateEvent(Event e) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(EVENT_COLUMN_PETNAME, e.getPetName());
+        values.put(EVENT_COLUMN_PETCHIP, e.getPetChip());
+        return db.update(EVENT_TABLE_NAME, values, COLUMN_ID + "=" + e.getId(), null) > 0;
     }
 
     public boolean deletePet(int id) {

@@ -25,20 +25,21 @@ public class EventListAdapter extends ArrayAdapter<Event> {
     private final String[] MONTHS = {"Gen", "Feb", "Març", "Abr", "Maig", "Juny", "Jul", "Ag", "Set", "Oct", "Nov", "Des"};
 
 
-    public EventListAdapter(Context context, int resource, ArrayList<Event> events){
-        super(context,resource,events);
+    public EventListAdapter(Context context, int resource, ArrayList<Event> events) {
+        super(context, resource, events);
         this.context = context;
         this.resource = resource; //id de l'Xml amb le layout
         this.events = events;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         final Event itemEvent = events.get(position);
         final int index = position;
-        if(convertView ==  null) convertView = LayoutInflater.from(context).inflate(R.layout.listed_event, parent, false);
+        if (convertView == null)
+            convertView = LayoutInflater.from(context).inflate(R.layout.listed_event, parent, false);
 
         TextView eventDay = (TextView) convertView.findViewById(R.id.eventday);
-        TextView eventMonth= (TextView) convertView.findViewById(R.id.eventmonth);
+        TextView eventMonth = (TextView) convertView.findViewById(R.id.eventmonth);
         TextView eventYear = (TextView) convertView.findViewById(R.id.eventyear);
         TextView eventName = (TextView) convertView.findViewById(R.id.eventname);
         TextView eventPet = (TextView) convertView.findViewById(R.id.eventpet);
@@ -46,14 +47,13 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         ImageView deleteImg = (ImageView) convertView.findViewById(R.id.deletevent);
 
         eventDay.setText(itemEvent.getDay());
-        eventMonth.setText(MONTHS[Integer.parseInt(itemEvent.getMonth())-1]);
+        eventMonth.setText(MONTHS[Integer.parseInt(itemEvent.getMonth()) - 1]);
         eventYear.setText(itemEvent.getYear());
         eventName.setText(itemEvent.getName());
-        String pet = itemEvent.getPetName() +" - "+itemEvent.getPetChip();
+        String pet = itemEvent.getPetName() + " - " + itemEvent.getPetChip();
         eventPet.setText(pet);
         String hourLoc = itemEvent.getHour() + ":" + itemEvent.getMinute() + " - " + itemEvent.getEventLocation();
         eventHourLoc.setText(hourLoc);
-        Log.d("randooooom", eventHourLoc.getText().toString());
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +70,7 @@ public class EventListAdapter extends ArrayAdapter<Event> {
                             Toast.makeText(context, "S'ha eliminat l'esdeveniment", Toast.LENGTH_SHORT).show();
                             notifyDataSetChanged();
                         } else {
-                            Log.d("no s'ha eliminat lindex", Integer.toString(index) );
+                            Log.d("no s'ha eliminat lindex", Integer.toString(index));
                         }
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {

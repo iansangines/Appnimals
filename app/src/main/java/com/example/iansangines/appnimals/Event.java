@@ -16,8 +16,6 @@ public class Event {
     private String petChip;
     private int petId;
     private String eventLocation;
-    private String eventDescription;
-
 
     public Event() {
         name = day = month = year = eventType = hour = petChip = "";
@@ -120,12 +118,5 @@ public class Event {
         this.eventLocation = eventLocation;
     }
 
-    public String getEventDescription() {
-        return eventDescription;
-    }
-
-    public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;
-    }
 }
 

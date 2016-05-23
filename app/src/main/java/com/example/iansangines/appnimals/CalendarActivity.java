@@ -41,21 +41,6 @@ public class CalendarActivity extends AppCompatActivity {
         eventListView = (ListView) findViewById(R.id.eventlist);
         dbController = new PetDBController(this);
         eventList = dbController.queryAllEvents();
-
-        for (int i = 0; i < eventList.size(); i++) {
-            Event e = eventList.get(i);
-            Log.d("eventliist posició:", Integer.toString(i));
-            Log.d("nom", e.getName());
-            Log.d("dia", e.getDay());
-            Log.d("mes", e.getMonth());
-            Log.d("year", e.getYear());
-            // Log.d("tipus", e.getEventType());
-            Log.d("hora", e.getHour());
-            Log.d("minut", e.getMinute());
-            Log.d("loc", e.getEventLocation());
-            Log.d("desc", e.getEventDescription());
-        }
-
         adapter = new EventListAdapter(CalendarActivity.this, R.layout.listed_event, eventList);
         assert eventListView != null;
         eventListView.setAdapter(adapter);
@@ -96,9 +81,9 @@ public class CalendarActivity extends AppCompatActivity {
         if (requestCode == 5) {
             dbController = new PetDBController(CalendarActivity.this);
             eventList = dbController.queryAllEvents();
-            adapter = new EventListAdapter(getApplicationContext(), R.layout.listed_event, eventList);
-            assert eventListView != null;
-            eventListView.setAdapter(adapter);
+            adapter.clear();
+            adapter.addAll(eventList);
+            adapter.notifyDataSetChanged();
 
         }
     }
