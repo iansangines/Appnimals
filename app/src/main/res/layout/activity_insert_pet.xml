@@ -133,10 +133,30 @@
                 android:layout_height="wrap_content"
                 android:hint="Tipus"
                 android:singleLine="true"
-                android:inputType="textCapWords"/>
+                android:inputType="textCapSentences"/>
 
         </android.support.design.widget.TextInputLayout>
 
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tractaments Especials"
+            android:id="@+id/especial"
+            android:layout_marginTop="16dp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editesp"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences"
+                android:hint="Tractaments Especials (separats per , )" />
+
+        </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 

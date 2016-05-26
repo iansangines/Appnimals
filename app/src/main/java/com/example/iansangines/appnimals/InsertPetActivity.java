@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -80,6 +83,22 @@ public class InsertPetActivity extends AppCompatActivity {
             }
         });
 
+       final TextInputLayout especialsInput = (TextInputLayout) findViewById(R.id.editesp);
+        assert especialsInput != null;
+        final EditText especialsEdit = especialsInput.getEditText();
+        assert especialsEdit != null;
+        CheckBox chk = (CheckBox) findViewById(R.id.especial);
+        assert chk != null;
+        chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Toast.makeText(InsertPetActivity.this, "HOLI PUTICORNIOS", Toast.LENGTH_SHORT).show();
+                if(isChecked){
+                    Toast.makeText(InsertPetActivity.this, "is chked madafaca", Toast.LENGTH_SHORT).show();
+                    especialsInput.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
         assert button != null;
@@ -174,10 +193,12 @@ public class InsertPetActivity extends AppCompatActivity {
                         return;
                     }
 
+                    String especials = especialsEdit.getText().toString();
+                    petToInsert.setEspecial(especials);
 
                     PetDBController db = new PetDBController(InsertPetActivity.this);
                     int id = db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(),
-                            petToInsert.getChipNumber(), petToInsert.getPhotoPath(), petToInsert.getthumbnailPath());
+                            petToInsert.getChipNumber(), petToInsert.getPhotoPath(), petToInsert.getthumbnailPath(), petToInsert.getEspecial());
                     Toast.makeText(InsertPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
                     //Retorna el numero de id per fer query al petlistactivity
                     Intent returned = new Intent();

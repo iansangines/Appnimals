@@ -15,6 +15,7 @@ public class Pet {
     private String chipNumber;
     private String thumbnailPath;
     private String photoPath;
+    private String especial;
 
     public Pet() {
         name = petType = bornDate = chipNumber = "";
@@ -77,4 +78,13 @@ public class Pet {
     public void setPetthumbnailPath(String thumbnailPath) {
         this.thumbnailPath = thumbnailPath;
     }
+
+    public String getEspecial() {
+        return especial;
+    }
+
+    public void setEspecial(String especial) {
+        this.especial = especial;
+    }
+
 }

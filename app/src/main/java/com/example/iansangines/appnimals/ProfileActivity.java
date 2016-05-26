@@ -14,8 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView chipTextView;
     private TextView bdTextView;
     private TextView typeTextView;
+    private TextView espTextView;
     private ImageView petImage;
     private CollapsingToolbarLayout collapsingToolbar;
 
@@ -72,6 +75,12 @@ public class ProfileActivity extends AppCompatActivity {
         String petType = profilePet.getPetType();
         assert typeTextView != null;
         typeTextView.setText(petType);
+
+        espTextView = (TextView) findViewById(R.id.profEsp);
+        assert espTextView != null;
+        String esp = profilePet.getEspecial();
+        espTextView.setText(esp);
+
 
         eventList = (RecyclerView) findViewById(R.id.eventview);
         petEvents = dbController.queryPetEvents(profilePet.getId());
