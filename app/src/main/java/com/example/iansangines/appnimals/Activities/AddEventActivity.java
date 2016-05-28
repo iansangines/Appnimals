@@ -1,14 +1,11 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Activities;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,9 +19,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.example.iansangines.appnimals.Controllers.PetDBController;
+import com.example.iansangines.appnimals.Domain.Event;
+import com.example.iansangines.appnimals.Domain.Pet;
+import com.example.iansangines.appnimals.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

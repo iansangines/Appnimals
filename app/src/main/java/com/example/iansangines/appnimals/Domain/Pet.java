@@ -1,4 +1,4 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Domain;
 
 import android.net.Uri;
 

@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         android:screenOrientation="portrait" >
         <activity
-            android:name=".LaunchActivity"
+            android:name=".Activities.LaunchActivity"
             android:label="Appnimals"
             android:noHistory="true">
             <intent-filter>
@@ -26,35 +26,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PetListActivity"
+            android:name=".Activities.PetListActivity"
             android:label="@string/title_activity_pet_list"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".InsertPetActivity"
+            android:name=".Activities.InsertPetActivity"
             android:label="@string/title_activity_insert_pet"
-            android:parentActivityName=".PetListActivity"
+            android:parentActivityName=".Activities.PetListActivity"
             android:theme="@style/AppTheme"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.iansangines.appnimals.PetListActivity" />
+                android:value=".Activities.PetListActivity" />
         </activity>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".Activities.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".PetListActivity"
+            android:parentActivityName=".Activities.PetListActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.iansangines.appnimals.PetListActivity" />
+                android:value=".Activities.PetListActivity" />
         </activity>
         <activity
-            android:name=".CalendarActivity"
+            android:name=".Activities.CalendarActivity"
             android:label="@string/title_activity_calendar" />
         <activity
-            android:name=".AddEventActivity"
+            android:name=".Activities.AddEventActivity"
             android:label="@string/title_activity_add_event" />
-        <activity android:name=".EditPetActivity"></activity>
+        <activity android:name=".Activities.EditPetActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Domain;
 
 /**
  * Created by ian on 13/05/2016.

@@ -1,13 +1,13 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Controllers;
 
-import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
-import android.util.Log;
+
+import com.example.iansangines.appnimals.Domain.Event;
+import com.example.iansangines.appnimals.Domain.Pet;
 
 import java.util.ArrayList;
 

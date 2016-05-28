@@ -1,7 +1,6 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Activities;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -14,11 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.example.iansangines.appnimals.Controllers.PetDBController;
+import com.example.iansangines.appnimals.Domain.Event;
+import com.example.iansangines.appnimals.Domain.EventRecyclerAdapter;
+import com.example.iansangines.appnimals.Domain.Pet;
+import com.example.iansangines.appnimals.R;
 
 import java.util.ArrayList;
 

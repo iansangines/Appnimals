@@ -1,12 +1,9 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,10 +11,13 @@ import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 
-import java.text.SimpleDateFormat;
+import com.example.iansangines.appnimals.Controllers.PetDBController;
+import com.example.iansangines.appnimals.Domain.Event;
+import com.example.iansangines.appnimals.Domain.EventListAdapter;
+import com.example.iansangines.appnimals.R;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class CalendarActivity extends AppCompatActivity {
 

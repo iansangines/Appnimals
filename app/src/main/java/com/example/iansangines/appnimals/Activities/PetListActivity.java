@@ -1,4 +1,4 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -7,15 +7,18 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.iansangines.appnimals.Controllers.PetDBController;
+import com.example.iansangines.appnimals.Domain.ListAdapter;
+import com.example.iansangines.appnimals.Domain.Pet;
+import com.example.iansangines.appnimals.R;
 
 import java.util.ArrayList;
 

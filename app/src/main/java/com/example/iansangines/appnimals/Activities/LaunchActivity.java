@@ -1,10 +1,11 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+
+import com.example.iansangines.appnimals.R;
 
 
 public class LaunchActivity extends AppCompatActivity {

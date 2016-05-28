@@ -1,4 +1,4 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Controllers;
 
 import android.app.Activity;
 import android.content.res.Resources;

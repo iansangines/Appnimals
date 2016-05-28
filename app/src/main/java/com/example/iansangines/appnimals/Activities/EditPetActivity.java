@@ -1,4 +1,4 @@
-package com.example.iansangines.appnimals;
+package com.example.iansangines.appnimals.Activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -13,33 +13,28 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.Pair;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.iansangines.appnimals.Controllers.ImageFileController;
+import com.example.iansangines.appnimals.Controllers.PetDBController;
+import com.example.iansangines.appnimals.Domain.Event;
+import com.example.iansangines.appnimals.Domain.Pet;
+import com.example.iansangines.appnimals.R;
+
 import java.io.File;
-import java.util.Calendar;
+import java.util.ArrayList;
 
+public class EditPetActivity extends AppCompatActivity {
 
-public class InsertPetActivity extends AppCompatActivity {
     private boolean clicked = false;
     static final int INSERTED = 1;
     private ImageView imgView;
@@ -49,28 +44,52 @@ public class InsertPetActivity extends AppCompatActivity {
     File fullSizeImage;
     File thumbnailImage;
 
-    static Calendar c = Calendar.getInstance();
-    static int year = c.get(Calendar.YEAR);
-    static int month = c.get(Calendar.MONTH);
-    static int day = c.get(Calendar.DAY_OF_MONTH);
-    Pet petToInsert = new Pet();
+    static int year;
+    static int month;
+    static int day;
+
+    private PetDBController dbController = new PetDBController(this);
+    private Pet petToEdit = new Pet();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_pet);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Edita la mascota");
 
+        int petId = getIntent().getIntExtra("id", -1);
+        petToEdit = dbController.queryPetById(petId);
+        ImageView photo = (ImageView) findViewById(R.id.imgview);
+        Bitmap petBitmap = BitmapFactory.decodeFile(petToEdit.getthumbnailPath());
 
-        imageController.CreateDirectories();
+        photo.setImageBitmap(petBitmap);
+        fullSizeImage = new File(petToEdit.getPhotoPath());
+        thumbnailImage = new File(petToEdit.getthumbnailPath());
 
-        fullSizeImage = imageController.getFullSizeFile();
-        thumbnailImage = imageController.getThumbnailFile();
+        TextInputLayout layoutname = (TextInputLayout) findViewById(R.id.layout_input_nom);
+        EditText name = layoutname.getEditText();
+        name.setText(petToEdit.getName());
 
+        TextInputLayout layoutdate = (TextInputLayout) findViewById(R.id.layout_input_date);
+        EditText date = layoutdate.getEditText();
+        String bdate = petToEdit.getBornDate();
+        date.setText(bdate);
+        String[] splittedbdate = bdate.split("/");
+        day = Integer.parseInt(splittedbdate[0]);
+        month = Integer.parseInt(splittedbdate[1]);
+        year = Integer.parseInt(splittedbdate[2]);
+
+        TextInputLayout layoutchip = (TextInputLayout) findViewById(R.id.layout_input_xip);
+        EditText chip = layoutchip.getEditText();
+        chip.setText(petToEdit.getChipNumber());
+
+        TextInputLayout layouttype = (TextInputLayout) findViewById(R.id.layout_input_rasa);
+        EditText type = layouttype.getEditText();
+        type.setText(petToEdit.getPetType());
 
         ImageView datebutton = (ImageView) findViewById(R.id.calendar_imgbutton);
         assert datebutton != null;
@@ -79,24 +98,6 @@ public class InsertPetActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DialogFragment dialogFragment = new StartDatePicker();
                 dialogFragment.show(getFragmentManager(), "start_date_picker");
-                Toast.makeText(getApplicationContext(), Integer.toString(year) + "/" + Integer.toString(month) + "/" + Integer.toString(day), Toast.LENGTH_LONG).show();
-            }
-        });
-
-       final TextInputLayout especialsInput = (TextInputLayout) findViewById(R.id.editesp);
-        assert especialsInput != null;
-        final EditText especialsEdit = especialsInput.getEditText();
-        assert especialsEdit != null;
-        CheckBox chk = (CheckBox) findViewById(R.id.especial);
-        assert chk != null;
-        chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast.makeText(InsertPetActivity.this, "HOLI PUTICORNIOS", Toast.LENGTH_SHORT).show();
-                if(isChecked){
-                    Toast.makeText(InsertPetActivity.this, "is chked madafaca", Toast.LENGTH_SHORT).show();
-                    especialsInput.setVisibility(View.VISIBLE);
-                }
             }
         });
 
@@ -113,7 +114,7 @@ public class InsertPetActivity extends AppCompatActivity {
                     assert nameinput != null;
                     String name = nameinput.getText().toString();
                     if (name == null || name.equals("")) {
-                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        AlertDialog.Builder nameDialog = new AlertDialog.Builder(EditPetActivity.this);
                         nameDialog.setMessage("Introdueix un nom").setNeutralButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -122,7 +123,7 @@ public class InsertPetActivity extends AppCompatActivity {
                         }).show();
                         return;
                     } else {
-                        petToInsert.setName(name);
+                        petToEdit.setName(name);
                     }
 
                     TextInputLayout datainputlayout = (TextInputLayout) findViewById(R.id.layout_input_date);
@@ -132,7 +133,7 @@ public class InsertPetActivity extends AppCompatActivity {
                     String data = datainput.getText().toString();
                     if (data == null || data.equals("")) {
 
-                        AlertDialog.Builder dateDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        AlertDialog.Builder dateDialog = new AlertDialog.Builder(EditPetActivity.this);
                         dateDialog.setMessage("Introdueix una data").setNeutralButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -142,7 +143,7 @@ public class InsertPetActivity extends AppCompatActivity {
                         return;
 
                     } else {
-                        petToInsert.setBornDate(data);
+                        petToEdit.setBornDate(data);
                     }
 
                     TextInputLayout xipinputlayout = (TextInputLayout) findViewById(R.id.layout_input_xip);
@@ -151,7 +152,7 @@ public class InsertPetActivity extends AppCompatActivity {
                     assert xipinput != null;
                     String xip = (xipinput.getText().toString());
                     if (xip == null || xip.equals("")) {
-                        AlertDialog.Builder xipDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        AlertDialog.Builder xipDialog = new AlertDialog.Builder(EditPetActivity.this);
                         xipDialog.setMessage("Introdueix una número de xip").setNeutralButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -160,7 +161,7 @@ public class InsertPetActivity extends AppCompatActivity {
                         }).show();
                         return;
                     } else {
-                        petToInsert.setChipNumber(xip);
+                        petToEdit.setChipNumber(xip);
                     }
 
                     TextInputLayout subtypeinputlayout = (TextInputLayout) findViewById(R.id.layout_input_rasa);
@@ -170,7 +171,7 @@ public class InsertPetActivity extends AppCompatActivity {
                     String subtype = subtypeinput.getText().toString();
                     if (subtype == null || subtype.equals("")) {
 
-                        AlertDialog.Builder typeDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                        AlertDialog.Builder typeDialog = new AlertDialog.Builder(EditPetActivity.this);
                         typeDialog.setMessage("Introdueix una raça/tipus").setNeutralButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -179,11 +180,11 @@ public class InsertPetActivity extends AppCompatActivity {
                         }).show();
                         return;
                     } else {
-                        petToInsert.setPetType(subtype);
+                        petToEdit.setPetType(subtype);
                     }
 
-                    if (petToInsert.getPhotoPath() == null || petToInsert.getPhotoPath().equals("")) {
-                        AlertDialog.Builder photoDialog = new AlertDialog.Builder(InsertPetActivity.this);
+                    if (petToEdit.getPhotoPath() == null || petToEdit.getPhotoPath().equals("")) {
+                        AlertDialog.Builder photoDialog = new AlertDialog.Builder(EditPetActivity.this);
                         photoDialog.setMessage("Es requereix una imatge").setNeutralButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -193,28 +194,34 @@ public class InsertPetActivity extends AppCompatActivity {
                         return;
                     }
 
-                    String especials = especialsEdit.getText().toString();
-                    petToInsert.setEspecial(especials);
 
-                    PetDBController db = new PetDBController(InsertPetActivity.this);
-                    int id = db.insertPet(petToInsert.getName(), petToInsert.getBornDate(), petToInsert.getPetType(),
-                            petToInsert.getChipNumber(), petToInsert.getPhotoPath(), petToInsert.getthumbnailPath(), petToInsert.getEspecial());
-                    Toast.makeText(InsertPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
-                    //Retorna el numero de id per fer query al petlistactivity
+                    PetDBController db = new PetDBController(EditPetActivity.this);
+                    db.updatePet(petToEdit);
+                    ArrayList<Event> petEvents = db.queryPetEvents(petToEdit.getId());
+                    for (Event e : petEvents) {
+                        e.setPetChip(petToEdit.getChipNumber());
+                        e.setPetName(petToEdit.getName());
+                        db.updateEvent(e);
+                    }
+                    Toast.makeText(EditPetActivity.this, "Mascota guardada", Toast.LENGTH_SHORT).show();
+                    //Retorna el numero de xip per fer query al petlistactivity
                     Intent returned = new Intent();
-                    returned.putExtra("id", id);
+                    returned.putExtra("id", petToEdit.getId());
                     setResult(INSERTED, returned);
                     finish();
+
+
                 }
             }
         });
+
 
         imgView = (ImageView) findViewById(R.id.imgview);
         assert imgView != null;
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(InsertPetActivity.this, imgView);
+                PopupMenu popup = new PopupMenu(EditPetActivity.this, imgView);
                 popup.getMenuInflater().inflate(R.menu.photo_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -232,9 +239,7 @@ public class InsertPetActivity extends AppCompatActivity {
                 popup.show();
             }
         });
-        //FINAL ON CREate
     }
-
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -250,44 +255,35 @@ public class InsertPetActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(pickPictureIntent, "Selecciona la imatge"), PICK_IMAGE);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             try {
 
                 String fullSizeImagePath = fullSizeImage.getAbsolutePath();
-                petToInsert.setPetPhotoPath(fullSizeImagePath);
+                petToEdit.setPetPhotoPath(fullSizeImagePath);
 
                 Bitmap imageBitmap = BitmapFactory.decodeFile(fullSizeImagePath);
 
                 Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
-                petToInsert.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
+                petToEdit.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
                 imgView.setImageBitmap(thumbnail);
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
 
 
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK) {
-            petToInsert.setPetPhotoPath(null);
-            petToInsert.setPetthumbnailPath(null);
+            petToEdit.setPetPhotoPath(null);
+            petToEdit.setPetthumbnailPath(null);
         } else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
             try {
 
                 Uri photoUri = data.getData();
-                if (photoUri != null) Log.d("PICK_IMAGE", "URI:" + photoUri.getPath());
-                else Log.d("URI", "null");
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                // Get the cursor
-                Cursor cursor = getContentResolver().query(photoUri,
-                        filePathColumn, null, null, null);
-                // Move to first row
+                Cursor cursor = getContentResolver().query(photoUri, filePathColumn, null, null, null);
                 cursor.moveToFirst();
 
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -297,10 +293,10 @@ public class InsertPetActivity extends AppCompatActivity {
                 Bitmap imageBitmap = BitmapFactory.decodeFile(imgDecodableString);
 
                 imageController.saveFullSizeImage(imageBitmap, fullSizeImage);
-                petToInsert.setPetPhotoPath(fullSizeImage.getAbsolutePath());
+                petToEdit.setPetPhotoPath(fullSizeImage.getAbsolutePath());
 
                 Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
-                petToInsert.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
+                petToEdit.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
                 imgView.setImageBitmap(thumbnail);
 
 
@@ -308,8 +304,8 @@ public class InsertPetActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else if (requestCode == PICK_IMAGE && resultCode != RESULT_OK) {
-            petToInsert.setPetPhotoPath(null);
-            petToInsert.setPetthumbnailPath(null);
+            petToEdit.setPetPhotoPath(null);
+            petToEdit.setPetthumbnailPath(null);
         }
     }
 
@@ -331,6 +327,4 @@ public class InsertPetActivity extends AppCompatActivity {
             datainput.setText(date);
         }
     }
-
-
 }
