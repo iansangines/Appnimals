@@ -18,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -98,6 +100,26 @@ public class EditPetActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DialogFragment dialogFragment = new StartDatePicker();
                 dialogFragment.show(getFragmentManager(), "start_date_picker");
+            }
+        });
+
+        final TextInputLayout especialsInput = (TextInputLayout) findViewById(R.id.editesp);
+        EditText editesp = especialsInput.getEditText();
+        CheckBox check = (CheckBox) findViewById(R.id.especial);
+
+
+        if(!petToEdit.getEspecial().equals("")) {
+            check.setChecked(true);
+            editesp.setVisibility(View.VISIBLE);
+            editesp.setText(petToEdit.getEspecial());
+        }
+        assert check != null;
+        check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    especialsInput.setVisibility(View.VISIBLE);
+                }
             }
         });
 
