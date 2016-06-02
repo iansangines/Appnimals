@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.iansangines.appnimals.Domain.Event;
 import com.example.iansangines.appnimals.Domain.Pet;
@@ -74,6 +75,7 @@ public class PetDBController extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PET_TABLE);
+        Log.d("conCreat","holi");
         db.execSQL(CREATE_EVENT_TABLE);
     }
 
