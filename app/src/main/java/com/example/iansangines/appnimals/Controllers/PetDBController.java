@@ -269,6 +269,15 @@ public class PetDBController extends SQLiteOpenHelper {
     public boolean updateEvent(Event e) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+
+        values.put(EVENT_COLUMN_NAME,e.getName());
+        values.put(EVENT_COLUMN_TYPE,e.getEventType());
+        values.put(EVENT_COLUMN_DAY,e.getDay());
+       values.put(EVENT_COLUMN_MONTH,e.getMonth());
+        values.put(EVENT_COLUMN_YEAR,e.getYear());
+        values.put(EVENT_COLUMN_HOUR,e.getHour());
+        values.put(EVENT_COLUMN_MINUTE,e.getMinute());
+        values.put(EVENT_COLUMN_LOC,e.getEventLocation());
         values.put(EVENT_COLUMN_PETNAME, e.getPetName());
         values.put(EVENT_COLUMN_PETCHIP, e.getPetChip());
         return db.update(EVENT_TABLE_NAME, values, COLUMN_ID + "=" + e.getId(), null) > 0;

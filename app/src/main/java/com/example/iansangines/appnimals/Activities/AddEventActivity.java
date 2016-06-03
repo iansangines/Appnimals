@@ -53,6 +53,8 @@ public class AddEventActivity extends AppCompatActivity {
     private RadioButton altre;
     private Spinner petSpinner;
     private TextInputLayout otherType;
+    private TextInputLayout loclayout;
+    private TextInputLayout eventnamelayout;
     private ArrayList<Pet> pets = null;
     private Pet pet = null;
 
@@ -64,7 +66,7 @@ public class AddEventActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarevent);
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Afegir Esdeveniment");
 
         vacunacio = (RadioButton) findViewById(R.id.vac);
         assert vacunacio != null;
@@ -94,6 +96,10 @@ public class AddEventActivity extends AppCompatActivity {
 
         petSpinner = (Spinner) findViewById(R.id.petspinner);
 
+        loclayout = (TextInputLayout) findViewById(R.id.input_eventloc);
+
+        eventnamelayout = (TextInputLayout) findViewById(R.id.input_eventname);
+
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         db = new PetDBController(AddEventActivity.this);
@@ -109,9 +115,44 @@ public class AddEventActivity extends AppCompatActivity {
                 spinnerAdapter.add(spin);
             }
         } else {
-            pet = db.queryPetById(getIntent().getIntExtra("id", -1));
-            String spin = pet.getName() + " - " + pet.getChipNumber();
+            int id = getIntent().getIntExtra("petId",-1);
+            if(id != -1) {
+                pet = db.queryPetById(getIntent().getIntExtra("petId", -1));
+                String spin = pet.getName() + " - " + pet.getChipNumber();
+                spinnerAdapter.add(spin);
+            }
+            else{
+                id = getIntent().getIntExtra("eventId",-1);
+                eventToInsert = db.queryEvent(id);
+                getSupportActionBar().setTitle("Editar Esdeveniment");
+                eventnamelayout.getEditText().setText(eventToInsert.getName());
+                Date date = new Date(Integer.parseInt(eventToInsert.getYear()), Integer.parseInt(eventToInsert.getMonth()), Integer.parseInt(eventToInsert.getDay()) - 1);
+                SimpleDateFormat simpledateformat = new SimpleDateFormat("EEEE");
+                String dayName = simpledateformat.format(date);
+                String datetext = dayName + ", " + Integer.toString(date.getDay()) + "/" + Integer.toString(date.getMonth() -1 ) + "/" + Integer.toString(date.getYear());
+                dateinput.setText(datetext);
+                String hour = eventToInsert.getHour() + ":" + eventToInsert.getMinute();
+                hourinput.setText(hour);
+                switch(eventToInsert.getEventType()){
+                    case("Veterinar"):
+                        veterniari.setChecked(true);
+                        break;
+                    case("Vacunació"):
+                        vacunacio.setChecked(true);
+                        break;
+                    case("Desparacitació"):
+                        desp.setChecked(true);
+                        break;
+                    default:
+                        altre.setChecked(true);
+                        otherType.setVisibility(View.VISIBLE);
+                        otherType.getEditText().setText(eventToInsert.getEventType());
+                        break;
+                }
+            }
+            String spin = eventToInsert.getPetName() + " - " + eventToInsert.getPetChip();
             spinnerAdapter.add(spin);
+            loclayout.getEditText().setText(eventToInsert.getEventLocation());
         }
         assert petSpinner != null;
         petSpinner.setAdapter(spinnerAdapter);
@@ -124,7 +165,7 @@ public class AddEventActivity extends AppCompatActivity {
                 if (v.getId() == R.id.confevent) {
 
                     //NOM DE L'ESDEVENIMENT (NECESSARI)
-                    TextInputLayout eventnamelayout = (TextInputLayout) findViewById(R.id.input_eventname);
+
                     assert eventnamelayout != null;
                     EditText eventname = eventnamelayout.getEditText();
                     assert eventname != null;
@@ -194,7 +235,6 @@ public class AddEventActivity extends AppCompatActivity {
                     }
 
                     //LLOC DE L'ESDEVENIMENT
-                    TextInputLayout loclayout = (TextInputLayout) findViewById(R.id.input_eventloc);
                     assert loclayout != null;
                     EditText loc = loclayout.getEditText();
                     assert loc != null;
@@ -204,7 +244,11 @@ public class AddEventActivity extends AppCompatActivity {
 
 
                     PetDBController db = new PetDBController(AddEventActivity.this);
+                    if(getIntent().getIntExtra("eventId",-1) != -1)
                     db.insertEvent(eventToInsert);
+                    else{
+                        db.updateEvent(eventToInsert);
+                    }
                     Toast.makeText(AddEventActivity.this, "Esdeveniment Guardat", Toast.LENGTH_SHORT).show();
                     Intent returned = new Intent();
                     setResult(INSERTED, returned);
@@ -252,7 +296,7 @@ public class AddEventActivity extends AppCompatActivity {
                         veterniari.setChecked(true);
                         altre.setChecked(false);
                         eventToInsert.setEventType("Veterinari");
-                        otherType.getEditText().setVisibility(View.GONE);
+                        otherType.setVisibility(View.GONE);
                     }
                     break;
                 case R.id.desp:
@@ -262,7 +306,7 @@ public class AddEventActivity extends AppCompatActivity {
                         veterniari.setChecked(false);
                         altre.setChecked(false);
                         eventToInsert.setEventType("Desparacitació");
-                        otherType.getEditText().setVisibility(View.GONE);
+                        otherType.setVisibility(View.GONE);
                     }
                     break;
                 case R.id.altre:
@@ -272,7 +316,7 @@ public class AddEventActivity extends AppCompatActivity {
                         desp.setChecked(false);
                         veterniari.setChecked(false);
                         altre.setChecked(true);
-                        otherType.getEditText().setVisibility(View.VISIBLE);
+                        otherType.setVisibility(View.VISIBLE);
                     }
             }
         }

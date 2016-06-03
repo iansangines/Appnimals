@@ -54,7 +54,6 @@
             android:name=".Activities.AddEventActivity"
             android:label="@string/title_activity_add_event" />
         <activity android:name=".Activities.EditPetActivity" />
-        <activity android:name=".Activities.EditEventActivity"></activity>
     </application>
 
 </manifest>

@@ -111,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
             case R.id.add_event:
                 Intent addevent = new Intent(ProfileActivity.this, AddEventActivity.class);
-                addevent.putExtra("id", profilePet.getId());
+                addevent.putExtra("petId", profilePet.getId());
                 startActivityForResult(addevent, ADD_EVENT_ACTIVITY);
             default:
                 return super.onOptionsItemSelected(item);

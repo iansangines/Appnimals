@@ -109,6 +109,7 @@ public class EditPetActivity extends AppCompatActivity {
 
 
         if(!petToEdit.getEspecial().equals("")) {
+            assert check != null;
             check.setChecked(true);
             editesp.setVisibility(View.VISIBLE);
             editesp.setText(petToEdit.getEspecial());

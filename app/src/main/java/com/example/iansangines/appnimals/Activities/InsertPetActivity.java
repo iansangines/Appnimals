@@ -89,9 +89,7 @@ public class InsertPetActivity extends AppCompatActivity {
         chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast.makeText(InsertPetActivity.this, "HOLI PUTICORNIOS", Toast.LENGTH_SHORT).show();
                 if(isChecked){
-                    Toast.makeText(InsertPetActivity.this, "is chked madafaca", Toast.LENGTH_SHORT).show();
                     especialsInput.setVisibility(View.VISIBLE);
                 }
             }

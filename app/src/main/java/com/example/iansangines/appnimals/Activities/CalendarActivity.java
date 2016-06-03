@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -60,7 +61,7 @@ public class CalendarActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Event e = (Event) eventListView.getItemAtPosition(pos);
-                        Intent editEvent = new Intent(CalendarActivity.this, EditEventActivity.class);
+                        Intent editEvent = new Intent(CalendarActivity.this, AddEventActivity.class);
                         editEvent.putExtra("eventId", e.getId());
                         startActivityForResult(editEvent,5);
                     }
@@ -86,8 +87,19 @@ public class CalendarActivity extends AppCompatActivity {
                 calendarView.setDate(calendar.getTimeInMillis(), false, true);
             }
         });
-    }
 
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabcalendar);
+        assert fab != null;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addEvent = new Intent(CalendarActivity.this, AddEventActivity.class);
+                startActivityForResult(addEvent, 5);
+            }
+        });
+
+    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.calendar_menu, menu);
@@ -96,9 +108,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case (R.id.add_event):
-                Intent addEvent = new Intent(CalendarActivity.this, AddEventActivity.class);
-                startActivityForResult(addEvent, 5);
+
         }
         return true;
     }

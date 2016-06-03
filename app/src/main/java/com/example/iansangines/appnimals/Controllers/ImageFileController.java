@@ -34,11 +34,19 @@ public class ImageFileController {
         thumbnailDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/../AppnimalsImages/Thumbnails/");
 
 
-        if (fullSizeDir.mkdir())
+        if (fullSizeDir.mkdirs())
             Log.d("fullsizeDir", "created with path: " + fullSizeDir.getPath());
+
 
         else if (fullSizeDir.exists())
             Log.d("fullsizeDir", "exists with path: " + fullSizeDir.getPath());
+
+        if(thumbnailDir.mkdirs()) Log.d("thumbnailpàth", "created with path: " + fullSizeDir.getPath());
+
+        else if (thumbnailDir.exists())
+            Log.d("thumbnaildir", "exists with path: " + fullSizeDir.getPath());
+
+
     }
 
     public File getFullSizeFile() {
@@ -57,7 +65,7 @@ public class ImageFileController {
 
         try {
             FileOutputStream image = new FileOutputStream(fullSizeFile);
-
+Log.d("TOT BEEEE", "WTFPASAKI");
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 70, image);
             image.flush();
             image.close();
@@ -79,11 +87,15 @@ public class ImageFileController {
             if (height / 5 < imageBitmap.getHeight() && width / 5 - 10 < imageBitmap.getWidth()) {
                 Bitmap scaled = Bitmap.createScaledBitmap(imageBitmap, imageBitmap.getWidth() / 10, imageBitmap.getHeight() / 10 - 10, true);
                 scaled.compress(Bitmap.CompressFormat.PNG, 75, image);
+
                 image.flush();
                 image.close();
                 return scaled;
             } else {
+                Log.d("TOT BEEEE altre cop", "WTFPASAKI");
                 imageBitmap.compress(Bitmap.CompressFormat.PNG, 75, image);
+                image.flush();
+                image.close();
                 return imageBitmap;
             }
         } catch (IOException x) {
