@@ -50,8 +50,9 @@
         </android.support.design.widget.TextInputLayout>
 
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
             android:id="@+id/petspinner">
 
         </Spinner>
@@ -129,7 +130,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/input_eventtype"
             android:paddingTop="10dp"
-            android:visibility="invisible">
+            android:visibility="gone">
 
             <EditText
                 android:layout_width="match_parent"
@@ -157,36 +158,6 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recordatori"
-            android:id="@+id/checkBox" />
-
-        <!-- visible cuan s'apreta Recordatori -->
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible">
-
-            <Spinner
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/notiftime">
-
-            </Spinner>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="abans"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="220dp"/>
-
-
-        </RelativeLayout>
 
 
     </LinearLayout>

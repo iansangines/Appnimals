@@ -12,8 +12,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/appnimals_outside"
         android:label="Appnimals"
-        android:theme="@style/AppTheme"
-        android:screenOrientation="portrait" >
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Activities.LaunchActivity"
             android:label="Appnimals"
@@ -33,8 +33,7 @@
             android:name=".Activities.InsertPetActivity"
             android:label="@string/title_activity_insert_pet"
             android:parentActivityName=".Activities.PetListActivity"
-            android:theme="@style/AppTheme"
-            >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.PetListActivity" />
@@ -54,7 +53,8 @@
         <activity
             android:name=".Activities.AddEventActivity"
             android:label="@string/title_activity_add_event" />
-        <activity android:name=".Activities.EditPetActivity"></activity>
+        <activity android:name=".Activities.EditPetActivity" />
+        <activity android:name=".Activities.EditEventActivity"></activity>
     </application>
 
 </manifest>

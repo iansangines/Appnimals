@@ -76,7 +76,7 @@
                 android:layout_marginLeft="72dp"
                 android:textColor="#757575"
                 android:layout_alignParentTop="true"
-                android:text="Mascota"/>
+                android:text="Mascota - tipus esdeveniment"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -85,7 +85,7 @@
                 android:layout_below="@+id/eventpet"
                 android:layout_marginLeft="72dp"
                 android:textColor="#757575"
-                android:text="Hora - Lloc"/>
+                android:text="Hora - Lloc "/>
 
 
         </RelativeLayout>

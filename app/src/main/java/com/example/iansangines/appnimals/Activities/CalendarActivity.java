@@ -1,15 +1,19 @@
 package com.example.iansangines.appnimals.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.iansangines.appnimals.Controllers.PetDBController;
 import com.example.iansangines.appnimals.Domain.Event;
@@ -46,6 +50,29 @@ public class CalendarActivity extends AppCompatActivity {
         eventListView.setAdapter(adapter);
 
         calendarView = (CalendarView) findViewById(R.id.calendar);
+
+        eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final int pos = position;
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
+                alertDialog.setMessage("Vols editar l'Esdeveniment?").setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Event e = (Event) eventListView.getItemAtPosition(pos);
+                        Intent editEvent = new Intent(CalendarActivity.this, EditEventActivity.class);
+                        editEvent.putExtra("eventId", e.getId());
+                        startActivityForResult(editEvent,5);
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+                return false;
+            }
+        });
 
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

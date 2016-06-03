@@ -42,11 +42,11 @@ public class PetDBController extends SQLiteOpenHelper {
     private static final String EVENT_COLUMN_DAY = "DAY";
     private static final String EVENT_COLUMN_MONTH = "MONTH";
     private static final String EVENT_COLUMN_YEAR = "YEAR";
-    private static final String EVENT_COLUMN_TYPE = "TYPE"; // vacunacio|desparasitacio|veterinari
+    private static final String EVENT_COLUMN_TYPE = "TYPE"; // vacunacio|desparasitacio|veterinari|altre
     private static final String EVENT_COLUMN_HOUR = "HOUR";
     private static final String EVENT_COLUMN_MINUTE = "MINUTE";
     private static final String EVENT_COLUMN_LOC = "UBIC";
-    private static final String EVENT_COLUMN_PETNAME = "TYPE"; // vacunacio|desparasitacio|veterinari
+    private static final String EVENT_COLUMN_PETNAME = "PETNAME";
     private static final String EVENT_COLUMN_PETCHIP = "PETCHIP";
     private static final String EVENT_COLUMN_PETID = "PETID";
 
@@ -59,11 +59,12 @@ public class PetDBController extends SQLiteOpenHelper {
             + EVENT_COLUMN_TYPE + " TEXT, "
             + EVENT_COLUMN_HOUR + " TEXT, "
             + EVENT_COLUMN_MINUTE + " TEXT, "
+            + EVENT_COLUMN_PETNAME + " TEXT, "
             + EVENT_COLUMN_PETCHIP + " TEXT, "
             + EVENT_COLUMN_PETID + " INTEGER, "
             + EVENT_COLUMN_LOC + " TEXT, "
-            + " FOREIGN KEY (" + EVENT_COLUMN_PETCHIP + ") REFERENCES " + PET_TABLE_NAME + "(" + PET_COLUMN_CHIP + ") "
-            + " FOREIGN KEY (" + EVENT_COLUMN_PETID + ") REFERENCES " + PET_TABLE_NAME + "(" + COLUMN_ID + ") "
+            + " FOREIGN KEY (" + EVENT_COLUMN_PETCHIP + ") REFERENCES " + PET_TABLE_NAME + "(" + PET_COLUMN_CHIP + "), "
+            + " FOREIGN KEY (" + EVENT_COLUMN_PETID + ") REFERENCES " + PET_TABLE_NAME + "(" + COLUMN_ID + "), "
             + "FOREIGN KEY (" + EVENT_COLUMN_PETNAME + ") REFERENCES " + PET_TABLE_NAME + "(" + PET_COLUMN_NAME + " ) );";
 
     private static final String DELETE_PET_TABLE = "DROP TABLE IF EXISTS " + PET_TABLE_NAME;
@@ -227,6 +228,29 @@ public class PetDBController extends SQLiteOpenHelper {
         db.close();
         c.close();
         return eventArrayList;
+    }
+
+    public Event queryEvent (int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + EVENT_TABLE_NAME + " WHERE " + COLUMN_ID + "=" + id, null);
+        Event e = new Event();
+        if (c.moveToFirst()) {
+            e.setId(c.getInt(c.getColumnIndex(COLUMN_ID)));
+            e.setName(c.getString(c.getColumnIndex(EVENT_COLUMN_NAME)));
+            e.setEventType(c.getString(c.getColumnIndex(EVENT_COLUMN_TYPE)));
+            e.setDay(c.getString(c.getColumnIndex(EVENT_COLUMN_DAY)));
+            e.setMonth(c.getString(c.getColumnIndex(EVENT_COLUMN_MONTH)));
+            e.setYear(c.getString(c.getColumnIndex(EVENT_COLUMN_YEAR)));
+            e.setHour(c.getString(c.getColumnIndex(EVENT_COLUMN_HOUR)));
+            e.setMinute(c.getString(c.getColumnIndex(EVENT_COLUMN_MINUTE)));
+            e.setEventLocation(c.getString(c.getColumnIndex(EVENT_COLUMN_LOC)));
+            e.setPetChip(c.getString(c.getColumnIndex(EVENT_COLUMN_PETCHIP)));
+            e.setPetName(c.getString(c.getColumnIndex(EVENT_COLUMN_PETNAME)));
+            e.setPetId(c.getInt(c.getColumnIndex(EVENT_COLUMN_PETID)));
+        }
+        db.close();
+        c.close();
+        return e;
     }
 
     public boolean updatePet(Pet pet) {

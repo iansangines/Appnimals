@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -51,6 +52,7 @@ public class AddEventActivity extends AppCompatActivity {
     private RadioButton desp;
     private RadioButton altre;
     private Spinner petSpinner;
+    private TextInputLayout otherType;
     private ArrayList<Pet> pets = null;
     private Pet pet = null;
 
@@ -66,19 +68,19 @@ public class AddEventActivity extends AppCompatActivity {
 
         vacunacio = (RadioButton) findViewById(R.id.vac);
         assert vacunacio != null;
-        vacunacio.setOnClickListener(radiolisten);
+        vacunacio.setOnCheckedChangeListener(radiolisten);
 
         veterniari = (RadioButton) findViewById(R.id.vet);
         assert veterniari != null;
-        veterniari.setOnClickListener(radiolisten);
+        veterniari.setOnCheckedChangeListener(radiolisten);
 
         desp = (RadioButton) findViewById(R.id.desp);
         assert desp != null;
-        desp.setOnClickListener(radiolisten);
+        desp.setOnCheckedChangeListener(radiolisten);
 
         altre = (RadioButton) findViewById(R.id.altre);
         assert altre != null;
-        altre.setOnClickListener(radiolisten);
+        altre.setOnCheckedChangeListener(radiolisten);
 
         dateinput = (Button) findViewById(R.id.data);
         assert dateinput != null;
@@ -88,13 +90,15 @@ public class AddEventActivity extends AppCompatActivity {
         assert hourinput != null;
         hourinput.setOnClickListener(listen);
 
+        otherType = (TextInputLayout) findViewById(R.id.input_eventtype);
+
         petSpinner = (Spinner) findViewById(R.id.petspinner);
 
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         db = new PetDBController(AddEventActivity.this);
 
-        if(getIntent().getExtras() == null) {
+        if (getIntent().getExtras() == null) {
             spinnerAdapter.add("Selecciona una mascota..");
             pets = db.queryAllPets();
             for (int i = 0; i < pets.size(); i++) {
@@ -104,8 +108,7 @@ public class AddEventActivity extends AppCompatActivity {
                 String spin = name + " - " + chip;
                 spinnerAdapter.add(spin);
             }
-        }
-        else{
+        } else {
             pet = db.queryPetById(getIntent().getIntExtra("id", -1));
             String spin = pet.getName() + " - " + pet.getChipNumber();
             spinnerAdapter.add(spin);
@@ -160,23 +163,20 @@ public class AddEventActivity extends AppCompatActivity {
 
                     //SPINNER DEL NOM DE LA MASCOTA --> Si es ve d ela mascota getExtra(nom i xip) i centrar l'spinner a la mascota i bloquejarlo, sino, Extranull i yasta
                     String aux = petSpinner.getSelectedItem().toString();
-                    if(aux == null || aux.equals("Selecciona una mascota..")){
+                    if (aux == null || aux.equals("Selecciona una mascota..")) {
                         Toast.makeText(AddEventActivity.this, "Selecciona una mascota", Toast.LENGTH_SHORT).show();
                         return;
-                    }
-
-                    else if(pet == null){
+                    } else if (pet == null) {
                         String[] splitted = aux.split(" - ");
                         eventToInsert.setPetName(splitted[0]);
                         eventToInsert.setPetChip(splitted[1]);
-                        for(int i = 0; i < pets.size(); i++) {
-                            if(pets.get(i).getName().equals(splitted[0])) {
+                        for (int i = 0; i < pets.size(); i++) {
+                            if (pets.get(i).getName().equals(splitted[0])) {
                                 eventToInsert.setPetId(pets.get(i).getId());
                                 break;
                             }
                         }
-                    }
-                    else{
+                    } else {
                         String[] splitted = aux.split(" - ");
                         eventToInsert.setPetName(splitted[0]);
                         eventToInsert.setPetChip(splitted[1]);
@@ -184,16 +184,13 @@ public class AddEventActivity extends AppCompatActivity {
                     }
 
                     //TIPUS DE L'ESDEVENIMENT (NECESSARI)
-                    if(veterniari.isChecked()) eventToInsert.setEventType(veterniari.getText().toString());
-                    else if(vacunacio.isChecked()) eventToInsert.setEventType(vacunacio.getText().toString());
-                    else if(desp.isChecked()) eventToInsert.setEventType(desp.getText().toString());
-                    else if(altre.isChecked()){
-                        Log.d("Altre radiobut", "is checked");
-                        //afegir un edittext i gardar lo escrit
-                    }
-                    else{
-                        Toast.makeText(AddEventActivity.this, "Selecciona el tipus d'esdeveniment", Toast.LENGTH_SHORT).show();
-                        return;
+                    assert otherType.getEditText() != null;
+                    if (otherType.getEditText().getVisibility() == View.VISIBLE){
+                        String eventType = otherType.getEditText().getText().toString();
+                        if(eventType == null || eventType.equals("")){
+                            Toast.makeText(AddEventActivity.this, "Selecciona el tipus d'esdeveniment", Toast.LENGTH_SHORT).show();
+                        }
+                        else eventToInsert.setEventType(eventType);
                     }
 
                     //LLOC DE L'ESDEVENIMENT
@@ -207,11 +204,9 @@ public class AddEventActivity extends AppCompatActivity {
 
 
                     PetDBController db = new PetDBController(AddEventActivity.this);
-                    Log.d("type selected", eventToInsert.getEventType());
                     db.insertEvent(eventToInsert);
                     Toast.makeText(AddEventActivity.this, "Esdeveniment Guardat", Toast.LENGTH_SHORT).show();
                     Intent returned = new Intent();
-                    returned.putExtra("id", eventToInsert.getId());
                     setResult(INSERTED, returned);
                     finish();
 
@@ -224,82 +219,86 @@ public class AddEventActivity extends AppCompatActivity {
     private View.OnClickListener listen = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(v.getId() == R.id.data){
+            if (v.getId() == R.id.data) {
                 DialogFragment newFragment = new StartDatePicker();
                 newFragment.show(getFragmentManager(), "datePicker");
             }
-            if(v.getId() == R.id.hour){
+            if (v.getId() == R.id.hour) {
                 DialogFragment newFragment = new TimePickerFragment();
                 newFragment.show(getFragmentManager(), "TimePicker");
             }
         }
     };
 
-    private View.OnClickListener radiolisten = new View.OnClickListener() {
-        // Is the button now checked?
+    private CompoundButton.OnCheckedChangeListener radiolisten = new CompoundButton.OnCheckedChangeListener() {
         @Override
-        public void onClick(View view) {
-            boolean checked = ((RadioButton) view).isChecked();
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-            // Check which radio button was clicked
-            switch (view.getId()) {
+            switch (buttonView.getId()) {
                 case R.id.vac:
-                    if (checked) {
+                    if (isChecked) {
                         vacunacio.setChecked(true);
                         desp.setChecked(false);
                         veterniari.setChecked(false);
                         altre.setChecked(false);
+                        eventToInsert.setEventType("Vacunació");
+                        otherType.setVisibility(View.GONE);
                     }
                     break;
                 case R.id.vet:
-                    if (checked){
+                    if (isChecked) {
                         vacunacio.setChecked(false);
                         desp.setChecked(false);
                         veterniari.setChecked(true);
                         altre.setChecked(false);
+                        eventToInsert.setEventType("Veterinari");
+                        otherType.getEditText().setVisibility(View.GONE);
                     }
                     break;
                 case R.id.desp:
-                    if(checked){
+                    if (isChecked) {
                         vacunacio.setChecked(false);
                         desp.setChecked(true);
                         veterniari.setChecked(false);
                         altre.setChecked(false);
+                        eventToInsert.setEventType("Desparacitació");
+                        otherType.getEditText().setVisibility(View.GONE);
                     }
                     break;
                 case R.id.altre:
-                    if(checked) {
+                    if (isChecked) {
+                        Toast.makeText(AddEventActivity.this, "S'ha clickat altre", Toast.LENGTH_SHORT).show();
                         vacunacio.setChecked(false);
                         desp.setChecked(false);
                         veterniari.setChecked(false);
                         altre.setChecked(true);
+                        otherType.getEditText().setVisibility(View.VISIBLE);
                     }
             }
         }
     };
 
 
-
-    public static class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+    public static class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            DatePickerDialog dialog = new DatePickerDialog(getActivity(),R.style.DialogTheme,this,startYear,startMonth,startDay);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, this, startYear, startMonth, startDay);
             return dialog;
 
         }
+
         public void onDateSet(DatePicker view, int year, int month, int day) {
             SimpleDateFormat simpledateformat = new SimpleDateFormat("EEEE");
-            Date date = new Date(year, month, day-1);
+            Date date = new Date(year, month, day - 1);
             String dayName = simpledateformat.format(date);
             Button datatext = (Button) getActivity().findViewById(R.id.data);
             assert datatext != null;
-            if(day < startDay && month < startMonth && year < startYear){
+            if (day < startDay && month < startMonth && year < startYear) {
                 Toast.makeText(getActivity(), "La data introduïda ja ha passat", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                String datetext = dayName + ", " + Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year);
+            } else {
+                String datetext = dayName + ", " + Integer.toString(day) + "/" + Integer.toString(month + 1) + "/" + Integer.toString(year);
                 datatext.setText(datetext);
-                c.set(year, month+1, day);
+                c.set(year, month + 1, day);
             }
         }
     }
@@ -309,7 +308,7 @@ public class AddEventActivity extends AppCompatActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new TimePickerDialog(getActivity(),R.style.DialogTheme, this, startHour, startMinute,
+            return new TimePickerDialog(getActivity(), R.style.DialogTheme, this, startHour, startMinute,
                     DateFormat.is24HourFormat(getActivity()));
         }
 
@@ -318,11 +317,11 @@ public class AddEventActivity extends AppCompatActivity {
             assert timetext != null;
             String h = Integer.toString(hour);
             String m = Integer.toString(minute);
-            if(hour < 10) h = "0" + h;
-            if(minute < 10) m = "0" + m;
+            if (hour < 10) h = "0" + h;
+            if (minute < 10) m = "0" + m;
             String time = h + ":" + m + " h";
-            c.set(Calendar.HOUR_OF_DAY,hour);
-            c.set(Calendar.MINUTE,minute);
+            c.set(Calendar.HOUR_OF_DAY, hour);
+            c.set(Calendar.MINUTE, minute);
             timetext.setText(time);
         }
     }
