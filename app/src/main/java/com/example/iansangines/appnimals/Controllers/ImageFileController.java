@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,10 +64,17 @@ public class ImageFileController {
 
     public void saveFullSizeImage(Bitmap imageBitmap, File fullSizeFile) {
 
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+
+        Log.d("ampalda imatge", Integer.toString(imageBitmap.getWidth()));
+        Log.d("llargada imatge", Integer.toString(imageBitmap.getHeight()));
+
+
         try {
+            if( imageBitmap.getWidth() > width && imageBitmap.getHeight() > height) imageBitmap  = Bitmap.createScaledBitmap(imageBitmap,width, height,true);
             FileOutputStream image = new FileOutputStream(fullSizeFile);
-Log.d("TOT BEEEE", "WTFPASAKI");
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 70, image);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 85, image);
             image.flush();
             image.close();
         } catch (IOException x) {
@@ -78,7 +86,9 @@ Log.d("TOT BEEEE", "WTFPASAKI");
     public Bitmap saveThumbnailImage(Bitmap imageBitmap, File thumbnailFile) {
 
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+
 
         try {
 
@@ -92,7 +102,6 @@ Log.d("TOT BEEEE", "WTFPASAKI");
                 image.close();
                 return scaled;
             } else {
-                Log.d("TOT BEEEE altre cop", "WTFPASAKI");
                 imageBitmap.compress(Bitmap.CompressFormat.PNG, 75, image);
                 image.flush();
                 image.close();

@@ -13,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.iansangines.appnimals.Controllers.PetDBController;
@@ -81,7 +83,11 @@ public class ProfileActivity extends AppCompatActivity {
         espTextView = (TextView) findViewById(R.id.profEsp);
         assert espTextView != null;
         String esp = profilePet.getEspecial();
-        espTextView.setText(esp);
+        if(esp == null || esp.equals("") ){
+            RelativeLayout rl = (RelativeLayout) findViewById(R.id.especiallayout);
+            rl.setVisibility(View.GONE);
+        }
+        else espTextView.setText(esp);
 
 
         eventList = (RecyclerView) findViewById(R.id.eventview);

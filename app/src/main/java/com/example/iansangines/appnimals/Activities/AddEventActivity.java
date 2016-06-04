@@ -55,7 +55,7 @@ public class AddEventActivity extends AppCompatActivity {
     private TextInputLayout otherType;
     private TextInputLayout loclayout;
     private TextInputLayout eventnamelayout;
-    private ArrayList<Pet> pets = null;
+    private ArrayList<Pet> pets;
     private Pet pet = null;
 
     @Override
@@ -100,6 +100,8 @@ public class AddEventActivity extends AppCompatActivity {
 
         eventnamelayout = (TextInputLayout) findViewById(R.id.input_eventname);
 
+        pets = new ArrayList<>();
+
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         db = new PetDBController(AddEventActivity.this);
@@ -126,10 +128,11 @@ public class AddEventActivity extends AppCompatActivity {
                 eventToInsert = db.queryEvent(id);
                 getSupportActionBar().setTitle("Editar Esdeveniment");
                 eventnamelayout.getEditText().setText(eventToInsert.getName());
-                Date date = new Date(Integer.parseInt(eventToInsert.getYear()), Integer.parseInt(eventToInsert.getMonth()), Integer.parseInt(eventToInsert.getDay()) - 1);
+                c.set(Integer.parseInt(eventToInsert.getYear()),Integer.parseInt(eventToInsert.getMonth())-1,Integer.parseInt(eventToInsert.getDay()));
+                Date date = new Date(c.getTimeInMillis());
                 SimpleDateFormat simpledateformat = new SimpleDateFormat("EEEE");
                 String dayName = simpledateformat.format(date);
-                String datetext = dayName + ", " + Integer.toString(date.getDay()) + "/" + Integer.toString(date.getMonth() -1 ) + "/" + Integer.toString(date.getYear());
+                String datetext = dayName + ", " + Integer.toString(c.get(Calendar.DAY_OF_MONTH)) + "/" + Integer.toString(c.get(Calendar.MONTH) +1 ) + "/" + Integer.toString(c.get(c.YEAR));
                 dateinput.setText(datetext);
                 String hour = eventToInsert.getHour() + ":" + eventToInsert.getMinute();
                 hourinput.setText(hour);
@@ -244,7 +247,7 @@ public class AddEventActivity extends AppCompatActivity {
 
 
                     PetDBController db = new PetDBController(AddEventActivity.this);
-                    if(getIntent().getIntExtra("eventId",-1) != -1)
+                    if(getIntent().getIntExtra("eventId",-1) == -1)
                     db.insertEvent(eventToInsert);
                     else{
                         db.updateEvent(eventToInsert);

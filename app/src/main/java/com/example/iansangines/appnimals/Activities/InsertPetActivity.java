@@ -260,6 +260,7 @@ public class InsertPetActivity extends AppCompatActivity {
                 Bitmap imageBitmap = BitmapFactory.decodeFile(fullSizeImagePath);
 
                 Bitmap thumbnail = imageController.saveThumbnailImage(imageBitmap, thumbnailImage);
+                imageController.saveFullSizeImage(imageBitmap,fullSizeImage);
                 petToInsert.setPetthumbnailPath(thumbnailImage.getAbsolutePath());
                 imgView.setImageBitmap(thumbnail);
             } catch (Exception e) {

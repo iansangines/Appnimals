@@ -184,6 +184,7 @@
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/especiallayout"
                 android:minHeight="60dp">
 
                 <ImageView
@@ -230,7 +231,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:paddingTop="4dp"
+                android:paddingTop="8dp"
                 android:text="Agenda mascota"/>
 
         </LinearLayout>
