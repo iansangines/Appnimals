@@ -30,7 +30,7 @@ import android.widget.Toast;
 import com.example.iansangines.appnimals.Controllers.ImageFileController;
 import com.example.iansangines.appnimals.Controllers.PetDBController;
 import com.example.iansangines.appnimals.Domain.Pet;
-import com.example.iansangines.appnimals.R;
+import com.example.iansangines.appnimals.Activities.R;
 
 import java.io.File;
 import java.util.Calendar;

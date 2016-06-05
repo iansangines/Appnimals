@@ -2,14 +2,20 @@ package com.example.iansangines.appnimals.Controllers;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.example.iansangines.appnimals.Activities.R;
 import com.example.iansangines.appnimals.Domain.Event;
 import com.example.iansangines.appnimals.Domain.Pet;
 
+
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -70,14 +76,51 @@ public class PetDBController extends SQLiteOpenHelper {
     private static final String DELETE_PET_TABLE = "DROP TABLE IF EXISTS " + PET_TABLE_NAME;
     private static final String DELETE_EVENT_TABLE = "DROP TABLE IF EXISTS " + EVENT_TABLE_NAME;
 
+    private Context context;
+
     public PetDBController(Context context) {
         super(context, DATABASE_NAME, null, 1);
+        this.context = context;
+
     }
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PET_TABLE);
-        Log.d("conCreat","holi");
+        Log.d("conCreat", "holi");
         db.execSQL(CREATE_EVENT_TABLE);
+
+        ImageFileController ifc = new ImageFileController();
+        ifc.CreateDirectories();
+        Bitmap img = BitmapFactory.decodeResource(context.getResources(), R.drawable.inu);
+        File fullImage = ifc.getFullSizeFile();
+        ifc.saveFullSizeImage(img, fullImage);
+        File thumbnailFile = ifc.getThumbnailFile();
+        ifc.saveThumbnailImage(img, thumbnailFile);
+
+        ContentValues values = new ContentValues();
+        values.put(PET_COLUMN_NAME, "Inu");
+        values.put(PET_COLUMN_DATA, "14/11/2010");
+        values.put(PET_COLUMN_TYPE, "Gos");
+        values.put(PET_COLUMN_CHIP, "977000123456789");
+        values.put(PET_COLUMN_IMGPATH, fullImage.getAbsolutePath());
+        values.put(PET_COLUMN_THUMBNAILPATH, thumbnailFile.getAbsolutePath());
+        values.put(PET_COLUMN_ESPECIAL, "Necessita calci");
+        long ret = db.insert(PET_TABLE_NAME, null, values);
+
+        img = BitmapFactory.decodeResource(context.getResources(), R.drawable.jimi);
+        fullImage = ifc.getFullSizeFile();
+        ifc.saveFullSizeImage(img, fullImage);
+        thumbnailFile = ifc.getThumbnailFile();
+        ifc.saveThumbnailImage(img, thumbnailFile);
+
+        values = new ContentValues();
+        values.put(PET_COLUMN_NAME, "Jimi");
+        values.put(PET_COLUMN_DATA,  "6/4/2015");
+        values.put(PET_COLUMN_TYPE, "Conill");
+        values.put(PET_COLUMN_CHIP, "973529155362754");
+        values.put(PET_COLUMN_IMGPATH, fullImage.getAbsolutePath());
+        values.put(PET_COLUMN_THUMBNAILPATH, thumbnailFile.getAbsolutePath());
+        ret = db.insert(PET_TABLE_NAME, null, values);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -230,7 +273,7 @@ public class PetDBController extends SQLiteOpenHelper {
         return eventArrayList;
     }
 
-    public Event queryEvent (int id) {
+    public Event queryEvent(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + EVENT_TABLE_NAME + " WHERE " + COLUMN_ID + "=" + id, null);
         Event e = new Event();
@@ -262,7 +305,7 @@ public class PetDBController extends SQLiteOpenHelper {
         values.put(PET_COLUMN_CHIP, pet.getChipNumber());
         values.put(PET_COLUMN_IMGPATH, pet.getPhotoPath());
         values.put(PET_COLUMN_THUMBNAILPATH, pet.getthumbnailPath());
-        values.put(PET_COLUMN_ESPECIAL,pet.getEspecial());
+        values.put(PET_COLUMN_ESPECIAL, pet.getEspecial());
         return db.update(PET_TABLE_NAME, values, COLUMN_ID + "=" + pet.getId(), null) > 0;
     }
 
@@ -270,14 +313,14 @@ public class PetDBController extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(EVENT_COLUMN_NAME,e.getName());
-        values.put(EVENT_COLUMN_TYPE,e.getEventType());
-        values.put(EVENT_COLUMN_DAY,e.getDay());
-       values.put(EVENT_COLUMN_MONTH,e.getMonth());
-        values.put(EVENT_COLUMN_YEAR,e.getYear());
-        values.put(EVENT_COLUMN_HOUR,e.getHour());
-        values.put(EVENT_COLUMN_MINUTE,e.getMinute());
-        values.put(EVENT_COLUMN_LOC,e.getEventLocation());
+        values.put(EVENT_COLUMN_NAME, e.getName());
+        values.put(EVENT_COLUMN_TYPE, e.getEventType());
+        values.put(EVENT_COLUMN_DAY, e.getDay());
+        values.put(EVENT_COLUMN_MONTH, e.getMonth());
+        values.put(EVENT_COLUMN_YEAR, e.getYear());
+        values.put(EVENT_COLUMN_HOUR, e.getHour());
+        values.put(EVENT_COLUMN_MINUTE, e.getMinute());
+        values.put(EVENT_COLUMN_LOC, e.getEventLocation());
         values.put(EVENT_COLUMN_PETNAME, e.getPetName());
         values.put(EVENT_COLUMN_PETCHIP, e.getPetChip());
         return db.update(EVENT_TABLE_NAME, values, COLUMN_ID + "=" + e.getId(), null) > 0;

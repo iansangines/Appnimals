@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.example.iansangines.appnimals.Controllers.PetDBController;
 import com.example.iansangines.appnimals.Domain.ListAdapter;
 import com.example.iansangines.appnimals.Domain.Pet;
-import com.example.iansangines.appnimals.R;
+import com.example.iansangines.appnimals.Activities.R;
 
 import java.util.ArrayList;
 

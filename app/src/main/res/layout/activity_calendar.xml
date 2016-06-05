@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".Activities.CalendarActivity">
+    tools:context=".CalendarActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -58,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/view"
+            android:id="@+id/esdev"
             android:paddingTop="16dp"
             android:textSize="22sp"
             android:textColor="#424242"
@@ -67,7 +68,7 @@
             android:id="@+id/eventlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="340dp"
+            android:layout_below="@+id/esdev"
             android:clickable="true"
             android:dividerHeight="1dp" />
 

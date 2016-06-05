@@ -1,9 +1,5 @@
 package com.example.iansangines.appnimals.Domain;
 
-import android.net.Uri;
-
-import java.io.Serializable;
-
 /**
  * Created by ian on 09/04/2016.
  */

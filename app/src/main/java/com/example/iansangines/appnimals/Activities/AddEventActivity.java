@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.example.iansangines.appnimals.Controllers.PetDBController;
 import com.example.iansangines.appnimals.Domain.Event;
 import com.example.iansangines.appnimals.Domain.Pet;
-import com.example.iansangines.appnimals.R;
+import com.example.iansangines.appnimals.Activities.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -124,6 +124,8 @@ public class AddEventActivity extends AppCompatActivity {
                 spinnerAdapter.add(spin);
             }
             else{
+                // TODO: el mes d ela data decrementa a cada edit
+                // TODO: s'escriu malament la hora cuan es 0
                 id = getIntent().getIntExtra("eventId",-1);
                 eventToInsert = db.queryEvent(id);
                 getSupportActionBar().setTitle("Editar Esdeveniment");

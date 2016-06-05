@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.example.iansangines.appnimals.Controllers.PetDBController;
 import com.example.iansangines.appnimals.Domain.Event;
 import com.example.iansangines.appnimals.Domain.EventListAdapter;
-import com.example.iansangines.appnimals.R;
+import com.example.iansangines.appnimals.Activities.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
