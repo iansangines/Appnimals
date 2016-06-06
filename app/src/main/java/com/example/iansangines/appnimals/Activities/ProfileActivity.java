@@ -1,5 +1,7 @@
 package com.example.iansangines.appnimals.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -85,6 +89,7 @@ public class ProfileActivity extends AppCompatActivity {
         String esp = profilePet.getEspecial();
         if(esp == null || esp.equals("") ){
             RelativeLayout rl = (RelativeLayout) findViewById(R.id.especiallayout);
+            assert rl != null;
             rl.setVisibility(View.GONE);
         }
         else espTextView.setText(esp);
@@ -93,7 +98,14 @@ public class ProfileActivity extends AppCompatActivity {
         eventList = (RecyclerView) findViewById(R.id.eventview);
         petEvents = dbController.queryPetEvents(profilePet.getId());
 
-        adapter = new EventRecyclerAdapter(petEvents);
+        eventList.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
+
+        adapter = new EventRecyclerAdapter(petEvents,ProfileActivity.this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ProfileActivity.this);
         eventList.setLayoutManager(mLayoutManager);
         eventList.setItemAnimator(new DefaultItemAnimator());
@@ -138,7 +150,7 @@ public class ProfileActivity extends AppCompatActivity {
             petImage.setImageBitmap(petBitmap);
         }
         petEvents = dbController.queryPetEvents(profilePet.getId());
-        adapter = new EventRecyclerAdapter(petEvents);
+        adapter = new EventRecyclerAdapter(petEvents,ProfileActivity.this);
         eventList.setAdapter(adapter);
     }
 }

@@ -1,8 +1,12 @@
 package com.example.iansangines.appnimals.Domain;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.iansangines.appnimals.Activities.AddEventActivity;
 import com.example.iansangines.appnimals.Controllers.PetDBController;
 import com.example.iansangines.appnimals.Activities.R;
 
@@ -23,13 +28,16 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
 
     private ArrayList<Event> eventList;
     private final String[] MONTHS = {"Gen", "Feb", "Març", "Abr", "Maig", "Juny", "Jul", "Ag", "Set", "Oct", "Nov", "Des"};
+    private final Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        private final View view;
         public TextView day, month, year, eventName, eventPet, eventHourLoc;
         public ImageView deleteImg;
 
         public MyViewHolder(View view) {
             super(view);
+            this.view = view;
             day = (TextView) view.findViewById(R.id.eventday);
             month = (TextView) view.findViewById(R.id.eventmonth);
             year = (TextView) view.findViewById(R.id.eventyear);
@@ -40,8 +48,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         }
     }
 
-    public EventRecyclerAdapter(ArrayList<Event> eventList) {
+    public EventRecyclerAdapter(ArrayList<Event> eventList, Context context) {
         this.eventList = eventList;
+        this.context = context;
     }
 
     @Override
@@ -55,6 +64,27 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
 
         final Event e = eventList.get(position);
         final int index = position;
+
+        holder.view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
+                alertDialog.setMessage("Vols editar l'Esdeveniment?").setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent editEvent = new Intent(context, AddEventActivity.class);
+                        editEvent.putExtra("eventId", e.getId());
+                        ((Activity) context).startActivityForResult(editEvent,5);
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+                return false;
+            }
+        });
         holder.day.setText(e.getDay());
         holder.month.setText(MONTHS[Integer.parseInt(e.getMonth()) - 1]);
         holder.year.setText(e.getYear());

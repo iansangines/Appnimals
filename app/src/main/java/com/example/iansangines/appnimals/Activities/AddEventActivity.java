@@ -124,13 +124,11 @@ public class AddEventActivity extends AppCompatActivity {
                 spinnerAdapter.add(spin);
             }
             else{
-                // TODO: el mes d ela data decrementa a cada edit
-                // TODO: s'escriu malament la hora cuan es 0
                 id = getIntent().getIntExtra("eventId",-1);
                 eventToInsert = db.queryEvent(id);
                 getSupportActionBar().setTitle("Editar Esdeveniment");
                 eventnamelayout.getEditText().setText(eventToInsert.getName());
-                c.set(Integer.parseInt(eventToInsert.getYear()),Integer.parseInt(eventToInsert.getMonth())-1,Integer.parseInt(eventToInsert.getDay()));
+                c.set(Integer.parseInt(eventToInsert.getYear()),Integer.parseInt(eventToInsert.getMonth()),Integer.parseInt(eventToInsert.getDay()));
                 Date date = new Date(c.getTimeInMillis());
                 SimpleDateFormat simpledateformat = new SimpleDateFormat("EEEE");
                 String dayName = simpledateformat.format(date);
