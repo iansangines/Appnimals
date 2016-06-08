@@ -21,7 +21,8 @@
     </item>
 
     <item
-        android:title="@string/action_settings"
+        android:title="Ajuda"
+        android:id="@+id/ajudaperfil"
         app:showAsAction="never">
 
     </item>

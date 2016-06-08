@@ -108,9 +108,10 @@ public class ProfileActivity extends AppCompatActivity {
         adapter = new EventRecyclerAdapter(petEvents,ProfileActivity.this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ProfileActivity.this);
         eventList.setLayoutManager(mLayoutManager);
-        eventList.setItemAnimator(new DefaultItemAnimator());
-        eventList.setNestedScrollingEnabled(false);
         eventList.setAdapter(adapter);
+        adapter.swap(petEvents);
+        eventList.setAdapter(adapter);
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -131,6 +132,11 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent addevent = new Intent(ProfileActivity.this, AddEventActivity.class);
                 addevent.putExtra("petId", profilePet.getId());
                 startActivityForResult(addevent, ADD_EVENT_ACTIVITY);
+                return true;
+            case R.id.ajudaperfil:
+                Intent i = new Intent(ProfileActivity.this, HelpActivity.class);
+                startActivity(i);
+
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -150,7 +156,7 @@ public class ProfileActivity extends AppCompatActivity {
             petImage.setImageBitmap(petBitmap);
         }
         petEvents = dbController.queryPetEvents(profilePet.getId());
-        adapter = new EventRecyclerAdapter(petEvents,ProfileActivity.this);
+        adapter.swap(petEvents);
         eventList.setAdapter(adapter);
     }
 }

@@ -89,10 +89,13 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         holder.month.setText(MONTHS[Integer.parseInt(e.getMonth()) - 1]);
         holder.year.setText(e.getYear());
         holder.eventName.setText(e.getName());
-        String epet = e.getPetName() + " - " + e.getPetChip();
+        String epet = e.getPetName() + " - " + e.getEventType();
         holder.eventPet.setText(epet);
-        String hourloc = e.getHour() + ":" + e.getMinute() + " - " + e.getEventLocation();
-        holder.eventHourLoc.setText(hourloc);
+        String hourLoc = e.getHour() + ":" + e.getMinute();
+        if(!e.getEventLocation().equals("") || e.getEventLocation() != null){
+            hourLoc = hourLoc  + " - " + e.getEventLocation();
+        }
+        holder.eventHourLoc.setText(hourLoc);
         holder.deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,5 +129,12 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
     public int getItemCount() {
         return eventList.size();
     }
+
+    public void swap(ArrayList<Event> eventList){
+        this.eventList.clear();
+        this.eventList.addAll(eventList);
+        notifyDataSetChanged();
+    }
+
 }
 

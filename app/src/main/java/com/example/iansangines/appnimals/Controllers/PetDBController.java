@@ -77,12 +77,14 @@ public class PetDBController extends SQLiteOpenHelper {
     private static final String DELETE_EVENT_TABLE = "DROP TABLE IF EXISTS " + EVENT_TABLE_NAME;
 
     private Context context;
+    static boolean inserted;
 
     public PetDBController(Context context) {
         super(context, DATABASE_NAME, null, 1);
         this.context = context;
-
     }
+
+    public boolean getInserted() {return inserted;}
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PET_TABLE);
@@ -92,35 +94,64 @@ public class PetDBController extends SQLiteOpenHelper {
         ImageFileController ifc = new ImageFileController();
         ifc.CreateDirectories();
         Bitmap img = BitmapFactory.decodeResource(context.getResources(), R.drawable.inu);
-        File fullImage = ifc.getFullSizeFile();
-        ifc.saveFullSizeImage(img, fullImage);
-        File thumbnailFile = ifc.getThumbnailFile();
-        ifc.saveThumbnailImage(img, thumbnailFile);
+        File fullImage1 = ifc.getFullSizeFile();
+        ifc.saveFullSizeImage(img, fullImage1);
+        File thumbnailFile1 = ifc.getThumbnailFile();
+        ifc.saveThumbnailImage(img, thumbnailFile1);
 
         ContentValues values = new ContentValues();
         values.put(PET_COLUMN_NAME, "Inu");
         values.put(PET_COLUMN_DATA, "14/11/2010");
         values.put(PET_COLUMN_TYPE, "Gos");
         values.put(PET_COLUMN_CHIP, "977000123456789");
-        values.put(PET_COLUMN_IMGPATH, fullImage.getAbsolutePath());
-        values.put(PET_COLUMN_THUMBNAILPATH, thumbnailFile.getAbsolutePath());
+        values.put(PET_COLUMN_IMGPATH, fullImage1.getAbsolutePath());
+        values.put(PET_COLUMN_THUMBNAILPATH, thumbnailFile1.getAbsolutePath());
         values.put(PET_COLUMN_ESPECIAL, "Necessita calci");
         long ret = db.insert(PET_TABLE_NAME, null, values);
 
         img = BitmapFactory.decodeResource(context.getResources(), R.drawable.jimi);
-        fullImage = ifc.getFullSizeFile();
-        ifc.saveFullSizeImage(img, fullImage);
-        thumbnailFile = ifc.getThumbnailFile();
-        ifc.saveThumbnailImage(img, thumbnailFile);
+        File fullImage2 = ifc.getFullSizeFile();
+        ifc.saveFullSizeImage(img, fullImage2);
+        File thumbnailFile2 = ifc.getThumbnailFile();
+        ifc.saveThumbnailImage(img, thumbnailFile2);
 
         values = new ContentValues();
         values.put(PET_COLUMN_NAME, "Jimi");
         values.put(PET_COLUMN_DATA,  "6/4/2015");
         values.put(PET_COLUMN_TYPE, "Conill");
         values.put(PET_COLUMN_CHIP, "973529155362754");
-        values.put(PET_COLUMN_IMGPATH, fullImage.getAbsolutePath());
-        values.put(PET_COLUMN_THUMBNAILPATH, thumbnailFile.getAbsolutePath());
+        values.put(PET_COLUMN_IMGPATH, fullImage2.getAbsolutePath());
+        values.put(PET_COLUMN_THUMBNAILPATH, thumbnailFile2.getAbsolutePath());
         ret = db.insert(PET_TABLE_NAME, null, values);
+
+        values = new ContentValues();
+        values.put(EVENT_COLUMN_NAME, "Revisió trimestral");
+        values.put(EVENT_COLUMN_DAY, "4");
+        values.put(EVENT_COLUMN_MONTH, "7");
+        values.put(EVENT_COLUMN_YEAR, "2016");
+        values.put(EVENT_COLUMN_TYPE, "Veterinari");
+        values.put(EVENT_COLUMN_HOUR, "11");
+        values.put(EVENT_COLUMN_MINUTE, "30");
+        values.put(EVENT_COLUMN_PETNAME, "Inu");
+        values.put(EVENT_COLUMN_PETCHIP, "977000123456789");
+        values.put(EVENT_COLUMN_PETID, 1);
+        values.put(EVENT_COLUMN_LOC, "Granollers");
+        ret = db.insert(EVENT_TABLE_NAME, null, values);
+
+        values = new ContentValues();
+        values.put(EVENT_COLUMN_NAME, "Concurs bellesa");
+        values.put(EVENT_COLUMN_DAY, "17");
+        values.put(EVENT_COLUMN_MONTH, "8");
+        values.put(EVENT_COLUMN_YEAR, "2016");
+        values.put(EVENT_COLUMN_TYPE, "Concurs");
+        values.put(EVENT_COLUMN_HOUR, "18");
+        values.put(EVENT_COLUMN_MINUTE, "00");
+        values.put(EVENT_COLUMN_PETNAME, "Jimi");
+        values.put(EVENT_COLUMN_PETCHIP, "973529155362754");
+        values.put(EVENT_COLUMN_PETID, 2);
+        values.put(EVENT_COLUMN_LOC, "Mataró");
+        ret = db.insert(EVENT_TABLE_NAME, null, values);
+
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

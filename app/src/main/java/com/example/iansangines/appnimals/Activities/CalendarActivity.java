@@ -108,6 +108,9 @@ public class CalendarActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.ajudacalendari:
+                Intent i = new Intent(CalendarActivity.this, HelpActivity.class);
+                startActivity(i);
 
         }
         return true;

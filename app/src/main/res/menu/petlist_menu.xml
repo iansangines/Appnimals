@@ -19,8 +19,8 @@
     </item>
 
     <item
-        android:id="@+id/action_settings1"
-        android:title="@string/action_settings"
+        android:id="@+id/ajudapetlist"
+        android:title="Ajuda"
         app:showAsAction="never" />
 
 

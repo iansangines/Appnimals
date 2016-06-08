@@ -103,7 +103,6 @@ public class AddEventActivity extends AppCompatActivity {
         pets = new ArrayList<>();
 
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         db = new PetDBController(AddEventActivity.this);
 
         if (getIntent().getExtras() == null) {
@@ -114,6 +113,7 @@ public class AddEventActivity extends AppCompatActivity {
                 String name = aux.getName();
                 String chip = aux.getChipNumber();
                 String spin = name + " - " + chip;
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerAdapter.add(spin);
             }
         } else {
@@ -137,7 +137,7 @@ public class AddEventActivity extends AppCompatActivity {
                 String hour = eventToInsert.getHour() + ":" + eventToInsert.getMinute();
                 hourinput.setText(hour);
                 switch(eventToInsert.getEventType()){
-                    case("Veterinar"):
+                    case("Veterinari"):
                         veterniari.setChecked(true);
                         break;
                     case("Vacunació"):
@@ -152,10 +152,10 @@ public class AddEventActivity extends AppCompatActivity {
                         otherType.getEditText().setText(eventToInsert.getEventType());
                         break;
                 }
+                String spin = eventToInsert.getPetName() + " - " + eventToInsert.getPetChip();
+                spinnerAdapter.add(spin);
+                loclayout.getEditText().setText(eventToInsert.getEventLocation());
             }
-            String spin = eventToInsert.getPetName() + " - " + eventToInsert.getPetChip();
-            spinnerAdapter.add(spin);
-            loclayout.getEditText().setText(eventToInsert.getEventLocation());
         }
         assert petSpinner != null;
         petSpinner.setAdapter(spinnerAdapter);
@@ -229,12 +229,19 @@ public class AddEventActivity extends AppCompatActivity {
 
                     //TIPUS DE L'ESDEVENIMENT (NECESSARI)
                     assert otherType.getEditText() != null;
-                    if (otherType.getEditText().getVisibility() == View.VISIBLE){
+                    if (altre.isChecked()){
                         String eventType = otherType.getEditText().getText().toString();
                         if(eventType == null || eventType.equals("")){
                             Toast.makeText(AddEventActivity.this, "Selecciona el tipus d'esdeveniment", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                         else eventToInsert.setEventType(eventType);
+                    }
+                    else{
+                        if(eventToInsert.getEventType().equals("") || eventToInsert.getEventType() == null){
+                            Toast.makeText(AddEventActivity.this, "Selecciona el tipus d'esdeveniment", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }
 
                     //LLOC DE L'ESDEVENIMENT
@@ -314,7 +321,6 @@ public class AddEventActivity extends AppCompatActivity {
                     break;
                 case R.id.altre:
                     if (isChecked) {
-                        Toast.makeText(AddEventActivity.this, "S'ha clickat altre", Toast.LENGTH_SHORT).show();
                         vacunacio.setChecked(false);
                         desp.setChecked(false);
                         veterniari.setChecked(false);

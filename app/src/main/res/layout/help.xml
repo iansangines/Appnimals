@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<LinearLayout
+android:orientation="vertical" android:layout_width="match_parent"
+android:padding="16dp"
+android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22dp"
+        android:text="Com utilitzar Appnimals"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="Pantalla principal:"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="En la pantalla principal hi ha disponible un llistat amb totes les teves mascotes (amb el nom i el
+tipus d'animal) juntament amb una foto i un botó per eliminar-la del llistat.
+També pots cercar una mascota prement el botó de la lupa a la barra d'eines i accedir al calendari apretant el botó del calendari a la barra d'eines."/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="Afegir mascota:"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Per afegir una mascota, des de la pantalla principal, clica sobre el botó '+' i apareixerà un formulari
+per introduir les dades de la mascota.
+1. Afegeix una imatge per la mascota, ja sigui fent una foto o agafant una imatge de la
+galeria.
+2. Introdueix el nom de la mascota a afegir.
+3. Introdueix la data de naixement de la mascota amb el format 'dd/mm/aaaa' o bé clica
+sobre el boto del calendari per seleccionar una data.
+4. Introdueix el número de xip de la mascota.
+5. Introdueix el tipus d'animal (com per exemple: gos, gat, etc..).
+6. Afegeix un tractament especial a la mascota si el necessita clicant sobre el checkbox
+'Tractaments Especials' i introdueix-los.
+7. Prem el botó quan acabis d'introduir les dades per guardar la mascota i tornaràs a la
+llista de mascotes ja actualitzada."/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="Veure el perfil:"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Per veure el perfil d'una mascota, des de la pantalla principal, prem sobre la mascota de la que vols
+veure el perfil del llistat i apareixerà la pantalla del perfil amb la foto, les seves dades i un llistat
+amb els esdeveniments de la mascota. Des d'allà es poden eliminar esdeveniments,
+editar-ne, afegir-ne i editar la mascota del perfil."/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="Editar mascota:"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Per editar una mascota, des del perfil d'aquesta mascota prem sobre el llapis a la barra
+d'eines i apareixerà el mateix formulari que al afegir una mascota però amb totes les
+dades ja introduïdes. Des d'allà podràs editar qualsevol dada i al finalitzar prémer el botó per
+guardar la mascota."/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="Accedir al calendari:"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Per accedir al calendari, des de la pantalla principal prem sobre el calendari de la barra d'eines
+i apareixerà la pantalla del calendari junt amb un llistat amb tots els esdeveniments introduïts.
+Prement sobre un esdeveniment, el calendari centra la data al dia de l'esdeveniment.
+Des d'allà pots eliminar , afegir i editar esdeveniments."/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="Afegir Esdeveniment"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Hi ha dues maneres d'afegir un esdeveniment:
+1. Des del perfil d'una mascota:
+Per afegir un esdeveniment des del perfil d'una mascota cal prémer el botó
+de la barra d'eines i apareixerà un formulari per introduir l'esdeveniment.
+2. Des del calendari:
+Per afegir un esdeveniment des del calendari cal prémer el botó '+' situat sota el calendari a
+l'esquerra.
+1. Introdueix el nom de l'esdeveniment.
+2. Selecciona la mascota de l'esdeveniment.
+3. Prem sobre 'dia. dd/mm/aaaa' per seleccionar la data de l'esdeveniment.
+4. Prem sobre 'hh:mm h' per seleccionar l'hora de l'esdeveniment.
+5. Selecciona un tipus d'esdeveniment. En el cas que sigui 'Altre' caldrà introduir de quin tipus
+es tracta.
+6. Introdueix la ubicació de l'esdeveniment.
+7. Prem el botó quan hagis acabat d'introduir les dades i tornaràs o al calendari o al perfil
+de la mascota amb els esdeveniments ja actualitzats."/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="Editar Esdeveniment:"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Per editar un esdeveniment cal prémer una estona sobre l'esdeveniment i apareixerà el mateix
+formulari que al afegir un esdeveniment.
+Des d'allà podràs editar qualsevol dada i al finalitzar prémer el botó per guardar l'esdeveniment."/>
+
+</LinearLayout>
+
+</ScrollView>
+

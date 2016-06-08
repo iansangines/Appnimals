@@ -3,15 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/add_event"
-        android:icon="@drawable/calendarplus"
-        app:showAsAction="ifRoom"
-        android:title="Nou Esdeveniment">
-
-    </item>
-
-    <item
-        android:title="@string/action_settings"
+        android:title="Ajuda"
+        android:id="@+id/ajudacalendari"
         app:showAsAction="never">
 
     </item>

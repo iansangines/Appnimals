@@ -120,6 +120,9 @@ public class PetListActivity extends AppCompatActivity {
                 startActivity(calendarIntent);
 
                 return true;
+            case R.id.ajudapetlist:
+                Intent i = new Intent(PetListActivity.this, HelpActivity.class);
+                startActivity(i);
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -54,6 +54,10 @@
             android:name=".AddEventActivity"
             android:label="@string/title_activity_add_event" />
         <activity android:name=".EditPetActivity" />
+        <activity
+            android:name=".HelpActivity"
+            android:label="Ajuda"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

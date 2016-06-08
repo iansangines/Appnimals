@@ -53,9 +53,13 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         eventMonth.setText(MONTHS[Integer.parseInt(itemEvent.getMonth()) - 1]);
         eventYear.setText(itemEvent.getYear());
         eventName.setText(itemEvent.getName());
-        String pet = itemEvent.getPetName() + " - " + itemEvent.getPetChip();
+        String pet = itemEvent.getPetName() + " - " + itemEvent.getEventType();
         eventPet.setText(pet);
-        String hourLoc = itemEvent.getHour() + ":" + itemEvent.getMinute() + " - " + itemEvent.getEventLocation();
+        String hourLoc = itemEvent.getHour() + ":" + itemEvent.getMinute();
+        if(!itemEvent.getEventLocation().equals("") || itemEvent.getEventLocation() != null){
+            hourLoc = hourLoc  + " - " + itemEvent.getEventLocation();
+        }
+        hourLoc = itemEvent.getHour() + ":" + itemEvent.getMinute() + " - " + itemEvent.getEventLocation();
         eventHourLoc.setText(hourLoc);
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
